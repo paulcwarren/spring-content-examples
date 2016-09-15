@@ -1,0 +1,1 @@
+To execute set AWS_ACCESS_KEY_ID and AWS_SECRET_KEY as environment variables.

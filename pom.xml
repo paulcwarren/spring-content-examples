@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>spring-eg-content</artifactId>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>com.github.paulcwarren</groupId>
+		<artifactId>spring-content</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>	
+
+	<properties>
+	</properties>
+
+	<modules>
+<!-- 		<module>./spring-content-commons</module>
+		<module>./spring-content-docx4j</module>
+		<module>./spring-content-fs</module>
+		<module>./spring-content-jpa</module>
+		<module>./spring-content-jpa-boot-starter</module>
+		<module>./spring-content-mongo</module>
+		<module>./spring-content-mongo-boot-starter</module>
+		<module>./spring-content-rest</module>
+		<module>./spring-content-rest-boot-starter</module>
+		<module>./spring-content-s3</module>
+		<module>./spring-content-s3-boot-starter</module>
+ -->
+   		<module>./spring-eg-content-commons</module>
+		<module>./spring-eg-content-fs</module>
+		<module>./spring-eg-content-mongo</module>
+		<module>./spring-eg-content-mongo-boot-starter</module>
+		<module>./spring-eg-content-jpa</module>
+		<module>./spring-eg-content-jpa-boot-starter</module>
+		<module>./spring-eg-content-s3</module>
+		<module>./spring-eg-content-renditions</module>
+		<module>./spring-eg-content-rest</module>
+ <!-- 		<module>./spring-gs-accessing-content-mongo/complete</module>
+		<module>./spring-gs-content-quickclaim</module>
+ --> 	</modules>
+
+</project>
