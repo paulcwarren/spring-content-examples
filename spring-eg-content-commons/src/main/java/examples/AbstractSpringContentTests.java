@@ -26,7 +26,23 @@ public abstract class AbstractSpringContentTests {
 	{
 		Describe("Spring Content", () -> {
 			
-			Context("given an Entity with @Content", () -> {
+			AfterEach(() -> {
+				// delete any existing claim forms
+				Iterable<Claim> existingClaims = claimRepo.findAll();
+				for (Claim existingClaim : existingClaims) {
+					claimFormStore.unsetContent(existingClaim.getClaimForm());
+					if (existingClaim.getClaimForm() != null) {
+						Assert.assertThat(existingClaim.getClaimForm().getContentId(), is(nullValue()));
+						Assert.assertEquals(existingClaim.getClaimForm().getContentLength(), 0);
+						Assert.assertThat(claimFormStore.getContent(existingClaim.getClaimForm()), is(nullValue()));
+					}
+				}
+				
+				// delete existing claims
+				claimRepo.deleteAll();
+			});
+			
+			Context("given an Entity with content", () -> {
 				
 				BeforeEach(() -> {
 					claim = new Claim();
@@ -64,28 +80,15 @@ public abstract class AbstractSpringContentTests {
 						claim = claimRepo.save(claim);
 					});
 					
-					It("should have no content or metadata", () -> {
-						Assert.assertThat(claim.getClaimForm().getContentId(), is(nullValue()));
-						Assert.assertEquals(claim.getClaimForm().getContentLength(), 0);
+					It("should have no content", () -> {
 						Assert.assertThat(claimFormStore.getContent(claim.getClaimForm()), is(nullValue()));
 					});
+					
+					It("should have no metadata", () -> {
+						Assert.assertThat(claim.getClaimForm().getContentId(), is(nullValue()));
+						Assert.assertEquals(claim.getClaimForm().getContentLength(), 0);
+					});
 				});
-			});
-			
-			AfterEach(() -> {
-				// delete any existing claim forms
-				Iterable<Claim> existingClaims = claimRepo.findAll();
-				for (Claim existingClaim : existingClaims) {
-					claimFormStore.unsetContent(existingClaim.getClaimForm());
-					if (existingClaim.getClaimForm() != null) {
-						Assert.assertThat(existingClaim.getClaimForm().getContentId(), is(nullValue()));
-						Assert.assertEquals(existingClaim.getClaimForm().getContentLength(), 0);
-						Assert.assertThat(claimFormStore.getContent(existingClaim.getClaimForm()), is(nullValue()));
-					}
-				}
-				
-				// delete existing claims
-				claimRepo.deleteAll();
 			});
 		});
 	}
