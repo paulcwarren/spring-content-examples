@@ -2,14 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>com.github.paulcwarren</groupId>
 	<artifactId>spring-eg-content</artifactId>
-	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
 
-	<parent>
-		<groupId>com.github.paulcwarren</groupId>
-		<artifactId>spring-content</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>	
+	<packaging>pom</packaging>
 
 	<properties>
 		<ginkgo-version>1.0.3</ginkgo-version>
