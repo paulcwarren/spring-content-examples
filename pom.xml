@@ -13,19 +13,20 @@
 		<spring-content-version>0.0.2</spring-content-version>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- Import dependency management from Spring Boot -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>1.4.1.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<modules>
-<!-- 		<module>./spring-content-commons</module>
-		<module>./spring-content-docx4j</module>
-		<module>./spring-content-fs</module>
-		<module>./spring-content-jpa</module>
-		<module>./spring-content-jpa-boot-starter</module>
-		<module>./spring-content-mongo</module>
-		<module>./spring-content-mongo-boot-starter</module>
-		<module>./spring-content-rest</module>
-		<module>./spring-content-rest-boot-starter</module>
-		<module>./spring-content-s3</module>
-		<module>./spring-content-s3-boot-starter</module>
- -->
    		<module>./spring-eg-content-commons</module>
 		<module>./spring-eg-content-fs</module>
 		<module>./spring-eg-content-mongo</module>
@@ -35,8 +36,20 @@
 		<module>./spring-eg-content-s3</module>
 		<module>./spring-eg-content-renditions</module>
 		<module>./spring-eg-content-rest</module>
- <!-- 		<module>./spring-gs-accessing-content-mongo/complete</module>
-		<module>./spring-gs-content-quickclaim</module>
- --> 	</modules>
+ 	</modules>
+ 	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+ 		</plugins>
+ 	</build>
 
 </project>
