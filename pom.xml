@@ -12,6 +12,8 @@
 	</parent>	
 
 	<properties>
+		<ginkgo-version>1.0.3</ginkgo-version>
+		<spring-content-version>0.0.2</spring-content-version>
 	</properties>
 
 	<modules>

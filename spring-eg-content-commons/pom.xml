@@ -19,7 +19,7 @@
  		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
 			<artifactId>spring-content-commons</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${spring-content-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
 			<artifactId>spring-content-rest</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${spring-content-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
 			<artifactId>ginkgo4j</artifactId>
-			<version>1.0.0</version>
+			<version>${ginkgo-version}</version>
 		</dependency>
 	</dependencies>
 </project>
