@@ -21,7 +21,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @SpringBootTest
-public class SolrTests {
+public class SolrTest {
 
 	@Autowired private DocumentRepository docRepo;
 	@Autowired private DocumentContentRepository docContentRepo;
@@ -32,6 +32,8 @@ public class SolrTests {
 	private Document doc2;
 	private Document doc3;
 	private Document doc4;
+
+	private String id = null;
 	
 	{
 		Describe("Solr Examples", () -> {
@@ -44,16 +46,11 @@ public class SolrTests {
 					docRepo.save(doc1);
 				});
 				AfterEach(() -> {
-					solr.deleteById(doc1.getContentId().toString());
-					solr.commit();
-
 					docContentRepo.unsetContent(doc1);
 					
 					docRepo.delete(doc1);
 				});
-				It("should index the document 1", () -> {
-					System.out.println("---->" + doc1.getId() + ":" + doc1.getContentId()); 
-					
+				It("should index the content of that document", () -> {
 					SolrQuery query = new SolrQuery();
 					query.setQuery("one");
 					query.addFilterQuery("id:" + doc1.getContentId().toString());
@@ -65,14 +62,12 @@ public class SolrTests {
 					assertThat(results.size(), is(not(nullValue())));
 					assertThat(results.size(), is(1));
 				});
-				Context("given an update", () -> {
+				Context("given that documents content is updated", () -> {
 					BeforeEach(() -> {
 						docContentRepo.setContent(doc1, this.getClass().getResourceAsStream("/two.rtf"));
 						docRepo.save(doc1);
 					});
 					It("should index the new content", () -> {
-						System.out.println("---->" + doc1.getId() + ":" + doc1.getContentId()); 
-						
 						SolrQuery query2 = new SolrQuery();
 						query2.setQuery("two");
 						query2.addFilterQuery("id:" + doc1.getContentId().toString());
@@ -83,6 +78,24 @@ public class SolrTests {
 						
 						assertThat(results.size(), is(not(nullValue())));
 						assertThat(results.size(), is(1));
+					});
+				});
+				Context("given that document is deleted", () -> {
+					BeforeEach(() -> {
+						id = doc1.getContentId().toString();
+						docContentRepo.unsetContent(doc1);
+						docRepo.delete(doc1);
+					});
+					It("should delete the record of the content from the index", () -> {
+						SolrQuery query = new SolrQuery();
+						query.setQuery("one");
+						query.addFilterQuery("id:" + id);
+						query.setFields("content");
+
+						QueryResponse response = solr.query(query);
+						SolrDocumentList results = response.getResults();
+
+						assertThat(results.size(), is(0));
 					});
 				});
 			});
