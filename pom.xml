@@ -9,8 +9,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<ginkgo-version>1.0.5</ginkgo-version>
-		<spring-content-version>0.0.2</spring-content-version>
+		<ginkgo-version>1.0.7</ginkgo-version>
+		<spring-content-version>0.0.3-SNAPSHOT</spring-content-version>
 	</properties>
 
 	<dependencyManagement>
