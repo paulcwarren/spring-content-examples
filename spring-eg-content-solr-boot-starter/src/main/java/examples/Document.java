@@ -14,11 +14,11 @@ public class Document {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ContentId
-	private Integer contentId;
-	
 	private String title;
 	private String author;
+
+	@ContentId
+	private Integer contentId;
 
 	public Document() {
 	}

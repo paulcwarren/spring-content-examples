@@ -1,8 +1,6 @@
 package examples;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.apache.solr.client.solrj.SolrClient;
@@ -28,10 +26,7 @@ public class SolrTest {
 	
 	@Autowired private SolrClient solr;
 	
-	private Document doc1;
-	private Document doc2;
-	private Document doc3;
-	private Document doc4;
+	private Document doc;
 
 	private String id = null;
 	
@@ -39,21 +34,21 @@ public class SolrTest {
 		Describe("Solr Examples", () -> {
 			Context("given a document", () -> {
 				BeforeEach(() -> {
-					doc1 = new Document();
-					doc1.setTitle("title of document 1");
-					doc1.setAuthor("author@email.com");
-					docContentRepo.setContent(doc1, this.getClass().getResourceAsStream("/one.docx"));
-					docRepo.save(doc1);
+					doc = new Document();
+					doc.setTitle("title of document 1");
+					doc.setAuthor("author@email.com");
+					docContentRepo.setContent(doc, this.getClass().getResourceAsStream("/one.docx"));
+					docRepo.save(doc);
 				});
 				AfterEach(() -> {
-					docContentRepo.unsetContent(doc1);
+					docContentRepo.unsetContent(doc);
 					
-					docRepo.delete(doc1);
+					docRepo.delete(doc);
 				});
 				It("should index the content of that document", () -> {
 					SolrQuery query = new SolrQuery();
 					query.setQuery("one");
-					query.addFilterQuery("id:" + doc1.getContentId().toString());
+					query.addFilterQuery("id:" + doc.getContentId().toString());
 					query.setFields("content");
 					
 					QueryResponse response = solr.query(query);
@@ -62,15 +57,21 @@ public class SolrTest {
 					assertThat(results.size(), is(not(nullValue())));
 					assertThat(results.size(), is(1));
 				});
+                Context("when the content is searched", () -> {
+                    It("should return the searched content", () -> {
+                        Iterable<Integer> content = docContentRepo.findKeyword("one");
+                        assertThat(content, hasItem(doc.getContentId()));
+                    });
+                });
 				Context("given that documents content is updated", () -> {
 					BeforeEach(() -> {
-						docContentRepo.setContent(doc1, this.getClass().getResourceAsStream("/two.rtf"));
-						docRepo.save(doc1);
+						docContentRepo.setContent(doc, this.getClass().getResourceAsStream("/two.rtf"));
+						docRepo.save(doc);
 					});
 					It("should index the new content", () -> {
 						SolrQuery query2 = new SolrQuery();
 						query2.setQuery("two");
-						query2.addFilterQuery("id:" + doc1.getContentId().toString());
+						query2.addFilterQuery("id:" + doc.getContentId().toString());
 						query2.setFields("content");
 						
 						QueryResponse response = solr.query(query2);
@@ -82,9 +83,9 @@ public class SolrTest {
 				});
 				Context("given that document is deleted", () -> {
 					BeforeEach(() -> {
-						id = doc1.getContentId().toString();
-						docContentRepo.unsetContent(doc1);
-						docRepo.delete(doc1);
+						id = doc.getContentId().toString();
+						docContentRepo.unsetContent(doc);
+						docRepo.delete(doc);
 					});
 					It("should delete the record of the content from the index", () -> {
 						SolrQuery query = new SolrQuery();
@@ -98,11 +99,6 @@ public class SolrTest {
 						assertThat(results.size(), is(0));
 					});
 				});
-			});
-
-			It("should have a document and document content repository", () -> {
-				assertThat(docRepo, is(not(nullValue())));
-				assertThat(docContentRepo, is(not(nullValue())));
 			});
 		});
 	}
