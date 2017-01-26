@@ -16,12 +16,7 @@ import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import examples.Claim;
-import examples.ClaimForm;
-import examples.ClaimFormStore;
-import examples.ClaimRepository;
-
-@RunWith(SpringJUnit4ClassRunner.class)
+	@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { RenditionTestConfig.class })
 public class RenditionTest {
 

@@ -6,8 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import examples.AbstractSpringContentMongoConfiguration;
-
 @Configuration
 @ComponentScan(basePackages = {"internal.org.springframework.content.docx4j"})
 @EnableMongoRepositories

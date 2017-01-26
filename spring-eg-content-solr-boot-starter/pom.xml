@@ -50,6 +50,11 @@
 	  		<artifactId>spring-boot-configuration-processor</artifactId>
 	  		<optional>true</optional>
 	  	</dependency>
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-content-solr</artifactId>
+			<optional>true</optional>
+		</dependency>
 		
 		<!-- Test dependencies -->
 		<dependency>
