@@ -2,10 +2,6 @@ package examples;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import examples.Application;
-import examples.Document;
-import examples.DocumentContentRepository;
-import examples.DocumentRepository;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -21,7 +17,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static java.util.stream.StreamSupport.stream;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -32,11 +32,14 @@ public class AuthSolrTest {
 
 	@Autowired private DocumentRepository docRepo;
 	@Autowired private DocumentContentRepository docContentRepo;
+	@Autowired private SOPDocumentRepository sopRepo;
+	@Autowired private SOPDocumentContentRepository sopContentRepo;
 	
 	@Autowired private SolrClient solr;
 	@Autowired private SolrProperties solrProperties;
 	
 	private Document doc;
+	private SOPDocument sopDoc;
 
 	private String id = null;
 	private String url, user, password;
@@ -44,22 +47,30 @@ public class AuthSolrTest {
 	{
 		Describe("Solr Examples", () -> {
 			Context("given a secured Solr Server", () -> {
-				Context("given a document", () -> {
+				Context("given two documents of different types", () -> {
 					BeforeEach(() -> {
 						doc = new Document();
 						doc.setTitle("title of document 1");
 						doc.setAuthor("author@email.com");
 						docContentRepo.setContent(doc, this.getClass().getResourceAsStream("/one.docx"));
 						docRepo.save(doc);
+
+                        sopDoc = new SOPDocument();
+                        sopDoc.setTitle("title of sop document 1");
+                        sopDoc.setAuthor("sopauthor@email.com");
+                        sopContentRepo.setContent(sopDoc, this.getClass().getResourceAsStream("/one.docx"));
+                        sopRepo.save(sopDoc);
 					});
 					AfterEach(() -> {
 						docContentRepo.unsetContent(doc);
 						docRepo.delete(doc);
+                        sopContentRepo.unsetContent(sopDoc);
+                        sopRepo.delete(sopDoc);
 					});
 					It("should index the content of that document", () -> {
 						SolrQuery query = new SolrQuery();
 						query.setQuery("one");
-						query.addFilterQuery("id:" + doc.getContentId().toString());
+						query.addFilterQuery("id:" + doc.getClass().getCanonicalName() + "\\:" + doc.getContentId().toString());
 						query.setFields("content");
 						QueryRequest request = new QueryRequest(query);
 						request.setBasicAuthCredentials(solrProperties.getUser(), solrProperties.getPassword());
@@ -71,9 +82,11 @@ public class AuthSolrTest {
 						assertThat(results.size(), is(1));
 					});
 					Context("when the content is searched", () -> {
-						It("should return the searched content", () -> {
+						It("should return the searched content and no more", () -> {
 							Iterable<Integer> content = docContentRepo.findKeyword("one");
-							assertThat(content, hasItem(doc.getContentId()));
+                            List<Integer> result = stream(content.spliterator(), false).collect(Collectors.toList());
+                            assertThat(result.size(), is(1));
+							assertThat(result, hasItem(doc.getContentId()));
 						});
 					});
 					Context("given that documents content is updated", () -> {
@@ -84,7 +97,7 @@ public class AuthSolrTest {
 						It("should index the new content", () -> {
 							SolrQuery query2 = new SolrQuery();
 							query2.setQuery("two");
-							query2.addFilterQuery("id:" + doc.getContentId().toString());
+							query2.addFilterQuery("id:" + doc.getClass().getCanonicalName() + "\\:" + doc.getContentId().toString());
 							query2.setFields("content");
 
 							QueryRequest request = new QueryRequest(query2);
