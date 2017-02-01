@@ -74,5 +74,12 @@
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>spring-content</id>
+			<name>spring-content</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
 
 </project>
