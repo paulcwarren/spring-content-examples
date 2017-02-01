@@ -4,8 +4,17 @@
 
 	<groupId>com.github.paulcwarren</groupId>
 	<artifactId>spring-eg-content</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-
+	<version>0.0.4-SNAPSHOT</version>
+	<repositories>
+		<repository>
+			<id>snapshots</id>
+			<name>nexus</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/com/github/paulcwarren/spring-content/0.0.4-SNAPSHOT</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	<packaging>pom</packaging>
 
 	<properties>
