@@ -38,6 +38,7 @@
 	<modules>
    		<module>./spring-eg-content-commons</module>
 		<module>./spring-eg-content-fs</module>
+		<module>./spring-eg-content-fs-boot-starter</module>
 		<module>./spring-eg-content-mongo</module>
 		<module>./spring-eg-content-mongo-boot-starter</module>
 		<module>./spring-eg-content-jpa</module>

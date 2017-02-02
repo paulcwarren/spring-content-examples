@@ -1,10 +1,6 @@
 package examples;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
 import javax.sql.DataSource;
 
 import org.springframework.content.fs.config.EnableFilesystemContentRepositories;
@@ -28,11 +24,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class ClaimTestConfig {
 
-	@Bean
-	public File fileSystemRoot() throws IOException {
-		return Files.createTempDirectory("").toFile();
-	}
-	
 	@Bean
 	public DataSource dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
