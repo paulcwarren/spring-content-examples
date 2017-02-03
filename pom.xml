@@ -34,10 +34,11 @@
 		<module>./spring-eg-content-jpa</module>
 		<module>./spring-eg-content-jpa-boot-starter</module>
 		<module>./spring-eg-content-s3</module>
+		<module>./spring-eg-content-s3-boot-starter</module>
 		<module>./spring-eg-content-renditions</module>
 		<module>./spring-eg-content-rest</module>
 		<module>./spring-eg-content-solr-boot-starter</module>
- 	</modules>
+	</modules>
  	
 	<build>
 		<plugins>
