@@ -24,6 +24,7 @@ install:
   - sudo rm /usr/local/mvn -f
   - sudo ln -s /usr/share/maven3/bin/mvn /usr/local/mvn
   - mvn -version
+  - which mvn
 
 script:
   - mvn -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' test
