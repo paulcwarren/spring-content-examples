@@ -15,7 +15,7 @@ install:
   - ./solr-6.4.1/bin/solr start
   - ./solr-6.4.1/bin/solr create -c solr
   - sudo apt-get update -y --fix-missing
-  - sudo apt-get purge maven maven2 -y
+  - sudo apt-get purge maven maven2 maven3-y
   - sudo apt-add-repository ppa:andrei-pozolotin/maven3 -y
   - sudo apt-get update -y
   - sudo apt-get install maven3 -y
