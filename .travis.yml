@@ -29,17 +29,17 @@ install:
   - which mvn
   - sudo ln -sf /usr/share/maven3/bin $(which mvn)
   - which mvn
-  - mvn -version
+  - /usr/share/maven3/bin/mvn -version
 
 script:
-  - mvn -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' test
-  - mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
+  - /usr/share/maven3/bin/mvn -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' test
+  - /usr/share/maven3/bin/mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
   - unset SOLR_PASSWORD
   - unset SOLR_USERNAME
   - export SOLR_URL=$INSECURE_SOLR
-  - mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
+  - /usr/share/maven3/bin/mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
   - unset SOLR_URL
-  - mvn -pl spring-eg-content-solr-boot-starter test
+  - /usr/share/maven3/bin/mvn -pl spring-eg-content-solr-boot-starter test
 
 
 
