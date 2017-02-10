@@ -38,6 +38,7 @@
 		<module>./spring-eg-content-renditions</module>
 		<module>./spring-eg-content-rest</module>
 		<module>./spring-eg-content-solr-boot-starter</module>
+		<module>./spring-eg-content-solr</module>
 	</modules>
  	
 	<build>

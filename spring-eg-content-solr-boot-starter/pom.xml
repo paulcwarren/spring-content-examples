@@ -32,11 +32,18 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Spring Content AutoConfigure - INCLUDES SOLR BOOTSTARTER -->
+		<!-- Spring Content AutoConfigure -->
 
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
 			<artifactId>spring-content-autoconfigure</artifactId>
+			<version>${spring-content-version}</version>
+		</dependency>
+
+		<!-- Spring Content Solr Integration AutoConfigure -->
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-content-solr-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
 
