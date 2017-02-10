@@ -7,10 +7,20 @@ notifications:
   slack: cloudfoundry:xvgjKLNQTyqAFMnsTywVHik9
 
 install:
-- wget http://www-us.apache.org/dist/lucene/solr/6.4.1/solr-6.4.1.tgz
-- tar -xvf solr-6.4.1.tgz
-- ./solr-6.4.1/bin/solr start
-- ./solr-6.4.1/bin/solr create -c solr
+  - wget http://www-us.apache.org/dist/lucene/solr/6.4.1/solr-6.4.1.tgz
+  - tar -xvf solr-6.4.1.tgz
+  - ./solr-6.4.1/bin/solr start
+  - ./solr-6.4.1/bin/solr create -c solr
 
 script:
- - mvn test
+  - mvn -DskipPattern=**Solr** test
+  - mvn -DskipPattern=**SolrTest test -pl spring-eg-contet-solr
+  - unset SOLR_PASSWORD
+  - unset SOLR_USERNAME
+  - export SOLR_URL=$INSECURE_SOLR
+  - mvn -DskipPattern=**AuthSolr** test -pl spring-eg-content-solr
+  - unset SOLR_URL
+  - mvn test -pl spring-eg-content-solr-boot-starter
+
+
+
