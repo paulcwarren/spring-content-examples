@@ -10,6 +10,8 @@ notifications:
   slack: cloudfoundry:xvgjKLNQTyqAFMnsTywVHik9
 
 install:
+  - sudo sed -i 's/us-central1.gce/us-central1.gce.clouds/' /etc/apt/sources.list 
+  - sudo apt-get update
   - wget http://www-us.apache.org/dist/lucene/solr/6.4.1/solr-6.4.1.tgz
   - tar -xvf solr-6.4.1.tgz
   - ./solr-6.4.1/bin/solr start
