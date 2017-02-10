@@ -10,7 +10,7 @@ notifications:
   slack: cloudfoundry:xvgjKLNQTyqAFMnsTywVHik9
 
 install:
-  - sudo sed -i 's/us-central1.gce/us-central1.gce.clouds/' /etc/apt/sources.list 
+  - sudo sed -i 's/us-central1.gce/us-central1.gce.clouds/' /etc/apt/sources.list
   - sudo apt-get update
   - wget http://www-us.apache.org/dist/lucene/solr/6.4.1/solr-6.4.1.tgz
   - tar -xvf solr-6.4.1.tgz
@@ -18,10 +18,10 @@ install:
   - ./solr-6.4.1/bin/solr create -c solr
   - sudo apt-get update -y --fix-missing
   - sudo apt-get purge maven maven2 -y
-  - sudo apt-get purge maven3 -y
   - sudo apt-add-repository ppa:andrei-pozolotin/maven3 -y
   - sudo apt-get update -y
   - sudo apt-get install maven3 -y
+  - sudo ln -s /usr/share/maven3/bin/mvn /usr/bin/mvn
   - mvn -version
 
 script:
