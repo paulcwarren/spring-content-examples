@@ -27,7 +27,7 @@ install:
   - export PATH=$PATH:/usr/share/maven3/bin
   - echo $PATH
   - which mvn
-  - ln -s $(which mvn) /usr/share/maven3/bin
+  - ln -sf /usr/share/maven3/bin $(which mvn)
   - which mvn
   - mvn -version
 
