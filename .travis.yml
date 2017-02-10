@@ -19,6 +19,7 @@ install:
   - sudo apt-add-repository ppa:andrei-pozolotin/maven3 -y
   - sudo apt-get update -y
   - sudo apt-get install maven3 -y
+  - mvn -version
 
 script:
   - mvn test -pl '!spring-eg-content-solr, !spring-eg-content-solr-boot-starter'
