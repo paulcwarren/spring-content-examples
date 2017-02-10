@@ -1,79 +1,60 @@
 package examples;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import org.springframework.content.solr.SolrProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
-import static java.util.stream.StreamSupport.stream;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@SpringBootTest(classes={Application.class, AuthSolrTest.SolrConfiguration.class})
-public class AuthSolrTest {
+@SpringBootTest(classes={Application.class})
+public class BootStarterSolrTest {
 
 	@Autowired private DocumentRepository docRepo;
 	@Autowired private DocumentContentRepository docContentRepo;
-	@Autowired private SOPDocumentRepository sopRepo;
-	@Autowired private SOPDocumentContentRepository sopContentRepo;
 	
-	@Autowired private SolrClient solr;
+	@Autowired private SolrClient solr; //for tests
 	@Autowired private SolrProperties solrProperties;
-	
+
 	private Document doc;
-	private SOPDocument sopDoc;
 
 	private String id = null;
-	private String url, user, password;
-
-	{
+{
 		Describe("Solr Examples", () -> {
-			Context("given a secured Solr Server", () -> {
-				Context("given two documents of different types", () -> {
+			Context("given a insecure Solr Server", () -> {
+				Context("given a document", () -> {
 					BeforeEach(() -> {
 						doc = new Document();
 						doc.setTitle("title of document 1");
 						doc.setAuthor("author@email.com");
 						docContentRepo.setContent(doc, this.getClass().getResourceAsStream("/one.docx"));
 						docRepo.save(doc);
-
-                        sopDoc = new SOPDocument();
-                        sopDoc.setTitle("title of sop document 1");
-                        sopDoc.setAuthor("sopauthor@email.com");
-                        sopContentRepo.setContent(sopDoc, this.getClass().getResourceAsStream("/one.docx"));
-                        sopRepo.save(sopDoc);
 					});
 					AfterEach(() -> {
 						docContentRepo.unsetContent(doc);
 						docRepo.delete(doc);
-                        sopContentRepo.unsetContent(sopDoc);
-                        sopRepo.delete(sopDoc);
 					});
 					It("should index the content of that document", () -> {
 						SolrQuery query = new SolrQuery();
 						query.setQuery("one");
-						query.addFilterQuery("id:" + doc.getClass().getCanonicalName() + "\\:" + doc.getContentId().toString());
+						query.addFilterQuery("id:" + "examples.Document\\:" + doc.getContentId().toString() );
 						query.setFields("content");
 						QueryRequest request = new QueryRequest(query);
-						request.setBasicAuthCredentials(solrProperties.getUser(), solrProperties.getPassword());
 						QueryResponse response = request.process(solr);
 
 						SolrDocumentList results = response.getResults();
@@ -82,11 +63,9 @@ public class AuthSolrTest {
 						assertThat(results.size(), is(1));
 					});
 					Context("when the content is searched", () -> {
-						It("should return the searched content and no more", () -> {
+						It("should return the searched content", () -> {
 							Iterable<Integer> content = docContentRepo.findKeyword("one");
-                            List<Integer> result = stream(content.spliterator(), false).collect(Collectors.toList());
-                            assertThat(result.size(), is(1));
-							assertThat(result, hasItem(doc.getContentId()));
+							assertThat(content, CoreMatchers.hasItem(doc.getContentId()));
 						});
 					});
 					Context("given that documents content is updated", () -> {
@@ -97,11 +76,10 @@ public class AuthSolrTest {
 						It("should index the new content", () -> {
 							SolrQuery query2 = new SolrQuery();
 							query2.setQuery("two");
-							query2.addFilterQuery("id:" + doc.getClass().getCanonicalName() + "\\:" + doc.getContentId().toString());
+							query2.addFilterQuery("id:examples.Document\\:" + doc.getContentId().toString());
 							query2.setFields("content");
 
 							QueryRequest request = new QueryRequest(query2);
-							request.setBasicAuthCredentials(solrProperties.getUser(), solrProperties.getPassword());
 							QueryResponse response = request.process(solr);
 							SolrDocumentList results = response.getResults();
 
@@ -118,11 +96,11 @@ public class AuthSolrTest {
 						It("should delete the record of the content from the index", () -> {
 							SolrQuery query = new SolrQuery();
 							query.setQuery("one");
-							query.addFilterQuery("id:" + id);
+							query.addFilterQuery("id:" + "examples.Document\\:" + id);
 							query.setFields("content");
 
 							QueryRequest request = new QueryRequest(query);
-							request.setBasicAuthCredentials(solrProperties.getUser(), solrProperties.getPassword());
+
 							QueryResponse response = request.process(solr);
 							SolrDocumentList results = response.getResults();
 
@@ -136,32 +114,5 @@ public class AuthSolrTest {
 	
 	@Test
 	public void noop() {
-	}
-
-	@Configuration
-	public static class SolrConfiguration {
-
-		@Autowired
-		private Environment env;
-
-		public SolrConfiguration() {
-		}
-
-		@Bean
-		public SolrClient solrClient() {
-			return new HttpSolrClient(solrProperties().getUrl());
-		}
-
-		@Bean
-		public SolrProperties solrProperties() {
-			String url = env.getRequiredProperty("EXAMPLES_AUTH_URL");
-			String username = env.getRequiredProperty("EXAMPLES_USERNAME");
-			String password = env.getRequiredProperty("EXAMPLES_PASSWORD");
-			SolrProperties props = new SolrProperties();
-			props.setUrl(url);
-			props.setUser(username);
-			props.setPassword(password);
-			return props;
-		}
 	}
 }

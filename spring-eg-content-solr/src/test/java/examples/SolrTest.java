@@ -2,48 +2,36 @@ package examples;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
-import examples.Application;
-import examples.Document;
-import examples.DocumentContentRepository;
-import examples.DocumentRepository;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
-
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import org.springframework.content.solr.SolrProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.test.context.ContextConfiguration;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@SpringBootTest(classes={Application.class, SolrTest.SolrConfiguration.class})
+@ContextConfiguration(classes = {SolrConfig.class})
 public class SolrTest {
 
-	@Autowired private DocumentRepository docRepo;
-	@Autowired private DocumentContentRepository docContentRepo;
-	
-	@Autowired private SolrClient solr;
-	@Autowired private SolrProperties solrProperties;
-	
+	@Autowired
+	private DocumentRepository docRepo;
+	@Autowired
+	private DocumentContentRepository docContentRepo;
+	@Autowired
+	private SolrClient solr; //for tests
+	@Autowired
+	private SolrProperties solrProperties;
 	private Document doc;
-
 	private String id = null;
-
 
 	{
 		Describe("Solr Examples", () -> {
@@ -63,7 +51,7 @@ public class SolrTest {
 					It("should index the content of that document", () -> {
 						SolrQuery query = new SolrQuery();
 						query.setQuery("one");
-						query.addFilterQuery("id:" + "examples.Document\\:" + doc.getContentId().toString() );
+						query.addFilterQuery("id:" + "examples.Document\\:" + doc.getContentId().toString());
 						query.setFields("content");
 						QueryRequest request = new QueryRequest(query);
 						QueryResponse response = request.process(solr);
@@ -122,31 +110,10 @@ public class SolrTest {
 			});
 		});
 	}
-	
+
 	@Test
 	public void noop() {
 	}
 
-    @Configuration
-    public static class SolrConfiguration {
 
-        @Autowired
-        private Environment env;
-
-        public SolrConfiguration() {
-        }
-
-        @Bean
-        public SolrClient solrClient() {
-            return new HttpSolrClient(solrProperties().getUrl());
-        }
-
-        @Bean
-        public SolrProperties solrProperties() {
-            String url = env.getRequiredProperty("EXAMPLES_URL");
-            SolrProperties props = new SolrProperties();
-            props.setUrl(url);
-            return props;
-        }
-    }
 }

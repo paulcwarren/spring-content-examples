@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-	<artifactId>spring-eg-content-solr-boot-starter</artifactId>
+
+	<artifactId>spring-eg-content-solr</artifactId>
 
 	<parent>
 		<groupId>com.github.paulcwarren</groupId>
@@ -12,7 +12,7 @@
 
 	<dependencies>
 
-		<!-- Spring Data JPA Repository -->
+       <!-- Spring Data JPA Repository -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -32,19 +32,18 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Spring Content AutoConfigure - INCLUDES SOLR BOOTSTARTER -->
-
+		<!-- Spring Content Solr -->
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-autoconfigure</artifactId>
-			<version>${spring-content-version}</version>
+			<artifactId>spring-content-solr</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
 
-		<!-- Test dependencies -->
-
+		<!-- SolrJ Client -->
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
+			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>org.codehaus.woodstox</groupId>
@@ -55,19 +54,24 @@
 					<groupId>log4j</groupId>
 				</exclusion>
 			</exclusions>
-			<scope>test</scope>
 		</dependency>
 
+		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	  	<dependency>
-	  		<groupId>com.github.paulcwarren</groupId>
-	  		<artifactId>ginkgo4j</artifactId>
-	  		<version>${ginkgo-version}</version>
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>ginkgo4j</artifactId>
+			<version>${ginkgo-version}</version>
 			<scope>test</scope>
-	  	</dependency>
-	</dependencies>
+		</dependency>
+        <dependency>
+            <groupId>com.github.paulcwarren</groupId>
+            <artifactId>spring-eg-content-commons</artifactId>
+            <version>0.0.4-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
