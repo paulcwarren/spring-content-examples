@@ -22,7 +22,7 @@ install:
   - sudo apt-get update -y
   - sudo apt-get install maven3=3.3.9-001 -y
   - sudo rm /usr/local/maven-3.1.1 -rf
-  - sudo EXPORT path=path:/usr/share/maven3/bin/mvn
+  - export PATH=$PATH:/usr/share/maven3/bin/mvn
   - mvn -version
   - which mvn
 
