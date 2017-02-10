@@ -25,21 +25,23 @@ install:
   - sudo chmod 777 /usr/share/maven3/bin/mvn
   - ls /usr/share/maven3/bin
   - export PATH=$PATH:/usr/share/maven3/bin
+  - unset M2_HOME
+  - export M2_HOME=/usr/share/maven3
   - echo $PATH
   - which mvn
   - sudo ln -sf /usr/share/maven3/bin $(which mvn)
   - which mvn
-  - /usr/share/maven3/bin/mvn -version
+  - mvn -version
 
 script:
-  - /usr/share/maven3/bin/mvn -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' test
-  - /usr/share/maven3/bin/mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
+  - mvn -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' test
+  - mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
   - unset SOLR_PASSWORD
   - unset SOLR_USERNAME
   - export SOLR_URL=$INSECURE_SOLR
-  - /usr/share/maven3/bin/mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
+  - mvn -pl spring-eg-content-solr -pl spring-eg-content-commons test
   - unset SOLR_URL
-  - /usr/share/maven3/bin/mvn -pl spring-eg-content-solr-boot-starter test
+  - mvn -pl spring-eg-content-solr-boot-starter test
 
 
 
