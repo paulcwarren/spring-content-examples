@@ -11,16 +11,20 @@ install:
   - tar -xvf solr-6.4.1.tgz
   - ./solr-6.4.1/bin/solr start
   - ./solr-6.4.1/bin/solr create -c solr
+  - sudo apt-get purge maven maven2 maven3 -y
+  - sudo apt-add-repository ppa:andrei-pozolotin/maven3 -y
+  - sudo apt-get update -y
+  - sudo apt-get install maven3 -y
 
 script:
-  - mvn -DskipPattern=**Solr** test
-  - mvn -DskipPattern=**SolrTest test -pl spring-eg-contet-solr
+  - mvn test -pl '!spring-eg-content-solr, !spring-eg-content-solr-boot-starter'
+  - mvn test -pl 'spring-eg-content-solr'
   - unset SOLR_PASSWORD
   - unset SOLR_USERNAME
   - export SOLR_URL=$INSECURE_SOLR
-  - mvn -DskipPattern=**AuthSolr** test -pl spring-eg-content-solr
+  - mvn test -pl 'spring-eg-content-solr'
   - unset SOLR_URL
-  - mvn test -pl spring-eg-content-solr-boot-starter
+  - mvn test -pl 'spring-eg-content-solr-boot-starter'
 
 
 
