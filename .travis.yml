@@ -27,7 +27,7 @@ install:
   - export PATH=$PATH:/usr/share/maven3/bin
   - echo $PATH
   - which mvn
-  - ln -sf /usr/share/maven3/bin $(which mvn)
+  - sudo ln -sf /usr/share/maven3/bin $(which mvn)
   - which mvn
   - mvn -version
 
