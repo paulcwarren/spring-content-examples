@@ -22,11 +22,11 @@ install:
 
 script:
   - mvn test -pl '!spring-eg-content-solr, !spring-eg-content-solr-boot-starter'
-  - mvn test -pl 'spring-eg-content-solr'
+  - mvn test -pl 'spring-eg-content-solr, spring-eg-content-commons'
   - unset SOLR_PASSWORD
   - unset SOLR_USERNAME
   - export SOLR_URL=$INSECURE_SOLR
-  - mvn test -pl 'spring-eg-content-solr'
+  - mvn test -pl 'spring-eg-content-solr, spring-eg-content-commons'
   - unset SOLR_URL
   - mvn test -pl 'spring-eg-content-solr-boot-starter'
 
