@@ -21,6 +21,7 @@ install:
   - sudo apt-add-repository ppa:andrei-pozolotin/maven3 -y
   - sudo apt-get update -y
   - sudo apt-get install maven3=3.3.9-001 -y
+  - env
   - sudo rm /usr/local/maven-3.1.1 -rf
   - sudo chmod 777 /usr/share/maven3/bin/mvn
   - ls /usr/share/maven3/bin
