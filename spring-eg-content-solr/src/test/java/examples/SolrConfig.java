@@ -1,8 +1,13 @@
 package examples;
 
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.jpa.config.EnableJpaContentRepositories;
 import org.springframework.content.solr.EnableFullTextSolrIndexing;
+import org.springframework.content.solr.SolrProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,7 +26,11 @@ import javax.sql.DataSource;
 @EnableFullTextSolrIndexing
 @EnableJpaRepositories
 @EnableJpaContentRepositories
+@ComponentScan("org.springframework.content.solr")
 public class SolrConfig{
+
+    @Autowired
+    SolrProperties solrProperties;
 
     @Bean
     public ConversionService conversionService() {
@@ -55,5 +64,10 @@ public class SolrConfig{
         return txManager;
     }
 
+    @Bean
+    public SolrClient solrClient() {
+        SolrClient sc = new HttpSolrClient(solrProperties.getUrl());
+        return sc;
+    }
 
 }
