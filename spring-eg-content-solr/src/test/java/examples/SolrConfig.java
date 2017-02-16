@@ -26,7 +26,6 @@ import javax.sql.DataSource;
 @EnableFullTextSolrIndexing
 @EnableJpaRepositories
 @EnableJpaContentRepositories
-@ComponentScan("org.springframework.content.solr")
 public class SolrConfig{
 
     @Autowired
