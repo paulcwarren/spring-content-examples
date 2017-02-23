@@ -29,7 +29,7 @@ public class ClaimTestConfig {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 		return builder.setType(EmbeddedDatabaseType.HSQL).build();
 	}
-	
+
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 

@@ -35,8 +35,8 @@ While each `boot-starter` example does not specify a meta-data store, the standa
 ## Spring-Eg-Content-S3
 - This example stores content in a S3 Bucket
 - The following ENV variables need to be set when running this example:
- - `AWS_S3_BUCKET` -> AWS S3 bucket that has been previously setup for storing content
- - `AWS_S3_REGION` -> AWS Region in which the bucket above is provisioned.
+ - `AWS_BUCKET` -> AWS S3 bucket that has been previously setup for storing content
+ - `AWS_REGION` -> AWS Region in which the bucket above is provisioned.
 
     > Availability Zones:
     - us-gov-west-1

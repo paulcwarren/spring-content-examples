@@ -3,12 +3,15 @@ package examples;
 
 import javax.sql.DataSource;
 
+import com.amazonaws.regions.RegionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.aws.context.config.annotation.EnableContextResourceLoader;
 import org.springframework.content.s3.config.AbstractS3ContentRepositoryConfiguration;
 import org.springframework.content.s3.config.EnableS3ContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -29,7 +32,10 @@ import com.amazonaws.regions.Regions;
 //@EnableContextResourceLoader
 @EnableTransactionManagement
 public class ClaimTestConfig extends AbstractS3ContentRepositoryConfiguration {
-	
+
+	@Autowired
+	private Environment env;
+
 	@Bean
 	public DataSource dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
@@ -61,12 +67,12 @@ public class ClaimTestConfig extends AbstractS3ContentRepositoryConfiguration {
 
 	@Override
 	public String bucket() {
-		return "spring-eg-content-s3";
+		return env.getProperty("AWS_BUCKET");
 	}
 
 	@Override
 	public Region region() {
-		return Region.getRegion(Regions.US_WEST_1);
+		return RegionUtils.getRegion(env.getProperty("AWS_REGION"));
 	}
 
 }

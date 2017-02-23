@@ -10,12 +10,12 @@ public class ClaimTestConfig extends AbstractS3ContentRepositoryConfiguration {
 
     @Override
     public String bucket() {
-        return System.getenv("AWS_S3_BUCKET");
+        return System.getenv("AWS_BUCKET");
     }
 
     @Override
     public Region region() {
-        return Region.getRegion(Regions.fromName(System.getenv("AWS_S3_REGION")));
+        return Region.getRegion(Regions.fromName(System.getenv("AWS_REGION")));
     }
 
 }
