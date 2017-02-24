@@ -23,19 +23,28 @@ public abstract class AbstractSpringContentTests {
 	private ClaimFormStore claimFormStore;
 	
 	private Claim claim;
-	{
+    private String id;
+
+    {
 		Describe("Spring Content", () -> {
 			
 			AfterEach(() -> {
 				// delete any existing claim forms
 				Iterable<Claim> existingClaims = claimRepo.findAll();
 				for (Claim existingClaim : existingClaims) {
-					claimFormStore.unsetContent(existingClaim.getClaimForm());
-					if (existingClaim.getClaimForm() != null) {
-						Assert.assertThat(existingClaim.getClaimForm().getContentId(), is(nullValue()));
-						Assert.assertEquals(existingClaim.getClaimForm().getContentLength(), 0);
-						Assert.assertThat(claimFormStore.getContent(existingClaim.getClaimForm()), is(nullValue()));
-					}
+				    if (claimFormStore.getContent(existingClaim.getClaimForm()) != null) {
+                        String contentId = existingClaim.getClaimForm().getContentId();
+                        claimFormStore.unsetContent(existingClaim.getClaimForm());
+                        if (existingClaim.getClaimForm() != null) {
+                            Assert.assertThat(existingClaim.getClaimForm().getContentId(), is(nullValue()));
+                            Assert.assertEquals(existingClaim.getClaimForm().getContentLength(), 0);
+
+                            // double check the content got removed
+                            ClaimForm deletedClaimForm = new ClaimForm();
+                            deletedClaimForm.setContentId(contentId);
+                            Assert.assertThat(claimFormStore.getContent(deletedClaimForm), is(nullValue()));
+                        }
+                    }
 				}
 				
 				// delete existing claims
@@ -75,13 +84,21 @@ public abstract class AbstractSpringContentTests {
 				});
 				
 				Context("when content is deleted", () -> {
-					BeforeEach(() ->{
+				    BeforeEach(() -> {
+                        id = claim.getClaimForm().getContentId();
 						claimFormStore.unsetContent(claim.getClaimForm());
 						claim = claimRepo.save(claim);
 					});
+
+				    AfterEach(() -> {
+				        claimRepo.delete(claim);
+                    });
 					
 					It("should have no content", () -> {
-						Assert.assertThat(claimFormStore.getContent(claim.getClaimForm()), is(nullValue()));
+                        ClaimForm deletedClaimForm = new ClaimForm();
+                        deletedClaimForm.setContentId(id);
+
+						Assert.assertThat(claimFormStore.getContent(deletedClaimForm), is(nullValue()));
 					});
 					
 					It("should have no metadata", () -> {
