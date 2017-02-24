@@ -32,7 +32,7 @@ public abstract class AbstractSpringContentTests {
 				// delete any existing claim forms
 				Iterable<Claim> existingClaims = claimRepo.findAll();
 				for (Claim existingClaim : existingClaims) {
-				    if (claimFormStore.getContent(existingClaim.getClaimForm()) != null) {
+					if (existingClaim.getClaimForm() != null && claimFormStore.getContent(existingClaim.getClaimForm()) != null) {
                         String contentId = existingClaim.getClaimForm().getContentId();
                         claimFormStore.unsetContent(existingClaim.getClaimForm());
                         if (existingClaim.getClaimForm() != null) {
