@@ -3,6 +3,8 @@ package examples;
 
 import javax.sql.DataSource;
 
+import internal.org.springframework.content.commons.placementstrategy.UUIDPlacementStrategy;
+import org.springframework.content.commons.placementstrategy.PlacementStrategy;
 import org.springframework.content.fs.config.EnableFilesystemContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,6 +18,8 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.UUID;
 
 @Configuration
 @ComponentScan(basePackages={"examples"})
@@ -52,5 +56,16 @@ public class ClaimTestConfig {
 		txManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return txManager;
 	}
-	
+
+	@Bean
+	public PlacementStrategy<String> placementStrategy() {
+		return new PlacementStrategy<String>() {
+
+			@Override
+			public String getLocation(String contentId) {
+				return new UUIDPlacementStrategy().getLocation(UUID.fromString(contentId));
+			}
+		};
+	}
+
 }
