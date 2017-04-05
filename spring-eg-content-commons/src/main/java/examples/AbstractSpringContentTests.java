@@ -17,13 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractSpringContentTests {
 
 	@Autowired
-	private ClaimRepository claimRepo;
+	protected ClaimRepository claimRepo;
 	
 	@Autowired 
-	private ClaimFormStore claimFormStore;
+	protected ClaimFormStore claimFormStore;
 	
-	private Claim claim;
-    private String id;
+	protected Claim claim;
+    protected String id;
 
     {
 		Describe("Spring Content", () -> {
