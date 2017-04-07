@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import internal.org.springframework.content.commons.placement.UUIDPlacementStrategy;
 
+import java.net.URI;
 import java.util.UUID;
 
 @Configuration
@@ -65,6 +66,17 @@ public class ClaimTestConfig {
 			@Override
 			public String getLocation(String contentId) {
 				return new UUIDPlacementStrategy().getLocation(UUID.fromString(contentId));
+			}
+		};
+	}
+	
+	@Bean
+	public PlacementStrategy<URI> uriPlacementStrategy() {
+		return new PlacementStrategy<URI>() {
+
+			@Override
+			public String getLocation(URI id) {
+				return id.toString();
 			}
 		};
 	}
