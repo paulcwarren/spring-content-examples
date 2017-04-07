@@ -3,8 +3,7 @@ package examples;
 
 import javax.sql.DataSource;
 
-import internal.org.springframework.content.commons.placementstrategy.UUIDPlacementStrategy;
-import org.springframework.content.commons.placementstrategy.PlacementStrategy;
+import org.springframework.content.commons.placement.PlacementStrategy;
 import org.springframework.content.fs.config.EnableFilesystemContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,6 +17,8 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import internal.org.springframework.content.commons.placement.UUIDPlacementStrategy;
 
 import java.util.UUID;
 

@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.aws.core.io.s3.SimpleStorageResourceLoader;
-import org.springframework.content.commons.placementstrategy.PlacementStrategy;
+import org.springframework.content.commons.placement.PlacementStrategy;
 import org.springframework.content.s3.config.AbstractS3ContentRepositoryConfiguration;
 import org.springframework.content.s3.config.EnableS3ContentRepositories;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +28,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.services.s3.AmazonS3;
 
-import internal.org.springframework.content.commons.placementstrategy.UUIDPlacementStrategy;
+import internal.org.springframework.content.commons.placement.UUIDPlacementStrategy;
 
 @Configuration
 @ComponentScan
