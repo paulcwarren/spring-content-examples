@@ -21,12 +21,6 @@ public class ClaimTestConfig extends AbstractS3ContentRepositoryConfiguration {
 	@Autowired
 	private AmazonS3 client;
 
-    @Override
-    public String bucket() {
-        return System.getenv("AWS_BUCKET");
-    }
-
-    @Override
     public Region region() {
         return Region.getRegion(Regions.fromName(System.getenv("AWS_REGION")));
     }

@@ -27,7 +27,7 @@ public class ClaimTest extends AbstractSpringContentTests {
 
     @Autowired
     private ClaimTestConfig config;
-
+    
     {
         Describe("Spring Content Amazon S3", () -> {
             Describe("Backwards Compatibility", () -> {
