@@ -28,12 +28,8 @@ import org.springframework.test.context.ContextConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
-import examples.typesupport.BigIntegerBasedContentEntityStore;
-import examples.typesupport.LongBasedContentEntityStore;
-import examples.typesupport.URIBasedContentEntityStore;
 import examples.typesupport.UUIDBasedContentEntity;
 import examples.typesupport.UUIDBasedContentEntityStore;
-import internal.org.springframework.content.commons.placement.UUIDPlacementStrategy;
 import internal.org.springframework.content.fs.config.FilesystemProperties;
 
 @RunWith(Ginkgo4jSpringRunner.class)
