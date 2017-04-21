@@ -22,11 +22,11 @@ import java.util.UUID;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { ClaimTestConfig.class })
-public class ClaimTest extends AbstractSpringContentTests {
+@ContextConfiguration(classes = { S3Config.class })
+public class ExamplesTest extends AbstractSpringContentTests {
 
     @Autowired
-    private ClaimTestConfig config;
+    private S3Config config;
     
     {
         Describe("Spring Content Amazon S3", () -> {

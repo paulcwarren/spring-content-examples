@@ -27,6 +27,9 @@ import org.springframework.test.context.ContextConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
+import examples.typesupport.BigIntegerBasedContentEntityStore;
+import examples.typesupport.LongBasedContentEntityStore;
+import examples.typesupport.URIBasedContentEntityStore;
 import examples.typesupport.UUIDBasedContentEntity;
 import examples.typesupport.UUIDBasedContentEntityStore;
 import internal.org.springframework.content.commons.placement.UUIDPlacementStrategy;
@@ -34,8 +37,8 @@ import internal.org.springframework.content.fs.config.FilesystemProperties;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { ClaimTestConfig.class })
-public class ClaimTest extends AbstractSpringContentTests {
+@ContextConfiguration(classes = { FsConfig.class })
+public class ExamplesTest extends AbstractSpringContentTests {
 
 	@Autowired
 	private FilesystemProperties props;
@@ -46,14 +49,13 @@ public class ClaimTest extends AbstractSpringContentTests {
 	@Autowired
 	private DefaultConversionService converter;
 	
-	@Autowired
-	private UUIDBasedContentEntityStore uuidBasedStore;
-	
 	private Resource r;
 	
 	private Object contentEntity = null;
 	
 	private UUID id;
+	
+	@Autowired protected UUIDBasedContentEntityStore uuidStore;
 	
 	{
 		Describe("Spring Content Filesystem", () -> {
@@ -80,7 +82,7 @@ public class ClaimTest extends AbstractSpringContentTests {
 							id = UUID.randomUUID();
 							contentEntity = new UUIDBasedContentEntity();
 							((UUIDBasedContentEntity)contentEntity).setContentId(id);
-							uuidBasedStore.setContent((UUIDBasedContentEntity)contentEntity, new ByteArrayInputStream("Hello Content World!".getBytes()));
+							uuidStore.setContent((UUIDBasedContentEntity)contentEntity, new ByteArrayInputStream("Hello Content World!".getBytes()));
 						});
 						AfterEach(() -> {
 							converter.removeConvertible(UUID.class, String.class);

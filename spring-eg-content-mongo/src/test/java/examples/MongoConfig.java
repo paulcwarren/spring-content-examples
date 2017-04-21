@@ -10,6 +10,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @ComponentScan
 @EnableMongoRepositories
 @EnableMongoContentRepositories
-public class ClaimTestConfig extends AbstractSpringContentMongoConfiguration {
+public class MongoConfig extends AbstractSpringContentMongoConfiguration {
 
 }

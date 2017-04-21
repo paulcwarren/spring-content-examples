@@ -28,7 +28,7 @@ import java.util.UUID;
 @EnableJpaRepositories
 @EnableFilesystemContentRepositories
 @EnableTransactionManagement
-public class ClaimTestConfig {
+public class FsConfig {
 
 	@Bean
 	public DataSource dataSource() {
