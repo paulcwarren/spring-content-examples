@@ -20,6 +20,7 @@ import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.content.fs.config.FilesystemStoreConverter;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
@@ -47,7 +48,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 	private URIResourceStore store;
 	
 	@Autowired
-	private DefaultConversionService converter;
+	private DefaultConversionService filesystemStoreConverter;
 	
 	private Resource r;
 	
@@ -77,7 +78,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 				Describe("Custom content placement", () -> {
 					Context("given a converter that converts a UUID id to a resource path", () -> {
 						BeforeEach(() -> {
-							converter.addConverter(new UUIDPlacementStrategy());
+							filesystemStoreConverter.addConverter(new UUIDConverter());
 
 							id = UUID.randomUUID();
 							contentEntity = new UUIDBasedContentEntity();
@@ -85,7 +86,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 							uuidStore.setContent((UUIDBasedContentEntity)contentEntity, new ByteArrayInputStream("Hello Content World!".getBytes()));
 						});
 						AfterEach(() -> {
-							converter.removeConvertible(UUID.class, String.class);
+							filesystemStoreConverter.removeConvertible(UUID.class, String.class);
 						});
 						It("should store content at that path", () -> {
 							String[] segments = id.toString().split("-");
@@ -142,6 +143,13 @@ public class ExamplesTest extends AbstractSpringContentTests {
 				});
 			});
 		}); 
+	}
+	
+	public class UUIDConverter implements FilesystemStoreConverter<UUID,String> {
+		@Override
+		public String convert(UUID source) {
+			return String.format("/%s", source.toString().replaceAll("-","/"));
+		}
 	}
 	
 }

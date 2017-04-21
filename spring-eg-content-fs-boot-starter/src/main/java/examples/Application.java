@@ -30,16 +30,5 @@ public class Application {
 
     @Configuration
     public static class ApplicationConfiguration {
-
-        @Bean
-        public PlacementStrategy<String> placementStrategy() {
-            return new PlacementStrategy<String>() {
-
-                @Override
-                public String getLocation(String contentId) {
-                    return new UUIDPlacementStrategy().getLocation(UUID.fromString(contentId));
-                }
-            };
-        }
     }
 }

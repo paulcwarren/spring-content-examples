@@ -3,7 +3,6 @@ package examples;
 
 import javax.sql.DataSource;
 
-import org.springframework.content.commons.placement.PlacementStrategy;
 import org.springframework.content.fs.config.EnableFilesystemContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,11 +16,6 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import internal.org.springframework.content.commons.placement.UUIDPlacementStrategy;
-
-import java.net.URI;
-import java.util.UUID;
 
 @Configuration
 @ComponentScan(basePackages={"examples"})
@@ -57,27 +51,5 @@ public class FsConfig {
 		JpaTransactionManager txManager = new JpaTransactionManager();
 		txManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return txManager;
-	}
-
-	@Bean
-	public PlacementStrategy<String> placementStrategy() {
-		return new PlacementStrategy<String>() {
-
-			@Override
-			public String getLocation(String contentId) {
-				return new UUIDPlacementStrategy().getLocation(UUID.fromString(contentId));
-			}
-		};
-	}
-	
-	@Bean
-	public PlacementStrategy<URI> uriPlacementStrategy() {
-		return new PlacementStrategy<URI>() {
-
-			@Override
-			public String getLocation(URI id) {
-				return id.toString();
-			}
-		};
 	}
 }
