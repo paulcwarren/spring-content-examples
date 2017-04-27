@@ -34,7 +34,7 @@ import internal.org.springframework.content.fs.config.FilesystemProperties;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { FsConfig.class })
+@ContextConfiguration(classes = { EnableFilesystemStoresConfig.class })
 public class ExamplesTest extends AbstractSpringContentTests {
 
 	@Autowired

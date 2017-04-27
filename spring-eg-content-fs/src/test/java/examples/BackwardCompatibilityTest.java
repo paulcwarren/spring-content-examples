@@ -6,11 +6,10 @@ import org.springframework.test.context.ContextConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
-import examples.typesupport.TypeSupportTests;
-
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { EnableFilesystemStoresConfig.class })
-public class FsTypeSupportTests extends TypeSupportTests {
-
+@ContextConfiguration(classes = { EnableFilesystemContentRepositoriesConfig.class })
+public class BackwardCompatibilityTest extends AbstractSpringContentTests {
+	{
+	}
 }

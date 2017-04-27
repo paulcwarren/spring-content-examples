@@ -1,9 +1,7 @@
 package examples;
 
-
 import javax.sql.DataSource;
 
-import org.springframework.content.fs.config.EnableFilesystemContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +18,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ComponentScan(basePackages={"examples"})
 @EnableJpaRepositories
-@EnableFilesystemContentRepositories
 @EnableTransactionManagement
-public class FsConfig {
+public class JpaConfig {
 
 	@Bean
 	public DataSource dataSource() {
