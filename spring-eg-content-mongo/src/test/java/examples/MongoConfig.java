@@ -1,7 +1,7 @@
 package examples;
 
 
-import org.springframework.content.mongo.config.EnableMongoContentRepositories;
+import org.springframework.content.mongo.config.EnableMongoStores;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @ComponentScan
 @EnableMongoRepositories
-@EnableMongoContentRepositories
+@EnableMongoStores
 public class MongoConfig extends AbstractSpringContentMongoConfiguration {
 
 }
