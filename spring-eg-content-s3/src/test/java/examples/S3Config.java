@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.aws.core.io.s3.SimpleStorageResourceLoader;
-import org.springframework.content.s3.config.AbstractS3ContentRepositoryConfiguration;
+import org.springframework.content.s3.config.AbstractS3StoreConfiguration;
 import org.springframework.content.s3.config.EnableS3ContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,7 +31,7 @@ import com.amazonaws.services.s3.AmazonS3;
 @EnableS3ContentRepositories
 //@EnableContextResourceLoader
 @EnableTransactionManagement
-public class S3Config extends AbstractS3ContentRepositoryConfiguration {
+public class S3Config extends AbstractS3StoreConfiguration {
 
 	@Autowired
 	private Environment env;
