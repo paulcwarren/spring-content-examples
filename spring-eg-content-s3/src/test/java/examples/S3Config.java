@@ -21,9 +21,12 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
-import com.amazonaws.regions.RegionUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 
 @Configuration
 @ComponentScan
@@ -36,23 +39,27 @@ public class S3Config extends AbstractS3StoreConfiguration {
 	@Autowired
 	private Environment env;
 	
-	@Autowired
-	private AmazonS3 client;
+    public Region region() {
+        return Region.getRegion(Regions.fromName(System.getenv("AWS_REGION")));
+    }
 
-	public String bucket() {
-		return env.getProperty("AWS_BUCKET");
+	@Bean
+	public BasicAWSCredentials basicAWSCredentials() {
+		return new BasicAWSCredentials(env.getProperty("AWS_ACCESS_KEY_ID"), env.getProperty("AWS_SECRET_KEY"));
 	}
 	
-	public Region region() {
-		return RegionUtils.getRegion(env.getProperty("AWS_REGION"));
+	@Bean
+	public AmazonS3 client(AWSCredentials awsCredentials) {
+		AmazonS3Client amazonS3Client = new AmazonS3Client(awsCredentials);
+		amazonS3Client.setRegion(region());
+		return amazonS3Client;
 	}
-	
-	@Override
+    
+    @Override
 	public SimpleStorageResourceLoader simpleStorageResourceLoader() {
-		client.setRegion(region());
-		return new SimpleStorageResourceLoader(client);
+		return new SimpleStorageResourceLoader(client(basicAWSCredentials()));
 	}
-
+	
 	@Bean
 	public DataSource dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
