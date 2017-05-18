@@ -1,4 +1,4 @@
-package examples;
+package examples.events;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -6,11 +6,12 @@ import org.springframework.test.context.ContextConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
-import examples.typesupport.TypeSupportTests;
+import examples.JpaConfig;
+import examples.events.AnnotatedEventHandlerTests;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { EnableFilesystemStoresConfig.class })
-public class FsTypeSupportTests extends TypeSupportTests {
-
+@ContextConfiguration(classes = { JpaConfig.class, examples.events.AnnotatedEventHandlerConfig.class })
+public class AnnotatedEventsTest extends AnnotatedEventHandlerTests {
+	//
 }
