@@ -1,11 +1,9 @@
 package examples;
 
-
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.aws.core.io.s3.SimpleStorageResourceLoader;
-import org.springframework.content.s3.config.AbstractS3StoreConfiguration;
 import org.springframework.content.s3.config.EnableS3ContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,7 +32,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 @EnableS3ContentRepositories
 //@EnableContextResourceLoader
 @EnableTransactionManagement
-public class S3Config extends AbstractS3StoreConfiguration {
+public class S3Config {
 
 	@Autowired
 	private Environment env;
@@ -55,9 +53,9 @@ public class S3Config extends AbstractS3StoreConfiguration {
 		return amazonS3Client;
 	}
     
-    @Override
-	public SimpleStorageResourceLoader simpleStorageResourceLoader() {
-		return new SimpleStorageResourceLoader(client(basicAWSCredentials()));
+	@Bean
+	public SimpleStorageResourceLoader simpleStorageResourceLoader(AmazonS3 client) {
+		return new SimpleStorageResourceLoader(client);
 	}
 	
 	@Bean
