@@ -7,16 +7,17 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 				});
 			});
 			
-			Describe("Experimental Store API", () -> {
+			Describe("Store API (Experimental)", () -> {
 				Describe("Store", () -> {
 					Context("given a uri-based resource store", () -> {
 						Context("given an existing resource", () -> {
@@ -107,7 +108,10 @@ public class ExamplesTest extends AbstractSpringContentTests {
 								out.close();
 							});
 							JustBeforeEach(() -> {
-								r = store.getResource(new URI("/some/thing"));
+								r = store.getResource("/some/thing");
+							});
+							AfterEach(() -> {
+								FileUtils.forceDelete(new File(Paths.get(props.getFilesystemRoot(), "some", "thing").toAbsolutePath().toString()));
 							});
 							It("should be able to get that resource", () -> {
 								assertThat(IOUtils.contentEquals(r.getInputStream(), IOUtils.toInputStream("Hello Spring Content World!", Charset.defaultCharset())), is(true));
@@ -119,6 +123,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 					Context("given an entity", () -> {
 						BeforeEach(() -> {
 							claim = new Claim();
+							claim.setClaimForm(new ClaimForm());
 						});
 						Context("given a resource", () -> {
 							BeforeEach(() -> {
@@ -129,10 +134,34 @@ public class ExamplesTest extends AbstractSpringContentTests {
 								FileOutputStream out = new FileOutputStream(file);
 								out.write("Hello Spring Content World!".getBytes());
 								out.close();
+
+								r = store.getResource("/some/other/thing");
 							});
-							It("should be possible to associate the entity and the resource", () -> {
-								r = store.getResource(new URI("/some/other/thing"));
-//								store.associate(claim, r);
+							AfterEach(() -> {
+								FileUtils.forceDelete(new File(Paths.get(props.getFilesystemRoot(), "some", "other", "thing").toAbsolutePath().toString()));
+							});
+							Context("when it is associated", () -> {
+								BeforeEach(() -> {
+									store.associate(claim.getClaimForm(), "/some/other/thing");
+								});
+								It("should update the entity's content attributes", () -> {
+									assertThat(claim.getClaimForm().getContentId(), is("/some/other/thing"));
+									assertThat(claim.getClaimForm().getContentLength(), is(27L));
+								});
+							});
+							Context("given it is associated", () -> {
+								BeforeEach(() -> {
+									store.associate(claim.getClaimForm(), "/some/other/thing");
+								});
+								Context("when it is unassociated", () -> {
+									BeforeEach(() -> {
+										store.unassociate(claim.getClaimForm());
+									});
+									It("should reset the entity's content attributes", () -> {
+										assertThat(claim.getClaimForm().getContentId(), is(nullValue()));
+										assertThat(claim.getClaimForm().getContentLength(), is(0L));
+									});
+								});
 							});
 						});
 					});
