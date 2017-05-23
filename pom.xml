@@ -9,7 +9,7 @@
 
 	<properties>
 		<ginkgo-version>1.0.9</ginkgo-version>
-		<spring-content-version>0.0.4-SNAPSHOT</spring-content-version>
+		<spring-content-version>0.0.4</spring-content-version>
 	</properties>
 
 	<dependencyManagement>
