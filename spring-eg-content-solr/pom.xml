@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.github.paulcwarren</groupId>
 		<artifactId>spring-eg-content</artifactId>
-		<version>0.0.4-SNAPSHOT</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
 			<artifactId>spring-content-solr</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>${spring-content-version}</version>
 		</dependency>
 
 		<!-- SolrJ Client -->
@@ -71,7 +71,7 @@
         <dependency>
             <groupId>com.github.paulcwarren</groupId>
             <artifactId>spring-eg-content-commons</artifactId>
-            <version>0.0.4-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-eg-content</artifactId>
         <groupId>com.github.paulcwarren</groupId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spring-eg-content-s3-boot-starter</artifactId>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>com.github.paulcwarren</groupId>
             <artifactId>spring-eg-content-commons</artifactId>
-            <version>${spring-content-version}</version>
+            <version>0.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
