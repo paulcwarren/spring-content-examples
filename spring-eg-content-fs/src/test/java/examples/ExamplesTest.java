@@ -31,7 +31,6 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
 import examples.typesupport.UUIDBasedContentEntity;
 import examples.typesupport.UUIDBasedContentEntityStore;
-import internal.org.springframework.content.fs.config.FilesystemProperties;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -39,7 +38,7 @@ import internal.org.springframework.content.fs.config.FilesystemProperties;
 public class ExamplesTest extends AbstractSpringContentTests {
 
 	@Autowired
-	private FilesystemProperties props;
+	private File filesystemRoot;
 	
 	@Autowired
 	private URIResourceStore store;
@@ -69,7 +68,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 						claimRepo.save(claim);
 					});
 					It("should store content in the root of the Store", () -> {
-						assertThat(new File(Paths.get(props.getFilesystemRoot(), claim.getClaimForm().getContentId()).toAbsolutePath().toString()).exists(), is(true));
+						assertThat(new File(Paths.get(filesystemRoot.getAbsolutePath(), claim.getClaimForm().getContentId()).toAbsolutePath().toString()).exists(), is(true));
 					});
 				});
 				Describe("Custom content placement", () -> {
@@ -88,7 +87,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 						It("should store content at that path", () -> {
 							String[] segments = id.toString().split("-");
 							
-							assertThat(new File(Paths.get(props.getFilesystemRoot(), segments).toAbsolutePath().toString()).exists(), is(true));
+							assertThat(new File(Paths.get(filesystemRoot.getAbsolutePath(), segments).toAbsolutePath().toString()).exists(), is(true));
 						});
 					});
 				});
@@ -101,7 +100,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 							BeforeEach(() -> {
 								// write some content in the old placement location (store root) 
 								// and create a entity so we can try and fetch it
-								File file = new File(Paths.get(props.getFilesystemRoot(), "some", "thing").toAbsolutePath().toString());
+								File file = new File(Paths.get(filesystemRoot.getAbsolutePath(), "some", "thing").toAbsolutePath().toString());
 								file.getParentFile().mkdirs();
 								FileOutputStream out = new FileOutputStream(file);
 								out.write("Hello Spring Content World!".getBytes());
@@ -111,7 +110,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 								r = store.getResource("/some/thing");
 							});
 							AfterEach(() -> {
-								FileUtils.forceDelete(new File(Paths.get(props.getFilesystemRoot(), "some", "thing").toAbsolutePath().toString()));
+								FileUtils.forceDelete(new File(Paths.get(filesystemRoot.getAbsolutePath(), "some", "thing").toAbsolutePath().toString()));
 							});
 							It("should be able to get that resource", () -> {
 								assertThat(IOUtils.contentEquals(r.getInputStream(), IOUtils.toInputStream("Hello Spring Content World!", Charset.defaultCharset())), is(true));
@@ -129,7 +128,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 							BeforeEach(() -> {
 								// write some content in the old placement location (store root) 
 								// and create a entity so we can try and fetch it
-								File file = new File(Paths.get(props.getFilesystemRoot(), "some", "other", "thing").toAbsolutePath().toString());
+								File file = new File(Paths.get(filesystemRoot.getAbsolutePath(), "some", "other", "thing").toAbsolutePath().toString());
 								file.getParentFile().mkdirs();
 								FileOutputStream out = new FileOutputStream(file);
 								out.write("Hello Spring Content World!".getBytes());
@@ -138,7 +137,7 @@ public class ExamplesTest extends AbstractSpringContentTests {
 								r = store.getResource("/some/other/thing");
 							});
 							AfterEach(() -> {
-								FileUtils.forceDelete(new File(Paths.get(props.getFilesystemRoot(), "some", "other", "thing").toAbsolutePath().toString()));
+								FileUtils.forceDelete(new File(Paths.get(filesystemRoot.getAbsolutePath(), "some", "other", "thing").toAbsolutePath().toString()));
 							});
 							Context("when it is associated", () -> {
 								BeforeEach(() -> {
