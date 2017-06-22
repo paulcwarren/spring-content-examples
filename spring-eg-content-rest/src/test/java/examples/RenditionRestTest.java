@@ -1,7 +1,6 @@
 package examples;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -67,7 +66,8 @@ public class RenditionRestTest {
     @Test
     public void canGetRendition() {
     	JsonPath response = 
-		    when()
+    		given()
+    			.header("accept", "application/hal+json")
 		        .get("/claims/" + claim.getClaimId())
 		    .then()
 		    	.statusCode(HttpStatus.SC_OK)
@@ -95,7 +95,8 @@ public class RenditionRestTest {
     @Test
     public void noRenditionProviderReturns406() {
     	JsonPath response = 
-    		    when()
+        		given()
+        			.header("accept", "application/hal+json")
     		        .get("/claims/" + claim.getClaimId())
     		    .then()
     		    	.statusCode(HttpStatus.SC_OK)

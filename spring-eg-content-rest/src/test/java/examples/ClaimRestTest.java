@@ -10,7 +10,6 @@ import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,18 +83,17 @@ public class ClaimRestTest {
     }
 
     @Test
-    @Ignore
     public void canSetContent() {
     	JsonPath response = 
-    	given()
-			.contentType("plain/text")
-			.content("This is plain text content!".getBytes())
-	    .when()
-	        .post("/claims/" + canSetClaim.getClaimId() + "/claimForm")
-	    .then()
-	    	.statusCode(HttpStatus.SC_CREATED)
-	    	.extract()
-	    		.jsonPath();
+	    	given()
+				.contentType("plain/text")
+				.content("This is plain text content!".getBytes())
+		    .when()
+		        .post("/claims/" + canSetClaim.getClaimId() + "/claimForm")
+		    .then()
+		    	.statusCode(HttpStatus.SC_CREATED)
+		    	.extract()
+		    		.jsonPath();
     	
     	Assert.assertNotNull(response.get("_links"));
     	Assert.assertNotNull(response.get("_links.self"));
@@ -103,10 +101,10 @@ public class ClaimRestTest {
     }
 
     @Test
-    @Ignore
     public void canGetContent() {
     	JsonPath response = 
-		    when()
+    		given()
+    			.header("accept", "application/hal+json")
 		        .get("/claims/" + canGetClaim.getClaimId())
 		    .then()
 		    	.statusCode(HttpStatus.SC_OK)
@@ -127,8 +125,9 @@ public class ClaimRestTest {
 
     @Test
     public void canDeleteContent() {
-    	JsonPath response = 
-		    when()
+    	JsonPath response =
+    		given()
+    			.header("accept", "application/hal+json")
 		        .get("/claims/" + canDelClaim.getClaimId())
 		    .then()
 		    	.statusCode(HttpStatus.SC_OK)
