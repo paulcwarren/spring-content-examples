@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import examples.config.JpaConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

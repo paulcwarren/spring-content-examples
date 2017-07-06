@@ -13,10 +13,10 @@ public class ClaimForm {
 	private String contentId;
 	
 	@ContentLength
-	private long contentLength;
+	private long contentLength = 0L;
 	
 	@MimeType
-	private String mimeType;
+	private String mimeType = "text/plain";
 	
 	public String getContentId() {
 		return contentId;

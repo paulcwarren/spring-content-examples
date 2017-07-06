@@ -1,10 +1,12 @@
-package examples;
+package examples.config;
 
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -16,8 +18,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages={"examples"})
-@EnableJpaRepositories
+@ComponentScan(excludeFilters={
+        @Filter(type = FilterType.REGEX,
+                pattern = {
+                	".*MongoConfiguration", 
+                })
+})
+@EnableJpaRepositories(basePackages="examples")	 	// Tell Spring Data JPA where to find Repositories
 @EnableTransactionManagement
 public class JpaConfig {
 
@@ -26,7 +33,7 @@ public class JpaConfig {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 		return builder.setType(EmbeddedDatabaseType.HSQL).build();
 	}
-	
+
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
@@ -36,7 +43,7 @@ public class JpaConfig {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan(getClass().getPackage().getName());
+		factory.setPackagesToScan("examples");  	// Tell Hibernate where to find Entities
 		factory.setDataSource(dataSource());
 
 		return factory;
@@ -49,4 +56,5 @@ public class JpaConfig {
 		txManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return txManager;
 	}
+	
 }

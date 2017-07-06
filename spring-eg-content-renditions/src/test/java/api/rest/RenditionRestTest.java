@@ -1,30 +1,31 @@
-package examples;
+package api.rest;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import api.rest.Application;
+import examples.Claim;
+import examples.ClaimForm;
+import examples.ClaimFormStore;
+import examples.ClaimRepository;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration   
-@IntegrationTest("server.port:0")  
+@SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RenditionRestTest {
 
 	@Autowired
@@ -33,7 +34,7 @@ public class RenditionRestTest {
 	@Autowired
 	private ClaimFormStore claimFormStore;
 	
-    @Value("${local.server.port}")   // 6
+    @LocalServerPort
     int port;
 
     private Claim claim;
@@ -65,19 +66,7 @@ public class RenditionRestTest {
 
     @Test
     public void canGetRendition() {
-    	JsonPath response = 
-    		given()
-    			.header("accept", "application/hal+json")
-		        .get("/claims/" + claim.getClaimId())
-		    .then()
-		    	.statusCode(HttpStatus.SC_OK)
-		    	.extract()
-		    		.jsonPath();
-    	
-    	Assert.assertNotNull(response.get("_links.claimForm"));
-    	Assert.assertNotNull(response.get("_links.claimForm.href"));
-
-    	String contentUrl = response.get("_links.claimForm.href");
+    	String contentUrl = "/claims/" + claim.getClaimId() + "/claimForm/" + claim.getClaimForm().getContentId();
     	Response response2 = 
 			given()
 				.header("Accept", "text/plain")
@@ -88,25 +77,11 @@ public class RenditionRestTest {
     	assertThat(response2.getStatusCode(), is(200)); 
     	assertThat(response2.getHeader("Content-Type"), Matchers.startsWith("text/plain")); 
     	assertThat(response2.getBody().asString(), is("This is the Document Title and this is the document body."));
-
-    	// TODO: assert content
     }
     
     @Test
     public void noRenditionProviderReturns406() {
-    	JsonPath response = 
-        		given()
-        			.header("accept", "application/hal+json")
-    		        .get("/claims/" + claim.getClaimId())
-    		    .then()
-    		    	.statusCode(HttpStatus.SC_OK)
-    		    	.extract()
-    		    		.jsonPath();
-        	
-        	Assert.assertNotNull(response.get("_links.claimForm"));
-        	Assert.assertNotNull(response.get("_links.claimForm.href"));
-
-        	String contentUrl = response.get("_links.claimForm.href");
+        	String contentUrl = "/claims/" + claim.getClaimId() + "/claimForm/" + claim.getClaimForm().getContentId();
         	Response response2 = 
     			given()
     				.header("Accept", "what/ever")
@@ -115,7 +90,5 @@ public class RenditionRestTest {
         	
     	    		.andReturn();
         	assertThat(response2.getStatusCode(), is(406)); 
-
-        	// TODO: assert content
     }
 }

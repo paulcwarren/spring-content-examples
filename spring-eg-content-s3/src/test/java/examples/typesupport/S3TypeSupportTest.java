@@ -7,11 +7,11 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
 import examples.S3Config;
-import examples.typesupport.TypeSupportTests;
+import examples.config.JpaConfig;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { S3Config.class })
-public class S3TypeSupportTests extends TypeSupportTests {
+@ContextConfiguration(classes = { JpaConfig.class, S3Config.class })
+public class S3TypeSupportTest extends TypeSupportTests {
 
 }

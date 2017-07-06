@@ -8,24 +8,20 @@ import java.io.ByteArrayInputStream;
 
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.path.json.JsonPath;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration   
-@IntegrationTest("server.port:0")  
+@SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class ClaimRestTest {
 
 	@Autowired
@@ -34,9 +30,9 @@ public class ClaimRestTest {
 	@Autowired
 	private ClaimFormStore claimFormStore;
 	
-    @Value("${local.server.port}")   // 6
+    @LocalServerPort
     int port;
-
+    
     private Claim canSetClaim;
     private Claim canGetClaim;
     private Claim canDelClaim;
@@ -94,59 +90,32 @@ public class ClaimRestTest {
 		    	.statusCode(HttpStatus.SC_CREATED)
 		    	.extract()
 		    		.jsonPath();
-    	
-    	Assert.assertNotNull(response.get("_links"));
-    	Assert.assertNotNull(response.get("_links.self"));
-    	Assert.assertNotNull(response.get("_links.self.href"));
     }
 
     @Test
     public void canGetContent() {
-    	JsonPath response = 
-    		given()
-    			.header("accept", "application/hal+json")
-		        .get("/claims/" + canGetClaim.getClaimId())
-		    .then()
-		    	.statusCode(HttpStatus.SC_OK)
-		    	.extract()
-		    		.jsonPath();
-    	
-    	Assert.assertNotNull(response.get("_links.claimForm"));
-    	Assert.assertNotNull(response.get("_links.claimForm.href"));
-
-    	String contentUrl = response.get("_links.claimForm.href");
-    	when()
-    		.get(contentUrl)
-    	.then()
-    		.assertThat()
-    			.contentType(Matchers.startsWith("plain/text"))
-    			.body(Matchers.equalTo("This is plain text content!"));
+		given()
+			.header("accept", "plain/text")
+	        .get("/claims/" + canGetClaim.getClaimId() + "/claimForm")
+	    .then()
+	    	.statusCode(HttpStatus.SC_OK)
+	    	.assertThat()
+	    	.contentType(Matchers.startsWith("plain/text"))
+	    	.body(Matchers.equalTo("This is plain text content!"));
     }
 
     @Test
     public void canDeleteContent() {
-    	JsonPath response =
-    		given()
-    			.header("accept", "application/hal+json")
-		        .get("/claims/" + canDelClaim.getClaimId())
-		    .then()
-		    	.statusCode(HttpStatus.SC_OK)
-		    	.extract()
-		    		.jsonPath();
+		given()
+//			.header("accept", "application/hal+json")
+	        .delete("/claims/" + canDelClaim.getClaimId() + "/claimForm")
+	    .then()
+		    .assertThat()
+		    .statusCode(HttpStatus.SC_NO_CONTENT);
     	
-    	Assert.assertNotNull(response.get("_links.claimForm"));
-    	Assert.assertNotNull(response.get("_links.claimForm.href"));
-
-    	String contentUrl = response.get("_links.claimForm.href");
-    	when()
-    		.delete(contentUrl)
-    	.then()
-    		.assertThat()
-    			.statusCode(HttpStatus.SC_NO_CONTENT);
-
     	// and make sure that it is really gone
     	when()
-    		.get(contentUrl)
+    		.get("/claims/" + canDelClaim.getClaimId() + "/claimForm")
     	.then()
     		.assertThat()
     			.statusCode(HttpStatus.SC_NOT_FOUND);

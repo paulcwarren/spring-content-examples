@@ -1,9 +1,4 @@
-	package examples;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+package api.java;
 
 import java.io.InputStream;
 
@@ -16,8 +11,19 @@ import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-	@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { RenditionTestConfig.class })
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import examples.Claim;
+import examples.ClaimForm;
+import examples.ClaimFormStore;
+import examples.ClaimRepository;
+import examples.config.JpaConfig;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { JpaConfig.class, RenditionTestConfig.class })
 public class RenditionTest {
 
 	@Autowired

@@ -23,7 +23,7 @@ public class Claim {
 	
 	@Content
 	@Embedded
-	private ClaimForm claimForm;
+	private ClaimForm claimForm = new ClaimForm();
 
 	public String getClaimId() {
 		return claimId;

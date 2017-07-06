@@ -12,34 +12,59 @@
   <dependencies>
   	<dependency>
   		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-data-mongodb</artifactId>
+  		<artifactId>spring-boot-starter-data-jpa</artifactId>
   	</dependency>
-  	<dependency>
-      <groupId>com.github.paulcwarren</groupId>
-  		<artifactId>spring-content-mongo</artifactId>
-  		<version>${spring-content-version}</version>
-  	</dependency>
+	<!-- HSQL -->
+	<dependency>
+		<groupId>org.hsqldb</groupId>
+		<artifactId>hsqldb</artifactId>
+		<scope>runtime</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+		<dependency>
+		<groupId>org.springframework.hateoas</groupId>
+		<artifactId>spring-hateoas</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>com.github.paulcwarren</groupId>
+		<artifactId>spring-content-fs-boot-starter</artifactId>
+		<version>${spring-content-version}</version>
+	</dependency>
   	<dependency>
   		<groupId>com.github.paulcwarren</groupId>
   		<artifactId>spring-content-docx4j</artifactId>
   		<version>${spring-content-version}</version>
   	</dependency>
-
-  	<dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-test</artifactId>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-io</groupId>
-  		<artifactId>commons-io</artifactId>
-  		<version>2.4</version>
-  		<scope>test</scope>
-  	</dependency>
+	<dependency>
+		<groupId>com.github.paulcwarren</groupId>
+		<artifactId>spring-content-rest</artifactId>
+		<version>${spring-content-version}</version>
+	</dependency>
   	<dependency>
   		<groupId>com.github.paulcwarren</groupId>
   		<artifactId>spring-eg-content-commons</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+	
+	<!-- Test --> 
+ 	<dependency>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-starter-test</artifactId>
+  		<scope>test</scope>
+  	</dependency>
+	<dependency>
+		<groupId>com.jayway.restassured</groupId>
+		<artifactId>rest-assured</artifactId>
+		<version>2.3.4</version>
+		<scope>test</scope>
+	</dependency>
+  	<dependency>
+  		<groupId>commons-io</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>2.4</version>
   		<scope>test</scope>
   	</dependency>
   	<dependency>
