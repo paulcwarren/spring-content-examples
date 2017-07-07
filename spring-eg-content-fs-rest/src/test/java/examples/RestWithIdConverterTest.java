@@ -56,7 +56,9 @@ public class RestWithIdConverterTest {
     			}
     			
     			// and claims
-    			claimRepo.deleteAll();
+    			for (Claim existingClaim : existingClaims) {
+    				claimRepo.delete(existingClaim);
+    			}
     		});
     		Context("given a claim", () -> {
     			BeforeEach(() -> {
