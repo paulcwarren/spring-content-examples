@@ -1,4 +1,4 @@
-package examples;
+package examples.rest;
 
 
 import static com.jayway.restassured.RestAssured.given;
@@ -14,13 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.content.fs.config.FilesystemStoreConfigurer;
-import org.springframework.content.fs.config.FilesystemStoreConverter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.convert.converter.ConverterRegistry;
 
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.jayway.restassured.RestAssured;
 
@@ -29,9 +24,16 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 
+import examples.Claim;
+import examples.ClaimForm;
+import examples.ClaimFormStore;
+import examples.ClaimRepository;
+import examples.app.Application;
+
 @RunWith(Ginkgo4jSpringRunner.class)
-@SpringBootTest(classes = {Application.class, RestWithIdConverterTest.IdConverterConfig.class}, webEnvironment=WebEnvironment.RANDOM_PORT)
-public class RestWithIdConverterTest {
+@Ginkgo4jConfiguration(threads=1)
+@SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
+public class RestTest {
 
 	@Autowired
 	private ClaimRepository claimRepo;
@@ -56,9 +58,7 @@ public class RestWithIdConverterTest {
     			}
     			
     			// and claims
-    			for (Claim existingClaim : existingClaims) {
-    				claimRepo.delete(existingClaim);
-    			}
+    			claimRepo.deleteAll();
     		});
     		Context("given a claim", () -> {
     			BeforeEach(() -> {
@@ -150,31 +150,6 @@ public class RestWithIdConverterTest {
     			});
 			});
     	});
-    }
-    
-    @Configuration
-    public static class IdConverterConfig {
-    	
-    	public Converter<String,String> converter() {
-    		return new FilesystemStoreConverter<String,String>() {
-
-				@Override
-				public String convert(String source) {
-					return String.format("/%s", source.replaceAll("-", "/"));
-				}
-    		};
-    	}
-    	
-    	@Bean
-    	public FilesystemStoreConfigurer configurer() {
-    		return new FilesystemStoreConfigurer() {
-
-    			@Override
-    			public void configureFilesystemStoreConverters(ConverterRegistry registry) {
-    				registry.addConverter(converter());
-    			}
-    		};
-    	}
     }
     
     @Test

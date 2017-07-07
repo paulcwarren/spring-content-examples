@@ -74,6 +74,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 		<module>./spring-eg-content-jpa-boot-starter</module>
 		<module>./spring-eg-content-s3</module>
 		<module>./spring-eg-content-s3-boot-starter</module>
+		<module>./spring-eg-content-s3-rest</module>
 		<module>./spring-eg-content-renditions</module>
 		<module>./spring-eg-content-hypermedia</module>
 		<module>./spring-eg-content-solr-boot-starter</module>
