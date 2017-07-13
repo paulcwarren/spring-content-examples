@@ -48,6 +48,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 	<properties>
 		<ginkgo-version>1.0.9</ginkgo-version>
 		<spring-content-version>0.0.5-SNAPSHOT</spring-content-version>
+		<springboot-version>1.5.4.RELEASE</springboot-version>
 	</properties>
 
 	<dependencyManagement>
@@ -56,7 +57,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 				<!-- Import dependency management from Spring Boot -->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>1.4.3.RELEASE</version>
+				<version>${springboot-version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

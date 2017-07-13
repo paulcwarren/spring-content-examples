@@ -1,6 +1,5 @@
 package examples;
 
-
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 
@@ -14,18 +13,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.path.json.JsonPath;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration   
-@IntegrationTest("server.port:0")  
+@SpringBootTest(classes = Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+//@WebAppConfiguration   
 public class ClaimRestTest {
 
 	@Autowired
@@ -34,7 +31,7 @@ public class ClaimRestTest {
 	@Autowired
 	private ClaimFormStore claimFormStore;
 	
-    @Value("${local.server.port}")   // 6
+    @Value("${local.server.port}") 
     int port;
 
     private Claim canSetClaim;
