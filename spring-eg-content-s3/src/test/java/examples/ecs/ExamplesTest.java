@@ -1,6 +1,5 @@
 package examples.ecs;
 
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -13,7 +12,6 @@ import examples.config.JpaConfig;
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
 @ContextConfiguration(classes = { JpaConfig.class, ECSConfig.class })
-@Ignore
 public class ExamplesTest extends AbstractSpringContentTests {
 	//
 }
