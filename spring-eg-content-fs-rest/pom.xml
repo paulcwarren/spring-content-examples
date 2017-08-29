@@ -38,7 +38,7 @@
 		</dependency>
  		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-rest-boot-starter</artifactId>
+			<artifactId>content-rest-spring-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
 		<dependency>

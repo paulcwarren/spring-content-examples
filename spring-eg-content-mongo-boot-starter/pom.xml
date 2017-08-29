@@ -17,9 +17,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-mongo-boot-starter</artifactId>
+			<artifactId>content-mongo-spring-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
+		
+		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

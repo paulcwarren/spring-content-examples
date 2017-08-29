@@ -21,35 +21,26 @@
 		<!-- Spring Content JPA Repository -->
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-jpa-boot-starter</artifactId>
+			<artifactId>content-jpa-spring-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
 
-		<!-- JPA Repository Backing Service - HSQL -->
+		<!-- JPA Backing Service - HSQL -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Spring Content AutoConfigure -->
-
-		<dependency>
-			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-autoconfigure</artifactId>
-			<version>${spring-content-version}</version>
-		</dependency>
-
 		<!-- Spring Content Solr Integration AutoConfigure -->
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-solr-boot-starter</artifactId>
+			<artifactId>content-solr-spring-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->
-
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
 			<exclusions>
@@ -64,7 +55,7 @@
 			</exclusions>
 			<scope>test</scope>
 		</dependency>
-
+ -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

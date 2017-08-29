@@ -11,7 +11,6 @@
     <artifactId>spring-eg-content-s3-boot-starter</artifactId>
 
     <dependencies>
-        <!-- Project Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -23,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.paulcwarren</groupId>
-            <artifactId>spring-content-s3-boot-starter</artifactId>
+            <artifactId>content-s3-spring-boot-starter</artifactId>
             <version>${spring-content-version}</version>
         </dependency>
         <dependency>

@@ -33,12 +33,12 @@
  		</dependency>
  		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-s3-boot-starter</artifactId>
+			<artifactId>content-s3-spring-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
  		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-rest-boot-starter</artifactId>
+			<artifactId>content-rest-spring-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
 		<dependency>
