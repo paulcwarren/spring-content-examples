@@ -41,4 +41,10 @@ public class ClaimForm {
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
 	}
+
+	// Ensure we can handle entities with "computed" getters; i.e. getters that 
+	// dont have an associated field
+	public boolean getIsActive() {
+		return true;
+	}
 }
