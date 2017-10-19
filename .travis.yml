@@ -26,6 +26,15 @@ install:
   - export PATH=$PATH:/usr/share/maven3/bin
   - unset M2_HOME
   - export M2_HOME=/usr/share/maven3
+  - echo $SOLR_USERNAME
+  - echo $SOLR_PASSWORD
+  - echo $SOLR_URL
+  - echo $INSECURE_SOLR
+  - echo $EXAMPLES_URL
+  - echo $EXAMPLES_SOLR_URL
+  - echo $EXAMPLES_USERNAME
+  - echo $EXAMPLES_PASSWORD
+  - echo $EXAMPLES_AUTH_URL
 
 script:
   - mvn -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' deploy --settings settings.xml
