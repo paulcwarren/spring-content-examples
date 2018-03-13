@@ -64,8 +64,8 @@ public class SolrConfig{
 
     @Bean
     public SolrClient solrClient() {
-        SolrClient sc = new HttpSolrClient(solrProperties.getUrl());
-        return sc;
+        return new HttpSolrClient.Builder(solrProperties.getUrl())
+                .build();
     }
 
 }
