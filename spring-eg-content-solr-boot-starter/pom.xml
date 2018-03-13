@@ -62,10 +62,11 @@
 			<version>${spring-content-version}</version>
 		</dependency>
 
-		<!-- Test dependencies -->
-<!-- 		<dependency>
+		<!-- SolrJ Client -->
+		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
+			<version>7.2.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.codehaus.woodstox</groupId>
@@ -76,9 +77,9 @@
 					<groupId>log4j</groupId>
 				</exclusion>
 			</exclusions>
-			<scope>test</scope>
 		</dependency>
- -->
+
+		<!-- Test dependencies -->
  		<dependency>
 			<groupId>com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>
