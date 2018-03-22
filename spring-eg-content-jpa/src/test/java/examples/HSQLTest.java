@@ -10,7 +10,7 @@ import examples.config.JpaConfig;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { JpaConfig.class, JpaStoresConfig.class })
-public class ExamplesTest extends AbstractSpringContentTests {
+@ContextConfiguration(classes = { JpaConfig.class, HSQLTestConfig.class })
+public class HSQLTest extends AbstractSpringContentTests {
 
 }

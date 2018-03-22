@@ -1,10 +1,10 @@
 package examples;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static examples.utils.EventuallyLambdaMatcher.eventuallyEval;
+import static examples.utils.RealTimeSeries.sample;
+import static examples.utils.EventuallyMatcher.eventually;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -63,7 +63,13 @@ public abstract class AbstractSpringContentTests {
 				});
 				
 				It("should be able to store new content", () -> {
-					Assert.assertTrue(IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), claimFormStore.getContent(claim.getClaimForm())));
+					assertThat(sample(() -> {
+						try {
+							return IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), claimFormStore.getContent(claim.getClaimForm()));
+						} catch (IOException e) {
+							return false;
+						}
+					}), eventually(is(true)));
 				});
 				
 				It("should have content metadata", () -> {
@@ -79,7 +85,13 @@ public abstract class AbstractSpringContentTests {
 					});
 					
 					It("should have the updated content", () -> {
-						Assert.assertTrue(IOUtils.contentEquals(this.getClass().getResourceAsStream("/ACC_IN-1.DOC"), claimFormStore.getContent(claim.getClaimForm())));
+						assertThat(sample(() -> {
+							try {
+								return IOUtils.contentEquals(this.getClass().getResourceAsStream("/ACC_IN-1.DOC"), claimFormStore.getContent(claim.getClaimForm()));
+							} catch (IOException e) {
+								return false;
+							}
+						}), eventually(is(true)));
 					});
 				});
 				
@@ -112,5 +124,47 @@ public abstract class AbstractSpringContentTests {
     
 	@Test
 	public void noop() throws IOException {
+	}
+
+	public class TestThread implements Runnable {
+
+		private Signal ref;
+		private ClaimFormStore store;
+		private Claim claim;
+
+		public TestThread(Signal ref, ClaimFormStore store, Claim claim) {
+			this.ref = ref;
+			this.store = store;
+			this.claim = claim;
+		}
+
+		@Override
+		public void run() {
+			while (ref.isSignalled() == false) {
+				try {
+					System.out.println("Matches is " + ref);
+					boolean matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), this.store.getContent(this.claim.getClaimForm()));
+					System.out.println("test is " + matches);
+					this.ref.signal();
+					System.out.println("signalled");
+				} catch (Exception e) {
+					try {
+						Thread.currentThread().sleep(2000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	public class Signal {
+    	private boolean val = false;
+		public void signal() {
+			val = true;
+		}
+		public boolean isSignalled() {
+			return true;
+		}
 	}
 }
