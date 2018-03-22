@@ -52,7 +52,7 @@ public class BootStarterSolrTest {
 					It("should index the content of that document", () -> {
 						SolrQuery query = new SolrQuery();
 						query.setQuery("one");
-						query.addFilterQuery("id:" + "examples.Document\\:" + doc.getContentId().toString() );
+						query.addFilterQuery("id:" + "examples.Document\\:" + doc.getContentId().toString());
 						query.setFields("content");
 						QueryRequest request = new QueryRequest(query);
 						QueryResponse response = request.process(solr);
