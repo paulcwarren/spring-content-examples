@@ -1,21 +1,16 @@
 package examples;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
-import static examples.utils.EventuallyLambdaMatcher.eventuallyEval;
-import static examples.utils.RealTimeSeries.sample;
-import static examples.utils.EventuallyMatcher.eventually;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-
-import java.io.IOException;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public abstract class AbstractSpringContentTests {
 	
@@ -42,7 +37,9 @@ public abstract class AbstractSpringContentTests {
                             // double check the content got removed
                             ClaimForm deletedClaimForm = new ClaimForm();
                             deletedClaimForm.setContentId(contentId);
-                            Assert.assertThat(claimFormStore.getContent(deletedClaimForm), is(nullValue()));
+                            InputStream content = claimFormStore.getContent(deletedClaimForm);
+                            Assert.assertThat(content, is(nullValue()));
+                            IOUtils.closeQuietly(content);
                         }
                     }
 				}
@@ -63,13 +60,16 @@ public abstract class AbstractSpringContentTests {
 				});
 				
 				It("should be able to store new content", () -> {
-					assertThat(sample(() -> {
-						try {
-							return IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), claimFormStore.getContent(claim.getClaimForm()));
-						} catch (IOException e) {
-							return false;
-						}
-					}), eventually(is(true)));
+					boolean matches = false;
+					InputStream content = null;
+					try {
+						content = claimFormStore.getContent(claim.getClaimForm());
+						matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), content);
+					} catch (IOException e) {
+					} finally {
+						IOUtils.closeQuietly(content);
+					}
+					assertThat(matches, is(true));
 				});
 				
 				It("should have content metadata", () -> {
@@ -85,13 +85,16 @@ public abstract class AbstractSpringContentTests {
 					});
 					
 					It("should have the updated content", () -> {
-						assertThat(sample(() -> {
-							try {
-								return IOUtils.contentEquals(this.getClass().getResourceAsStream("/ACC_IN-1.DOC"), claimFormStore.getContent(claim.getClaimForm()));
-							} catch (IOException e) {
-								return false;
-							}
-						}), eventually(is(true)));
+						boolean matches = false;
+						InputStream content = null;
+						try {
+							content = claimFormStore.getContent(claim.getClaimForm());
+							matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/ACC_IN-1.DOC"), content);
+						} catch (IOException e) {
+						} finally {
+							IOUtils.closeQuietly(content);
+						}
+						assertThat(matches, is(true));
 					});
 				});
 				
@@ -110,7 +113,9 @@ public abstract class AbstractSpringContentTests {
                         ClaimForm deletedClaimForm = new ClaimForm();
                         deletedClaimForm.setContentId((String)id);
 
-						Assert.assertThat(claimFormStore.getContent(deletedClaimForm), is(nullValue()));
+                        InputStream content = claimFormStore.getContent(deletedClaimForm);
+						Assert.assertThat(content, is(nullValue()));
+						IOUtils.closeQuietly(content);
 					});
 					
 					It("should have no metadata", () -> {
@@ -124,47 +129,5 @@ public abstract class AbstractSpringContentTests {
     
 	@Test
 	public void noop() throws IOException {
-	}
-
-	public class TestThread implements Runnable {
-
-		private Signal ref;
-		private ClaimFormStore store;
-		private Claim claim;
-
-		public TestThread(Signal ref, ClaimFormStore store, Claim claim) {
-			this.ref = ref;
-			this.store = store;
-			this.claim = claim;
-		}
-
-		@Override
-		public void run() {
-			while (ref.isSignalled() == false) {
-				try {
-					System.out.println("Matches is " + ref);
-					boolean matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), this.store.getContent(this.claim.getClaimForm()));
-					System.out.println("test is " + matches);
-					this.ref.signal();
-					System.out.println("signalled");
-				} catch (Exception e) {
-					try {
-						Thread.currentThread().sleep(2000);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-		}
-	}
-
-	public class Signal {
-    	private boolean val = false;
-		public void signal() {
-			val = true;
-		}
-		public boolean isSignalled() {
-			return true;
-		}
 	}
 }
