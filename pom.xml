@@ -47,7 +47,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 
 	<properties>
 		<ginkgo-version>1.0.9</ginkgo-version>
-		<spring-content-version>0.0.10</spring-content-version>
+		<spring-content-version>0.0.11-SNAPSHOT</spring-content-version>
 		<springboot-version>1.5.10.RELEASE</springboot-version>
 	</properties>
 
