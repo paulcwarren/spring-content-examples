@@ -1,9 +1,8 @@
 package examples.typesupport;
 
-import java.math.BigInteger;
-
 import org.springframework.content.commons.repository.ContentStore;
+import org.springframework.content.s3.S3ContentId;
 
-public interface BigIntegerBasedContentEntityStore extends ContentStore<BigIntegerBasedContentEntity, BigInteger> {
+public interface S3ContentIdBasedContentEntityStore extends ContentStore<S3ContentIdBasedContentEntity, S3ContentId> {
 
 }

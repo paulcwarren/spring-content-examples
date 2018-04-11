@@ -1,12 +1,9 @@
 package examples.typesupport;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,11 +11,13 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.util.UUID;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class TypeSupportTests {
 	
@@ -71,14 +70,6 @@ public class TypeSupportTests {
 						id = new URI("/some/deep/location");
 						((URIBasedContentEntity)entity).setContentId((URI)id);
 
-						uriStore.setContent((URIBasedContentEntity)entity, new ByteArrayInputStream("uri".getBytes()));
-					});
-					It("should store the content successfully", () -> {
-						Assert.assertThat(IOUtils.contentEquals(uriStore.getContent((URIBasedContentEntity)entity), IOUtils.toInputStream("uri")), is(true));
-					});
-				});
-				Context("given Spring Content generates the ID", () -> {
-					BeforeEach(() -> {
 						uriStore.setContent((URIBasedContentEntity)entity, new ByteArrayInputStream("uri".getBytes()));
 					});
 					It("should store the content successfully", () -> {
