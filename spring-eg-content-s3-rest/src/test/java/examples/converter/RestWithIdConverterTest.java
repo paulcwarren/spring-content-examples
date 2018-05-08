@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.content.s3.config.S3ObjectIdResolvers;
 import org.springframework.content.s3.config.S3StoreConfigurer;
 import org.springframework.content.s3.config.S3StoreConverter;
 import org.springframework.context.annotation.Bean;
@@ -176,7 +177,11 @@ public class RestWithIdConverterTest {
     			public void configureS3StoreConverters(ConverterRegistry registry) {
     				registry.addConverter(converter());
     			}
-    		};
+
+				@Override
+				public void configureS3ObjectIdResolvers(S3ObjectIdResolvers resolvers) {
+				}
+			};
     	}
     }
     
