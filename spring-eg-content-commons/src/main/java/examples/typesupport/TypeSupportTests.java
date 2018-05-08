@@ -57,7 +57,7 @@ public class TypeSupportTests {
 			});
 			AfterEach(() -> {
 				uuidStore.unsetContent((UUIDBasedContentEntity)entity);
-				Assert.assertThat(uuidStore.getContent((UUIDBasedContentEntity)entity), is(nullValue()));
+				Assert.assertThat(((UUIDBasedContentEntity) entity).getContentId(), is(nullValue()));
 			});
 		});
 		Describe("java.net.URI", () -> {
@@ -79,7 +79,7 @@ public class TypeSupportTests {
 			});
 			AfterEach(() -> {
 				uriStore.unsetContent((URIBasedContentEntity)entity);
-				Assert.assertThat(uriStore.getContent((URIBasedContentEntity)entity), is(nullValue()));
+				Assert.assertThat(((URIBasedContentEntity) entity).getContentId(), is(nullValue()));
 			});
 		});
 		Describe("java.lang.Long", () -> {
@@ -101,7 +101,7 @@ public class TypeSupportTests {
 			});
 			AfterEach(() -> {
 				longStore.unsetContent((LongBasedContentEntity)entity);
-				Assert.assertThat(longStore.getContent((LongBasedContentEntity)entity), is(nullValue()));
+				Assert.assertThat(((LongBasedContentEntity) entity).getContentId(), is(nullValue()));
 			});
 		});
 		Describe("java.math.BigInteger", () -> {
@@ -123,7 +123,7 @@ public class TypeSupportTests {
 			});
 			AfterEach(() -> {
 				bigIntStore.unsetContent((BigIntegerBasedContentEntity)entity);
-				Assert.assertThat(bigIntStore.getContent((BigIntegerBasedContentEntity)entity), is(nullValue()));
+				Assert.assertThat(((BigIntegerBasedContentEntity) entity).getContentId(), is(nullValue()));
 			});
 		});
     }

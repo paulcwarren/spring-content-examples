@@ -1,10 +1,10 @@
  package examples.typesupport;
 
+import com.amazonaws.services.s3.model.S3ObjectId;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.content.s3.S3ContentId;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
@@ -30,32 +30,32 @@ import static org.hamcrest.Matchers.nullValue;
 public class S3TypeSupportTest extends TypeSupportTests {
 
      @Autowired
-     protected S3ContentIdBasedContentEntityStore s3ContentIdStore;
+     protected S3ObjectIdBasedContentEntityStore s3ContentIdStore;
 
      Object entity;
-     S3ContentId id;
+     S3ObjectId id;
 
      {
-         Describe("S3ContentId", () -> {
+         Describe("S3ObjectId", () -> {
              Context("given a content entity", () -> {
                  BeforeEach(() -> {
-                     entity = new S3ContentIdBasedContentEntity();
+                     entity = new S3ObjectIdBasedContentEntity();
                  });
                  Context("given the Application sets the ID", () -> {
                      BeforeEach(() -> {
-                         id = new S3ContentId("spring-eg-content-s3", UUID.randomUUID().toString());
-                         ((S3ContentIdBasedContentEntity) entity).setContentId(id);
+                         id = new S3ObjectId("spring-eg-content-s3", UUID.randomUUID().toString());
+                         ((S3ObjectIdBasedContentEntity) entity).setContentId(id);
 
-                         s3ContentIdStore.setContent((S3ContentIdBasedContentEntity) entity, new ByteArrayInputStream("uuid".getBytes()));
+                         s3ContentIdStore.setContent((S3ObjectIdBasedContentEntity) entity, new ByteArrayInputStream("uuid".getBytes()));
                      });
                      It("should store the content successfully", () -> {
-                         Assert.assertThat(IOUtils.contentEquals(s3ContentIdStore.getContent((S3ContentIdBasedContentEntity) entity), IOUtils.toInputStream("uuid")), is(true));
+                         Assert.assertThat(IOUtils.contentEquals(s3ContentIdStore.getContent((S3ObjectIdBasedContentEntity) entity), IOUtils.toInputStream("uuid")), is(true));
                      });
                  });
              });
              AfterEach(() -> {
-                 s3ContentIdStore.unsetContent((S3ContentIdBasedContentEntity) entity);
-                 Assert.assertThat(s3ContentIdStore.getContent((S3ContentIdBasedContentEntity) entity), is(nullValue()));
+                 s3ContentIdStore.unsetContent((S3ObjectIdBasedContentEntity) entity);
+                 Assert.assertThat(((S3ObjectIdBasedContentEntity) entity).getContentId(), is(nullValue()));
              });
          });
      }
