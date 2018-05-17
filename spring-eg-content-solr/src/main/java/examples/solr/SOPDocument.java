@@ -12,14 +12,14 @@ import javax.persistence.Id;
 public class SOPDocument {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title;
     private String author;
 
     @ContentId
-    private Integer contentId;
+    private String contentId;
 
     public SOPDocument() {
     }
@@ -32,11 +32,11 @@ public class SOPDocument {
         this.id = id;
     }
 
-    public Integer getContentId() {
+    public String getContentId() {
         return contentId;
     }
 
-    public void setContentId(Integer contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
 
