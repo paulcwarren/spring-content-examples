@@ -1,4 +1,4 @@
-package examples;
+package examples.solrboot;
 
 import org.springframework.data.repository.CrudRepository;
 

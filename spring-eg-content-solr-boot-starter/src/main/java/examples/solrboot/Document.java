@@ -1,4 +1,4 @@
-package examples;
+package examples.solrboot;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +18,7 @@ public class Document {
 	private String author;
 
 	@ContentId
-	private Integer contentId;
+	private String contentId;
 
 	public Document() {
 	}
@@ -31,11 +31,11 @@ public class Document {
 		this.id = id;
 	}
 
-	public Integer getContentId() {
+	public String getContentId() {
 		return contentId;
 	}
 
-	public void setContentId(Integer contentId) {
+	public void setContentId(String contentId) {
 		this.contentId = contentId;
 	}
 

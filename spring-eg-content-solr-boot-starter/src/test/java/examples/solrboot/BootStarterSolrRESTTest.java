@@ -1,22 +1,18 @@
-package examples;
-
-import static org.hamcrest.CoreMatchers.*;
+package examples.solrboot;
 
 import static com.jayway.restassured.RestAssured.when;
-import static org.junit.Assert.*;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 
+import examples.solrboot.Application;
+import examples.solrboot.Document;
+import examples.solrboot.DocumentContentRepository;
+import examples.solrboot.DocumentRepository;
 import org.apache.http.HttpStatus;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.request.QueryRequest;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocumentList;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
 
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;

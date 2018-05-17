@@ -1,4 +1,4 @@
-package examples;
+package examples.solrboot;
 
 
 import org.springframework.content.commons.annotations.ContentId;
@@ -19,7 +19,7 @@ public class SOPDocument {
     private String author;
 
     @ContentId
-    private Integer contentId;
+    private String contentId;
 
     public SOPDocument() {
     }
@@ -32,11 +32,11 @@ public class SOPDocument {
         this.id = id;
     }
 
-    public Integer getContentId() {
+    public String getContentId() {
         return contentId;
     }
 
-    public void setContentId(Integer contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
 
