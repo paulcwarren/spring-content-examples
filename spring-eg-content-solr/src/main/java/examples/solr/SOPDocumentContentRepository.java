@@ -1,4 +1,4 @@
-package examples;
+package examples.solr;
 
 
 import org.springframework.content.commons.repository.ContentStore;

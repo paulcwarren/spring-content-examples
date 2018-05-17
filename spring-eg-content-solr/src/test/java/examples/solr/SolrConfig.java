@@ -1,4 +1,4 @@
-package examples;
+package examples.solr;
 
 import javax.sql.DataSource;
 
@@ -7,6 +7,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.jpa.config.EnableJpaContentRepositories;
+import org.springframework.content.jpa.config.EnableJpaStores;
 import org.springframework.content.solr.EnableFullTextSolrIndexing;
 import org.springframework.content.solr.SolrProperties;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 @EnableFullTextSolrIndexing
 @EnableJpaRepositories
-@EnableJpaContentRepositories
+@EnableJpaStores
 public class SolrConfig{
 
     @Autowired

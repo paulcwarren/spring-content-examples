@@ -1,4 +1,4 @@
-package examples;
+package examples.solr;
 
 import org.springframework.content.commons.annotations.ContentId;
 
@@ -11,14 +11,14 @@ import javax.persistence.Id;
 public class Document {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	private String title;
 	private String author;
 
 	@ContentId
-	private Integer contentId;
+	private String contentId;
 
 	public Document() {
 	}
@@ -31,11 +31,11 @@ public class Document {
 		this.id = id;
 	}
 
-	public Integer getContentId() {
+	public String getContentId() {
 		return contentId;
 	}
 
-	public void setContentId(Integer contentId) {
+	public void setContentId(String contentId) {
 		this.contentId = contentId;
 	}
 

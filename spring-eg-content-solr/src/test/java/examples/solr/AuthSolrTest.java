@@ -1,4 +1,4 @@
-package examples;
+package examples.solr;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
@@ -79,8 +79,8 @@ public class AuthSolrTest {
                     });
                     Context("when the content is searched", () -> {
                         It("should return the searched content and no more", () -> {
-                            Iterable<Integer> content = docContentRepo.findKeyword("one");
-                            List<Integer> result = stream(content.spliterator(), false).collect(Collectors.toList());
+                            Iterable<String> content = docContentRepo.findKeyword("one");
+                            List<String> result = stream(content.spliterator(), false).collect(Collectors.toList());
                             assertThat(result, hasItem(doc.getContentId()));
                         });
                     });

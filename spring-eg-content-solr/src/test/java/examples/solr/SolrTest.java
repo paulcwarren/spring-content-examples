@@ -1,4 +1,4 @@
-package examples;
+package examples.solr;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -42,7 +42,11 @@ public class SolrTest {
 						doc.setTitle("title of document 1");
 						doc.setAuthor("author@email.com");
 						docContentRepo.setContent(doc, this.getClass().getResourceAsStream("/one.docx"));
-						docRepo.save(doc);
+						try {
+							doc = docRepo.save(doc);
+						} catch (Exception e) {
+							int i=0;
+						}
 					});
 					AfterEach(() -> {
 						docContentRepo.unsetContent(doc);
@@ -51,7 +55,7 @@ public class SolrTest {
 					It("should index the content of that document", () -> {
 						SolrQuery query = new SolrQuery();
 						query.setQuery("one");
-						query.addFilterQuery("id:" + "examples.models.Document\\:" + doc.getContentId().toString());
+						query.addFilterQuery("id:" + Document.class.getName() + "\\:" + doc.getContentId().toString());
 						query.setFields("content");
 						QueryRequest request = new QueryRequest(query);
 						QueryResponse response = request.process(solr);
@@ -63,7 +67,7 @@ public class SolrTest {
 					});
 					Context("when the content is searched", () -> {
 						It("should return the searched content", () -> {
-							Iterable<Integer> content = docContentRepo.findKeyword("one");
+							Iterable<String> content = docContentRepo.findKeyword("one");
 							assertThat(content, CoreMatchers.hasItem(doc.getContentId()));
 						});
 					});
@@ -75,7 +79,7 @@ public class SolrTest {
 						It("should index the new content", () -> {
 							SolrQuery query2 = new SolrQuery();
 							query2.setQuery("two");
-							query2.addFilterQuery("id:examples.models.Document\\:" + doc.getContentId().toString());
+							query2.addFilterQuery("id:" + Document.class.getName() + "\\:" + doc.getContentId().toString());
 							query2.setFields("content");
 
 							QueryRequest request = new QueryRequest(query2);
