@@ -17,6 +17,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import examples.models.Claim;
+import examples.models.ClaimForm;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.runner.RunWith;
@@ -35,7 +37,7 @@ import examples.typesupport.UUIDBasedContentEntityStore;
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
 @ContextConfiguration(classes = { EnableFilesystemStoresConfig.class })
-public class ExamplesTest extends AbstractSpringContentTests {
+public class ExamplesTest extends ContentStoreTests {
 
 	@Autowired
 	private File filesystemRoot;

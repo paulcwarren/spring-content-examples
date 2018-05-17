@@ -24,10 +24,10 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 
-import examples.Claim;
-import examples.ClaimForm;
-import examples.ClaimFormStore;
-import examples.ClaimRepository;
+import examples.models.Claim;
+import examples.models.ClaimForm;
+import examples.stores.ClaimFormStore;
+import examples.repositories.ClaimRepository;
 import examples.app.Application;
 
 @RunWith(Ginkgo4jSpringRunner.class)

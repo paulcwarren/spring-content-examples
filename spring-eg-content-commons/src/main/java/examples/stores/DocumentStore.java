@@ -1,4 +1,4 @@
-package examples;
+package examples.stores;
 
 import org.springframework.content.commons.repository.Store;
 

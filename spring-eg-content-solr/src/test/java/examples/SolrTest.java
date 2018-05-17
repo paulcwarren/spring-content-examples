@@ -51,7 +51,7 @@ public class SolrTest {
 					It("should index the content of that document", () -> {
 						SolrQuery query = new SolrQuery();
 						query.setQuery("one");
-						query.addFilterQuery("id:" + "examples.Document\\:" + doc.getContentId().toString());
+						query.addFilterQuery("id:" + "examples.models.Document\\:" + doc.getContentId().toString());
 						query.setFields("content");
 						QueryRequest request = new QueryRequest(query);
 						QueryResponse response = request.process(solr);
@@ -75,7 +75,7 @@ public class SolrTest {
 						It("should index the new content", () -> {
 							SolrQuery query2 = new SolrQuery();
 							query2.setQuery("two");
-							query2.addFilterQuery("id:examples.Document\\:" + doc.getContentId().toString());
+							query2.addFilterQuery("id:examples.models.Document\\:" + doc.getContentId().toString());
 							query2.setFields("content");
 
 							QueryRequest request = new QueryRequest(query2);
@@ -95,7 +95,7 @@ public class SolrTest {
 						It("should delete the record of the content from the index", () -> {
 							SolrQuery query = new SolrQuery();
 							query.setQuery("one");
-							query.addFilterQuery("id:" + "examples.Document\\:" + id);
+							query.addFilterQuery("id:" + "examples.models.Document\\:" + id);
 							query.setFields("content");
 
 							QueryRequest request = new QueryRequest(query);

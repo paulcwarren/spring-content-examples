@@ -5,6 +5,10 @@ import static com.jayway.restassured.RestAssured.when;
 
 import java.io.ByteArrayInputStream;
 
+import examples.models.Claim;
+import examples.models.ClaimForm;
+import examples.repositories.ClaimRepository;
+import examples.stores.ClaimFormStore;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Assert;

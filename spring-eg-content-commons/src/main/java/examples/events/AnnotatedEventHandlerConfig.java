@@ -10,7 +10,7 @@ import org.springframework.content.commons.annotations.StoreEventHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import examples.ClaimForm;
+import examples.models.ClaimForm;
 
 @Configuration
 public class AnnotatedEventHandlerConfig {

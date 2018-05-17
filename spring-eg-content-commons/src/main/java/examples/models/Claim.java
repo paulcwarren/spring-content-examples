@@ -1,4 +1,4 @@
-package examples;
+package examples.models;
 
 import java.util.UUID;
 

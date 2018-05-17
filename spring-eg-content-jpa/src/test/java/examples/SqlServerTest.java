@@ -8,6 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
 @ContextConfiguration(classes = { SqlServerTestConfig.class })
-public class SqlServerTest extends AbstractSpringContentTests {
+public class SqlServerTest extends ContentStoreTests {
 
 }

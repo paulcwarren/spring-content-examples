@@ -18,11 +18,10 @@ import com.jayway.restassured.response.Response;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import api.rest.Application;
-import examples.Claim;
-import examples.ClaimForm;
-import examples.ClaimFormStore;
-import examples.ClaimRepository;
+import examples.models.Claim;
+import examples.models.ClaimForm;
+import examples.stores.ClaimFormStore;
+import examples.repositories.ClaimRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)

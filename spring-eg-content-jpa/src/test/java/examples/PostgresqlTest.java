@@ -8,6 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
 @ContextConfiguration(classes = { PostgresqlTestConfig.class })
-public class PostgresqlTest extends AbstractSpringContentTests {
+public class PostgresqlTest extends ContentStoreTests {
 
 }

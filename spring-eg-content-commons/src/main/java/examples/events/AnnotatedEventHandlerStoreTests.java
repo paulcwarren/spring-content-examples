@@ -8,10 +8,10 @@ import static org.hamcrest.Matchers.greaterThan;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import examples.AbstractSpringContentTests;
+import examples.ContentStoreTests;
 import examples.events.AnnotatedEventHandlerConfig.ExampleAnnotatedEventHandler;
 
-public class AnnotatedEventHandlerTests extends AbstractSpringContentTests {
+public class AnnotatedEventHandlerStoreTests extends ContentStoreTests {
 	
 	@Autowired private ExampleAnnotatedEventHandler eventHandler;
 	

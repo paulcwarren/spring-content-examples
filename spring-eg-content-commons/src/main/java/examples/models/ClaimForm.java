@@ -1,4 +1,4 @@
-package examples;
+package examples.models;
 
 import javax.persistence.Embeddable;
 

@@ -16,10 +16,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import examples.Claim;
-import examples.ClaimForm;
-import examples.ClaimFormStore;
-import examples.ClaimRepository;
+import examples.models.Claim;
+import examples.models.ClaimForm;
+import examples.stores.ClaimFormStore;
+import examples.repositories.ClaimRepository;
 import examples.config.JpaConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)

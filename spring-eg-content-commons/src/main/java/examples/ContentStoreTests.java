@@ -1,5 +1,9 @@
 package examples;
 
+import examples.models.Claim;
+import examples.models.ClaimForm;
+import examples.repositories.ClaimRepository;
+import examples.stores.ClaimFormStore;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,7 +16,7 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public abstract class AbstractSpringContentTests {
+public abstract class ContentStoreTests extends AssociativeStoreTests {
 	
 	@Autowired protected ClaimRepository claimRepo;
 	@Autowired protected ClaimFormStore claimFormStore;
@@ -21,7 +25,7 @@ public abstract class AbstractSpringContentTests {
     protected Object id;
     
     {
-		Describe("Spring Content Basics", () -> {
+		Describe("ContentStore", () -> {
 			
 			AfterEach(() -> {
 				// delete any existing claim forms
