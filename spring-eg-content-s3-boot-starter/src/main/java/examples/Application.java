@@ -1,5 +1,7 @@
 package examples;
 
+import examples.models.ClaimForm;
+import examples.stores.ClaimFormStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +34,7 @@ public class Application {
 
 	@Configuration
 	public static class AppConfig {
-	
+
 		@Autowired
 		private Environment env;
 		

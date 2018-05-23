@@ -4,10 +4,6 @@ import static com.jayway.restassured.RestAssured.when;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 
-import examples.solrboot.Application;
-import examples.solrboot.Document;
-import examples.solrboot.DocumentContentRepository;
-import examples.solrboot.DocumentRepository;
 import org.apache.http.HttpStatus;
 import org.apache.solr.client.solrj.SolrClient;
 
@@ -17,13 +13,13 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.jayway.restassured.RestAssured;
 
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.content.solr.SolrProperties;
 
 @RunWith(Ginkgo4jSpringRunner.class)

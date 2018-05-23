@@ -31,7 +31,7 @@ public class AbstractSpringContentMongoConfiguration extends AbstractMongoConfig
 	}
 
 	@Override
-	public MongoDbFactory mongoDbFactory() throws Exception {
+	public MongoDbFactory mongoDbFactory() {
 		
 		if (System.getenv("spring_eg_content_mongo_host") != null) {
 	    	String host = System.getenv("spring_eg_content_mongo_host");
@@ -54,8 +54,7 @@ public class AbstractSpringContentMongoConfiguration extends AbstractMongoConfig
 		return super.mongoDbFactory();
 	}
 
-	@Override
-	public Mongo mongo() throws Exception {
+	public MongoClient mongoClient() {
     	log.info("Connecting to localhost");
         return new MongoClient();
 	}

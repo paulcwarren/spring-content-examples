@@ -1,6 +1,5 @@
 package examples.rest;
 
-
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 
@@ -11,7 +10,6 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
@@ -29,6 +27,7 @@ import examples.models.ClaimForm;
 import examples.stores.ClaimFormStore;
 import examples.repositories.ClaimRepository;
 import examples.app.Application;
+import org.springframework.boot.web.server.LocalServerPort;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
