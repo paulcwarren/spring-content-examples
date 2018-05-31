@@ -26,8 +26,8 @@ import javax.sql.DataSource;
 @EnableJpaStores
 public class SqlServerTestConfig {
 
-//    @Value("#{environment.SQLSERVER_URL}")
-    private String postgresqlUrl = "jdbc:sqlserver://den1.mssql6.gear.host;databaseName=springcontent";
+    @Value("#{environment.SQLSERVER_URL}")
+    private String postgresqlUrl;
 
     @Value("#{environment.SQLSERVER_USERNAME}")
     private String postgresqlUsername;

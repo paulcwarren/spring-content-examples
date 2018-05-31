@@ -12,5 +12,4 @@ import examples.config.JpaConfig;
 @Ginkgo4jConfiguration(threads=1)
 @ContextConfiguration(classes = { JpaConfig.class, HSQLTestConfig.class })
 public class HSQLTest extends ContentStoreTests {
-
 }

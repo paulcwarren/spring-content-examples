@@ -59,7 +59,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 					claim.setFirstName("John");
 					claim.setLastName("Smith");
 					claim.setClaimForm(new ClaimForm());
-					claimFormStore.setContent(claim.getClaimForm(), this.getClass().getResourceAsStream("/claim_form.pdf"));
+					claimFormStore.setContent(claim.getClaimForm(), this.getClass().getResourceAsStream("/ACC_IN-1.DOC"));
 					claimRepo.save(claim);
 				});
 				
@@ -68,7 +68,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 					InputStream content = null;
 					try {
 						content = claimFormStore.getContent(claim.getClaimForm());
-						matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), content);
+						matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/ACC_IN-1.DOC"), content);
 					} catch (IOException e) {
 					} finally {
 						IOUtils.closeQuietly(content);
@@ -79,12 +79,12 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 				It("should have content metadata", () -> {
 					Assert.assertThat(claim.getClaimForm().getContentId(), is(notNullValue()));
 					Assert.assertThat(claim.getClaimForm().getContentId().trim().length(), greaterThan(0));
-					Assert.assertEquals(claim.getClaimForm().getContentLength(), 1226609);
+					Assert.assertEquals(claim.getClaimForm().getContentLength(), 26624);
 				});
 				
 				Context("when content is updated", () -> {
 					BeforeEach(() ->{
-						claimFormStore.setContent(claim.getClaimForm(), this.getClass().getResourceAsStream("/ACC_IN-1.DOC"));
+						claimFormStore.setContent(claim.getClaimForm(), this.getClass().getResourceAsStream("/claim_form.pdf"));
 						claim = claimRepo.save(claim);
 					});
 					
@@ -93,7 +93,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 						InputStream content = null;
 						try {
 							content = claimFormStore.getContent(claim.getClaimForm());
-							matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/ACC_IN-1.DOC"), content);
+							matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), content);
 						} catch (IOException e) {
 						} finally {
 							IOUtils.closeQuietly(content);

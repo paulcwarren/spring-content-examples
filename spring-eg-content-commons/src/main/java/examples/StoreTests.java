@@ -74,7 +74,7 @@ public class StoreTests {
                         assertThat(matches, Matchers.is(true));
 
                     });
-                    Context("given that resource us then updated", () -> {
+                    Context("given that resource is then updated", () -> {
                         BeforeEach(() -> {
                             InputStream is = this.getClass().getResourceAsStream("/ACC_IN-1.DOC");
                             OutputStream os = ((WritableResource)r).getOutputStream();
@@ -98,7 +98,6 @@ public class StoreTests {
                                 IOUtils.closeQuietly(actual);
                             }
                             assertThat(matches, Matchers.is(true));
-
                         });
                     });
                     Context("given that resource is then deleted", () -> {

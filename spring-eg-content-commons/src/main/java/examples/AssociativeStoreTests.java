@@ -1,21 +1,13 @@
 package examples;
 
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import examples.models.Document;
 import examples.repositories.DocumentRepository;
 import examples.stores.DocumentAssociativeStore;
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.content.commons.io.DeletableResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.WritableResource;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.UUID;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
@@ -36,7 +28,8 @@ public class AssociativeStoreTests extends StoreTests {
     private DocumentAssociativeStore store;
 
     private Document document;
-    private Resource r;
+    private String resourceId;
+    private Resource resource;
     private Exception e;
 
     {
@@ -48,96 +41,27 @@ public class AssociativeStoreTests extends StoreTests {
                 });
                 It("should not have an associated resource", () -> {
                     assertThat(document.getContentId(), is(nullValue()));
+                    assertThat(store.getResource(document), is(nullValue()));
                 });
-                Context("given that entity's resource", () -> {
+                Context("given a resource", () -> {
                     BeforeEach(() -> {
-                        r = store.getResource(document);
+                        resourceId = UUID.randomUUID().toString();
+                        resource = store.getResource(resourceId);
                     });
-                    It("should not exist", () -> {
-                        assertThat(r.exists(), is(false));
-                    });
-                    Context("given content is added to that resource", () -> {
-                        BeforeEach(() -> {
-                            InputStream is = this.getClass().getResourceAsStream("/claim_form.pdf");
-                            OutputStream os = ((WritableResource)r).getOutputStream();
-                            IOUtils.copy(is, os);
-                            is.close();
-                            os.close();
+                    Context("when the resource is associated", () -> {
+                       BeforeEach(() -> {
+                           store.associate(document, resourceId);
+                       });
+                        It("should be recorded as such on the entity's @ContentId", () -> {
+                            assertThat(document.getContentId(), is(resourceId));
                         });
-                        AfterEach(() -> {
-                            try {
-                                ((DeletableResource) r).delete();
-                            } catch (Exception e) {
-                                // do nothing
-                            }
-                        });
-                        It("should then exist", () -> {
-                            assertThat(r.exists(), is(true));
-                        });
-                        It("should store that content", () -> {
-                            boolean matches = false;
-                            InputStream expected = this.getClass().getResourceAsStream("/claim_form.pdf");
-                            InputStream actual = null;
-                            try {
-                                actual = r.getInputStream();
-                                matches = IOUtils.contentEquals(expected, actual);
-                            } catch (IOException e) {
-                            } finally {
-                                IOUtils.closeQuietly(expected);
-                                IOUtils.closeQuietly(actual);
-                            }
-                            assertThat(matches, Matchers.is(true));
-                        });
-                        It("should be associated with the entity", () -> {
-                            assertThat(document.getContentId(), is(not(nullValue())));
-                        });
-                        Context("given that resource us then updated", () -> {
+                        Context("when the resource is unassociated", () -> {
                             BeforeEach(() -> {
-                                InputStream is = this.getClass().getResourceAsStream("/ACC_IN-1.DOC");
-                                OutputStream os = ((WritableResource)r).getOutputStream();
-                                IOUtils.copy(is, os);
-                                is.close();
-                                os.close();
+                                store.unassociate(document);
                             });
-                            It("should still exist", () -> {
-                                assertThat(r.exists(), is(true));
+                            It("should reset the entity's @ContentId", () -> {
+                                assertThat(document.getContentId(), is(nullValue()));
                             });
-                            It("should store that updated content", () -> {
-                                boolean matches = false;
-                                InputStream expected = this.getClass().getResourceAsStream("/ACC_IN-1.DOC");
-                                InputStream actual = null;
-                                try {
-                                    actual = r.getInputStream();
-                                    matches = IOUtils.contentEquals(expected, actual);
-                                } catch (IOException e) {
-                                } finally {
-                                    IOUtils.closeQuietly(expected);
-                                    IOUtils.closeQuietly(actual);
-                                }
-                                assertThat(matches, Matchers.is(true));
-                            });
-                            It("should still be associated", () -> {
-                                assertThat(document.getContentId(), is(not(nullValue())));
-                            });
-                        });
-                        Context("given that resource is then deleted", () -> {
-                            BeforeEach(() -> {
-                                try {
-                                    ((DeletableResource) r).delete();
-                                } catch (Exception e) {
-                                    this.e = e;
-                                }
-                            });
-                            It("should succeed", () -> {
-                                assertThat(e, is(nullValue()));
-                            });
-                        });
-                        Context("given the resource is forgotten", () -> {
-                            BeforeEach(() -> {
-                                // TODO: call store.forgetResource(document)
-                            });
-                            // TODO: It("should not exist", () - {});
-                            // TODO: It("should not be associated, () - {}");
                         });
                     });
                 });

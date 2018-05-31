@@ -12,8 +12,8 @@ import java.util.UUID;
 @ContextConfiguration(classes = { H2TestConfig.class })
 public class H2Test extends ContentStoreTests {
 
-    @Override
-    protected String getId() {
-        return UUID.randomUUID().toString();
-    }
+//    @Override
+//    protected String getId() {
+//        return UUID.randomUUID().toString();
+//    }
 }
