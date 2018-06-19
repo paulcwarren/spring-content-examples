@@ -17,6 +17,24 @@ public class AnnotatedEventHandlerStoreTests extends ContentStoreTests {
 	
 	{
 		Describe("Annotated Event Handler", () -> {
+			It("should have called BeforeGetResource", () -> {
+				assertThat(eventHandler.handleBeforeGetResourceCallCount(), is(greaterThan(0)));
+			});
+			It("should have called AfterGetResource", () -> {
+				assertThat(eventHandler.handleAfterGetResourceCallCount(), is(greaterThan(0)));
+			});
+			It("should have called BeforeAssociate", () -> {
+				assertThat(eventHandler.handleBeforeAssociateCallCount(), is(greaterThan(0)));
+			});
+			It("should have called AfterAssociate", () -> {
+				assertThat(eventHandler.handleAfterAssociateCallCount(), is(greaterThan(0)));
+			});
+			It("should have called BeforeUnassociate", () -> {
+				assertThat(eventHandler.handleBeforeUnassociateCallCount(), is(greaterThan(0)));
+			});
+			It("should have called AfterAssociate", () -> {
+				assertThat(eventHandler.handleAfterUnassociateCallCount(), is(greaterThan(0)));
+			});
 			It("should have called BeforeSetContent", () -> {
 				assertThat(eventHandler.handleBeforeSetCallCount(), is(greaterThan(0)));
 			});

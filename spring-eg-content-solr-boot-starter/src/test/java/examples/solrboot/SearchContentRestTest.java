@@ -1,9 +1,13 @@
 package examples.solrboot;
 
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FContext;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FIt;
 import static com.jayway.restassured.RestAssured.given;
 
+import java.io.InputStream;
 import java.io.StringReader;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +42,7 @@ public class SearchContentRestTest {
 
 	@Autowired
 	private DocumentContentRepository docContentStore;
-	
+
     @LocalServerPort
     int port;
     
@@ -46,9 +50,10 @@ public class SearchContentRestTest {
     
     {
     	Describe("Search Content REST Endpoint Examples", () -> {
-    		BeforeEach(() -> {
+
+			BeforeEach(() -> {
     			RestAssured.port = port;
-    			
+
     			// delete any existing docs
     			Iterable<Document> existingDocs = docRepo.findAll();
     			for (Document existingDoc : existingDocs) {
@@ -69,11 +74,11 @@ public class SearchContentRestTest {
     						.when()
 	    						.get("/documents/searchContent/findKeyword?keyword=one")
 	    						.andReturn();
-					
+
 					resp.then()
 						.assertThat()
 						.statusCode(HttpStatus.SC_OK);
-					
+
 					RepresentationFactory representationFactory = new StandardRepresentationFactory();
 					ReadableRepresentation halResponse = representationFactory.readRepresentation("application/hal+json", new StringReader(resp.asString()));
 					assertThat(halResponse.getResourcesByRel("documents").size(), is(1));
