@@ -11,7 +11,7 @@ import examples.typesupport.TypeSupportTests;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { EnableFilesystemStoresConfig.class })
+@ContextConfiguration(classes = { FsTypeSupportConfig.class })
 public class FsTypeSupportTests extends TypeSupportTests {
 
 }

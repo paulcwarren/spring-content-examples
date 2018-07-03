@@ -10,13 +10,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.UUID;
 
 import examples.models.Claim;
 import examples.models.ClaimForm;
-import org.apache.commons.io.IOUtils;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.fs.config.FilesystemStoreConverter;
@@ -69,6 +67,24 @@ public class ExamplesTest extends ContentStoreTests {
 				});
 			});
 			Describe("Custom content placement", () -> {
+				Context("given a converter that converts an entity to a resource path", () -> {
+					BeforeEach(() -> {
+						filesystemStoreConverter.addConverter(new EntityConverter());
+
+						id = UUID.randomUUID();
+						contentEntity = new UUIDBasedContentEntity();
+						((UUIDBasedContentEntity)contentEntity).setContentId(id);
+						uuidStore.setContent((UUIDBasedContentEntity)contentEntity, new ByteArrayInputStream("Hello Content World!".getBytes()));
+					});
+					AfterEach(() -> {
+						filesystemStoreConverter.removeConvertible(UUIDBasedContentEntity.class, String.class);
+					});
+					It("should store content at that path", () -> {
+						String[] segments = id.toString().split("-");
+
+						assertThat(new File(Paths.get(filesystemRoot.getAbsolutePath(), segments).toAbsolutePath().toString()).exists(), is(true));
+					});
+				});
 				Context("given a converter that converts a UUID id to a resource path", () -> {
 					BeforeEach(() -> {
 						filesystemStoreConverter.addConverter(new UUIDConverter());
@@ -90,12 +106,19 @@ public class ExamplesTest extends ContentStoreTests {
 			});
 		});
 	}
-	
+
+	public class EntityConverter implements FilesystemStoreConverter<UUIDBasedContentEntity,String> {
+		@Override
+		public String convert(UUIDBasedContentEntity source) {
+			UUID id = source.getContentId();
+			return String.format("/%s", id.toString().replaceAll("-","/"));
+		}
+	}
+
 	public class UUIDConverter implements FilesystemStoreConverter<UUID,String> {
 		@Override
 		public String convert(UUID source) {
 			return String.format("/%s", source.toString().replaceAll("-","/"));
 		}
 	}
-	
 }
