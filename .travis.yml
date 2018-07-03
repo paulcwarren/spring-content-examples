@@ -12,10 +12,10 @@ notifications:
 install:
   - sudo sed -i 's/us-central1.gce/us-central1.gce.clouds/' /etc/apt/sources.list
   - sudo apt-get update
-  - wget --quiet http://www-us.apache.org/dist/lucene/solr/7.3.1/solr-7.3.1.tgz
-  - tar -xf solr-7.3.1.tgz
-  - ./solr-7.3.1/bin/solr start
-  - ./solr-7.3.1/bin/solr create -c solr
+  - wget --quiet http://www-us.apache.org/dist/lucene/solr/7.4.0/solr-7.4.0.tgz
+  - tar -xf solr-7.4.0.tgz
+  - ./solr-7.4.0/bin/solr start
+  - ./solr-7.4.0/bin/solr create -c solr
   - sudo apt-get update -y --fix-missing
   - sudo apt-get purge maven maven2 -y
   - sudo apt-add-repository ppa:andrei-pozolotin/maven3 -y
