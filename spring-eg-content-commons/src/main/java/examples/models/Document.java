@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import java.util.UUID;
 
 @Entity
+@org.springframework.data.mongodb.core.mapping.Document
 public class Document {
 
     @Id
