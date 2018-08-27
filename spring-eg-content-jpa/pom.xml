@@ -22,7 +22,7 @@
 			<artifactId>spring-content-jpa</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
-		
+
 		<!-- HSQL -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
