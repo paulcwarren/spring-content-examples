@@ -6,6 +6,12 @@ sudo: required
 jdk:
   - oraclejdk8
 
+# safelist
+branches:
+  only:
+  - master
+  - release
+
 notifications:
   slack: cloudfoundry:xvgjKLNQTyqAFMnsTywVHik9
 
