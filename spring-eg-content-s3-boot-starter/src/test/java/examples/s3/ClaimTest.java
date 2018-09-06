@@ -1,5 +1,6 @@
-package examples;
+package examples.s3;
 
+import examples.ContentStoreTests;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 

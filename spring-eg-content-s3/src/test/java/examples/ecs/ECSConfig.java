@@ -1,7 +1,6 @@
 package examples.ecs;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.aws.core.io.s3.SimpleStorageResourceLoader;
 import org.springframework.content.s3.config.EnableS3ContentRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,11 +33,6 @@ public class ECSConfig {
     	return bucket;
     }
     
-    @Bean
-    public SimpleStorageResourceLoader simpleStorageResourceLoader() {
-        return new SimpleStorageResourceLoader(amazonS3Client(basicAWSCredentials()));
-    }
-
     @Bean
     public BasicAWSCredentials basicAWSCredentials() {
         return new BasicAWSCredentials(accessKey, secretKey);

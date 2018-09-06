@@ -3,7 +3,6 @@ package examples.app;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.aws.core.io.s3.SimpleStorageResourceLoader;
 import org.springframework.content.s3.config.EnableS3Stores;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,11 +56,6 @@ public class Application {
 			AmazonS3Client amazonS3Client = new AmazonS3Client(awsCredentials);
 			amazonS3Client.setRegion(region());
 			return amazonS3Client;
-		}
-	    
-		@Bean
-		public SimpleStorageResourceLoader simpleStorageResourceLoader(AmazonS3 client) {
-			return new SimpleStorageResourceLoader(client);
 		}
 	}
 }

@@ -59,5 +59,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>ginkgo4j</artifactId>
+			<version>${ginkgo-version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

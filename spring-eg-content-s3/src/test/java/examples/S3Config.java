@@ -1,10 +1,8 @@
 package examples;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.aws.core.io.s3.SimpleStorageResourceLoader;
 import org.springframework.content.s3.config.EnableS3ContentRepositories;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
@@ -36,10 +34,5 @@ public class S3Config {
 		AmazonS3Client amazonS3Client = new AmazonS3Client(awsCredentials);
 		amazonS3Client.setRegion(region());
 		return amazonS3Client;
-	}
-    
-	@Bean
-	public SimpleStorageResourceLoader simpleStorageResourceLoader(AmazonS3 client) {
-		return new SimpleStorageResourceLoader(client);
 	}
 }

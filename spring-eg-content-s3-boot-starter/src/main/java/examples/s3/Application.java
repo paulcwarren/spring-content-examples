@@ -1,11 +1,10 @@
-package examples;
+package examples.s3;
 
-import examples.models.ClaimForm;
-import examples.stores.ClaimFormStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.aws.core.io.s3.SimpleStorageResourceLoader;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.content.s3.config.EnableS3Stores;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -19,6 +18,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(excludeFilters={
@@ -27,6 +27,9 @@ import com.amazonaws.services.s3.AmazonS3Client;
 						".*MongoConfiguration", 
 		})
 })
+@EnableJpaRepositories(basePackages="examples.repositories")
+@EntityScan(basePackages = "examples.models")
+@EnableS3Stores(basePackages = "examples.stores")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -52,11 +55,6 @@ public class Application {
 			AmazonS3Client amazonS3Client = new AmazonS3Client(awsCredentials);
 			amazonS3Client.setRegion(region());
 			return amazonS3Client;
-		}
-	    
-		@Bean
-		public SimpleStorageResourceLoader simpleStorageResourceLoader(AmazonS3 client) {
-			return new SimpleStorageResourceLoader(client);
 		}
 	}
 }
