@@ -1,9 +1,14 @@
 package examples.s3;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.content.commons.repository.Store;
+import org.springframework.content.rest.StoreRestResource;
 import org.springframework.content.s3.config.EnableS3Stores;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,6 +24,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @SpringBootApplication
 @ComponentScan(excludeFilters={
@@ -30,31 +36,44 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages="examples.repositories")
 @EntityScan(basePackages = "examples.models")
 @EnableS3Stores(basePackages = "examples.stores")
+
+
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-	@Configuration
-	public static class AppConfig {
+    @StoreRestResource
+	@CrossOrigin(origins="http://localhost:8080")
+    public interface FileStore extends Store<String> {}
 
-		@Autowired
-		private Environment env;
-		
-	    public Region region() {
-	        return Region.getRegion(Regions.fromName(System.getenv("AWS_REGION")));
-	    }
-	
+	@Configuration
+	public static class S3StorageConfig {
+
+		@Value("#{environment.AWS_ACCESS_KEY_ID}")
+		private String accessKey;
+
+		@Value("#{environment.AWS_SECRET_KEY}")
+		private String secretKey;
+
+		@Value("#{environment.AWS_REGION}")
+		private String region;
+
+		@Value("${aws.bucket:#{environment.AWS_BUCKET}}")
+		private String bucket;
+
 		@Bean
-		public BasicAWSCredentials basicAWSCredentials() {
-			return new BasicAWSCredentials(env.getProperty("AWS_ACCESS_KEY_ID"), env.getProperty("AWS_SECRET_KEY"));
+		public String bucket() {
+			return bucket;
 		}
-		
+
 		@Bean
-		public AmazonS3 client(AWSCredentials awsCredentials) {
-			AmazonS3Client amazonS3Client = new AmazonS3Client(awsCredentials);
-			amazonS3Client.setRegion(region());
-			return amazonS3Client;
+		public AmazonS3 client() {
+			return AmazonS3ClientBuilder.standard()
+						.withCredentials(new AWSStaticCredentialsProvider(
+											new BasicAWSCredentials(accessKey,secretKey)))
+						.withRegion(Regions.fromName(region))
+						.build();
 		}
 	}
 }
