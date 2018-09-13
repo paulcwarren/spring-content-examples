@@ -1,10 +1,11 @@
 package examples.models;
 
-import javax.persistence.Embeddable;
 
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.content.commons.annotations.MimeType;
+
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class ClaimForm {

@@ -21,8 +21,8 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- NOTE: we deliberately omit spring-boot-starter-data-rest and/or spring-data-rest-webmvc (containing the Soring Data REST implementation) to prove that -->
-		<!--       Spring Content REST is not dependent upon it -->
+		<!-- NOTE: we deliberately omit spring-boot-starter-data-rest and/or spring-data-rest-webmvc (containing the -->
+		<!-- Spring Data REST implementation) to prove that Spring Content REST does not depend upon it -->
   		<dependency>
  			<groupId>org.springframework.boot</groupId>
  			<artifactId>spring-boot-starter-web</artifactId>
@@ -46,7 +46,15 @@
 			<artifactId>spring-eg-content-commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
+		<!-- Locking and Versioning Spike -->
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-versions-jpa</artifactId>
+			<version>0.3.0-SNAPSHOT</version>
+		</dependency>
+		<!-- Locking and Versioning Spike -->
+
 		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>

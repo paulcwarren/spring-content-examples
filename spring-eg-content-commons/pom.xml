@@ -11,12 +11,11 @@
 	<artifactId>spring-eg-content-commons</artifactId>
 
 	<dependencies>
- 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<version>1.0</version>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
 		</dependency>
- 		<dependency>
+		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
 			<artifactId>spring-content-commons</artifactId>
 			<version>${spring-content-version}</version>
