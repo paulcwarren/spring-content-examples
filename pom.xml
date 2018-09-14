@@ -47,7 +47,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 
 	<properties>
 		<ginkgo-version>1.0.9</ginkgo-version>
-		<spring-content-version>0.3.0-SNAPSHOT</spring-content-version>
+		<spring-content-version>0.3.0</spring-content-version>
 		<springboot-version>2.0.4.RELEASE</springboot-version>
 		<spring-cloud.version>Finchley.SR1</spring-cloud.version>
 	</properties>
