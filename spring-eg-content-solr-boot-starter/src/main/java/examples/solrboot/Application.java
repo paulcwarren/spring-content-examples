@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * exclude={MongoRepositoriesAutoConfiguration.class} is only required because we re-use
@@ -16,8 +17,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  */
 
 @SpringBootApplication
-@EnableConfigurationProperties
-@EnableAutoConfiguration(exclude={MongoRepositoriesAutoConfiguration.class})
+//@ComponentScan("org.springframework.content.solr")
+//@EnableConfigurationProperties
+//@EnableAutoConfiguration(exclude={MongoRepositoriesAutoConfiguration.class})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

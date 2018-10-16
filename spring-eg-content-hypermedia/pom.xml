@@ -40,7 +40,19 @@
 			<artifactId>spring-eg-content-commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
+		<!-- Locking and Versioning Spike -->
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-versions-jpa</artifactId>
+			<version>${spring-content-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- Locking and Versioning Spike -->
+
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>

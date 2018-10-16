@@ -8,6 +8,7 @@ import org.springframework.content.fs.config.EnableFilesystemStores;
 import org.springframework.content.fs.io.FileSystemResourceLoader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +22,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.versions.jpa.config.JpaVersionsConfig;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -28,12 +30,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 @Configuration
-//@Import(JpaConfig.class)
-//@ComponentScan("internal.org.springframework.versions.jpa")
-@EnableJpaRepositories(basePackages={"examples.versioning","internal.org.springframework.versions.jpa"})	 	// Tell Spring Data JPA where to find Repositories
+@Import(JpaVersionsConfig.class)
+@EnableJpaRepositories(basePackages={"examples.versioning"})
 @EnableTransactionManagement
 @EnableFilesystemStores
-//@EnableJpaAuditing
 public class VersioningConfig {
 
     @Bean
@@ -48,26 +48,6 @@ public class VersioningConfig {
     FileSystemResourceLoader fileSystemResourceLoader() {
         return new FileSystemResourceLoader(filesystemRoot().getAbsolutePath());
     }
-
-    @Bean
-    public LockingService versioningService() {
-        return new JpaLockingServiceImpl(new JdbcTemplate(dataSource()), transactionManager(), auth()    );
-    }
-
-//    @Bean
-//    public EvaluationContextExtension versioningEvaluationContext() {
-//        return new EvaluationContextExtensionSupport() {
-//            @Override
-//            public String getExtensionId() {
-//                return "versioning";
-//            }
-//
-//            @Override
-//            public Map<String, Object> getProperties() {
-//                return Collections.singletonMap("ancestralRootId", "t.ancestralRootId");
-//            }
-//        };
-//    }
 
     @Value("/org/springframework/versions/jpa/schema-drop-hsqldb.sql")
     private Resource dropRepositoryTables;
@@ -89,11 +69,6 @@ public class VersioningConfig {
         initializer.setDatabasePopulator(databasePopulator);
 
         return initializer;
-    }
-
-    @Bean
-    public AuthenticationFacade auth() {
-        return new AuthenticationFacade();
     }
 
     @Bean

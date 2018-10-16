@@ -5,7 +5,10 @@ import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.versions.AncestorId;
 import org.springframework.versions.AncestorRootId;
+import org.springframework.versions.ContentVersion;
 import org.springframework.versions.LockOwner;
+import org.springframework.versions.VersionLabel;
+import org.springframework.versions.VersionNumber;
 import org.springframework.versions.VersionStatus;
 
 import javax.persistence.Entity;
@@ -26,6 +29,9 @@ public class VersionedDocument {
     @Version
     private Long vstamp;
 
+    @ContentVersion
+    private Long contentVersion = 0L;
+
     @ContentId
     private UUID contentId;
 
@@ -40,6 +46,12 @@ public class VersionedDocument {
 
     @AncestorRootId
     private Long ancestralRootId;
+
+    @VersionNumber
+    private String version;
+
+    @VersionLabel
+    private String label;
 
     @VersionStatus
     private boolean latest;
@@ -60,6 +72,14 @@ public class VersionedDocument {
 
     public void setVstamp(Long vstamp) {
         this.vstamp = vstamp;
+    }
+
+    public Long getContentVersion() {
+        return contentVersion;
+    }
+
+    public void setContentVersion(Long contentVersion) {
+        this.contentVersion = contentVersion;
     }
 
     public UUID getContentId() {
@@ -116,6 +136,22 @@ public class VersionedDocument {
 
     public void setAncestorId(Long ancestorId) {
         this.ancestorId = ancestorId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @Override

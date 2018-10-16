@@ -15,15 +15,15 @@
 		<!-- Spring Data JPA Repository -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 
 		<!-- JPA Backing Service - HSQL -->
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.hsqldb</groupId>-->
+			<!--<artifactId>hsqldb</artifactId>-->
+			<!--<scope>runtime</scope>-->
+		<!--</dependency>-->
 
  		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -33,14 +33,20 @@
 		<!-- Spring Content JPA Repository -->
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>content-jpa-spring-boot-starter</artifactId>
+			<artifactId>spring-content-mongo-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
 
 		<!-- Spring Content Solr Integration -->
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>content-solr-spring-boot-starter</artifactId>
+			<artifactId>spring-content-solr-boot-starter</artifactId>
+			<version>${spring-content-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-content-renditions-boot-starter</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
 

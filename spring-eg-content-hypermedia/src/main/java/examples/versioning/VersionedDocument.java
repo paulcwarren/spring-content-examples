@@ -7,6 +7,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.versions.AncestorId;
 import org.springframework.versions.AncestorRootId;
 import org.springframework.versions.LockOwner;
+import org.springframework.versions.VersionLabel;
+import org.springframework.versions.VersionNumber;
 import org.springframework.versions.VersionStatus;
 
 import javax.persistence.Entity;
@@ -44,6 +46,12 @@ public class VersionedDocument {
 
     @AncestorRootId
     private Long ancestralRootId;
+
+    @VersionNumber
+    private String versionNumber;
+
+    @VersionLabel
+    private String versionLabel;
 
     @VersionStatus
     private boolean latest;
@@ -112,6 +120,22 @@ public class VersionedDocument {
 
     public void setLatest(boolean latest) {
         this.latest = latest;
+    }
+
+    public String getVersionNumber() {
+        return versionNumber;
+    }
+
+    public void setVersionNumber(String versionNumber) {
+        this.versionNumber = versionNumber;
+    }
+
+    public String getVersionLabel() {
+        return versionLabel;
+    }
+
+    public void setVersionLabel(String versionLabel) {
+        this.versionLabel = versionLabel;
     }
 
     public Long getAncestralRootId() {

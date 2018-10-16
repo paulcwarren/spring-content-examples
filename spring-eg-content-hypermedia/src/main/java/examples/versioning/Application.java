@@ -26,6 +26,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.versions.jpa.config.JpaVersionsConfig;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -36,10 +37,11 @@ import java.nio.file.Files;
 @EnableJpaRepositories(basePackages={"examples.versioning","internal.org.springframework.versions.jpa"})	 	// Tell Spring Data JPA where to find Repositories
 @EnableTransactionManagement
 @EnableFilesystemStores
+@Import(JpaVersionsConfig.class)
 public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(examples.app.Application.class, args);
+        SpringApplication.run(examples.versioning.Application.class, args);
     }
 
     public class VersioningConfig {
@@ -55,11 +57,6 @@ public class Application {
         @Bean
         FileSystemResourceLoader fileSystemResourceLoader() {
             return new FileSystemResourceLoader(filesystemRoot().getAbsolutePath());
-        }
-
-        @Bean
-        public LockingService versioningService() {
-            return new JpaLockingServiceImpl(new JdbcTemplate(dataSource()), transactionManager(), auth()    );
         }
 
         @Value("/org/springframework/versions/jpa/schema-drop-hsqldb.sql")
@@ -82,11 +79,6 @@ public class Application {
             initializer.setDatabasePopulator(databasePopulator);
 
             return initializer;
-        }
-
-        @Bean
-        public AuthenticationFacade auth() {
-            return new AuthenticationFacade();
         }
 
         @Bean

@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
                 	".*MongoConfiguration", 
                 })
 })
-@EnableJpaRepositories(basePackages="examples")	 	// Tell Spring Data JPA where to find Repositories
+@EnableJpaRepositories(basePackages="examples.repositories")	 	// Tell Spring Data JPA where to find Repositories
 @EnableTransactionManagement
 public class JpaConfig {
 

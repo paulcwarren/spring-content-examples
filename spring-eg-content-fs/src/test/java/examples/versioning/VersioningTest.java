@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.versions.LockOwnerException;
+import org.springframework.versions.VersionInfo;
 
 import javax.persistence.OptimisticLockException;
 import javax.security.auth.Subject;
@@ -27,6 +28,8 @@ import java.util.concurrent.CountDownLatch;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FDescribe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FIt;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -236,8 +239,10 @@ public class VersioningTest {
 
                 v0Id = doc.getId();
             });
+            It("should have a 1.0 version number", () -> {
+                assertThat(doc.getVersion(), is("1.0"));
+            });
             It("be returned as a latest version", () -> {
-
                 assertThat(doc.getAncestralRootId(), is(nullValue()));
                 assertThat(doc.getVstamp(), is(0L));
 
@@ -249,7 +254,7 @@ public class VersioningTest {
                     doc = repo.lock(doc);
                     assertThat(doc.getVstamp(), is(1L));
 
-                    next = repo.version(doc);
+                    next = repo.version(doc, new VersionInfo("1.1", "some minor changes"));
                     v1Id = next.getId();
                 });
                 It("should create a new entity and carry over the lock", () -> {
@@ -258,6 +263,8 @@ public class VersioningTest {
                     assertThat(next.getAncestralRootId(), is(v0Id));
                     assertThat(next.getVstamp(), is(0L));
                     assertThat(next.getLockOwner(), is("some-user"));
+                    assertThat(next.getVersion(), is("1.1"));
+                    assertThat(next.getLabel(), is("some minor changes"));
                 });
                 It("should update existing as the ancestor and release its lock", () -> {
                     doc = repo.findById(v0Id).get();
@@ -267,6 +274,8 @@ public class VersioningTest {
                     assertThat(doc.getAncestralRootId(), is(v0Id));
                     assertThat(doc.getVstamp(), is(2L));
                     assertThat(doc.getLockOwner(), is(nullValue()));
+                    assertThat(doc.getVersion(), is("1.0"));
+                    assertThat(doc.getLabel(), is(nullValue()));
                 });
                 Context("#findAllVersionsLatest", () -> {
                     It("should return the new version as latest but not the old", () -> {
@@ -321,7 +330,7 @@ public class VersioningTest {
                 });
                 Context("when versioned again", () -> {
                     BeforeEach(() -> {
-                        next = repo.version(next);
+                        next = repo.version(next, new VersionInfo("2.0", "some major changes"));
                         v2Id = next.getId();
                     });
                     It("should create a new entity and carry over the lock", () -> {
@@ -332,6 +341,8 @@ public class VersioningTest {
                         assertThat(next.getAncestralRootId(), is(v0Id));
                         assertThat(next.getVstamp(), is(0L));
                         assertThat(next.getLockOwner(), is("some-user"));
+                        assertThat(next.getVersion(), is("2.0"));
+                        assertThat(next.getLabel(), is("some major changes"));
                     });
                     It("should update existing as the ancestor and release its lock", () -> {
                         doc = repo.findById(v1Id).get();
@@ -342,6 +353,8 @@ public class VersioningTest {
                         assertThat(doc.getAncestralRootId(), is(v0Id));
                         assertThat(doc.getVstamp(), is(1L));
                         assertThat(doc.getLockOwner(), is(nullValue()));
+                        assertThat(doc.getVersion(), is("1.1"));
+                        assertThat(doc.getLabel(), is("some minor changes"));
                     });
                 });
             });
@@ -559,7 +572,7 @@ public class VersioningTest {
             });
         });
 
-        Describe("Optimistic Locking", () -> {
+        FDescribe("Optimistic Locking", () -> {
             Describe("setContent", () -> {
                 It("should reject content updates to a stale entity", () -> {
 

@@ -125,7 +125,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 		</repository>
 	</repositories>
 	
-		<distributionManagement>
+	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>

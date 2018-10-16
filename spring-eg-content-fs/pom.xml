@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.github.paulcwarren</groupId>
             <artifactId>spring-versions-jpa</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>${spring-content-version}</version>
         </dependency>
 
 		<dependency>

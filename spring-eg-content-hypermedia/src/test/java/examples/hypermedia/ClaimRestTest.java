@@ -1,10 +1,11 @@
-package examples;
+package examples.hypermedia;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 
 import java.io.ByteArrayInputStream;
 
+import examples.hypermedia.Application;
 import examples.models.Claim;
 import examples.models.ClaimForm;
 import examples.repositories.ClaimRepository;
