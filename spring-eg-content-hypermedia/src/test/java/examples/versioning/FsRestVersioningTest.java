@@ -115,7 +115,7 @@ public class FsRestVersioningTest {
 					response =
 					given()
 							.auth().basic("paul123", "password")
-							.get("/versionedDocuments/" + doc.getId() + "/findAllLatestVersion")
+							.get("/versionedDocuments/findAllLatestVersion")
 							.then()
 							.statusCode(HttpStatus.SC_OK)
 							.extract().jsonPath();
