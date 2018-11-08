@@ -1,14 +1,25 @@
-package examples;
+package examples.versioning;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import examples.s3.S3Config;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.content.jpa.config.EnableJpaStores;
-import org.springframework.content.jpa.config.JpaStoreConfigurer;
-import org.springframework.content.jpa.config.JpaStoreProperties;
+import org.springframework.content.s3.config.EnableS3Stores;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -17,44 +28,40 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.versions.jpa.config.JpaVersionsConfig;
 
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages="examples.repositories")
+@ComponentScan(excludeFilters={
+        @ComponentScan.Filter(type = FilterType.REGEX,
+                pattern = {
+                        ".*MongoConfiguration",
+                })
+})
+@ComponentScan("org.springframework.versions")
+@Import({JpaVersionsConfig.class, S3Config.class})
+@EnableJpaRepositories(basePackages={"tests.versioning"})
 @EnableTransactionManagement
-@EnableJpaStores(basePackages = "examples.stores")
-public class PostgresqlTestConfig {
-
-    @Value("#{environment.POSTGRESQL_URL}")
-    private String postgresqlUrl;
-
-    @Value("#{environment.POSTGRESQL_USERNAME}")
-    private String postgresqlUsername;
-
-    @Value("#{environment.POSTGRESQL_PASSWORD}")
-    private String postgresqlPassword;
+@EnableS3Stores(basePackages={"tests.versioning"})
+public class S3VersioningConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource ds = new DriverManagerDataSource();
-            ds.setDriverClassName("org.postgresql.Driver");
-        ds.setUrl(postgresqlUrl);
-        ds.setUsername(postgresqlUsername);
-        ds.setPassword(postgresqlPassword);
-        return ds;
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        return builder.setType(EmbeddedDatabaseType.HSQL).build();
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setDatabase(Database.POSTGRESQL);
+        vendorAdapter.setDatabase(Database.HSQL);
         vendorAdapter.setGenerateDdl(true);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("examples.models");
+        factory.setPackagesToScan("tests.versioning");
         factory.setDataSource(dataSource());
 
         return factory;
@@ -68,35 +75,25 @@ public class PostgresqlTestConfig {
         return txManager;
     }
 
-    @Value("/org/springframework/content/jpa/schema-drop-postgresql.sql")
-    private Resource dropReopsitoryTables;
+    @Value("/org/springframework/versions/jpa/schema-drop-hsqldb.sql")
+    private Resource dropRepositoryTables;
 
-    @Value("/org/springframework/content/jpa/schema-postgresql.sql")
-    private Resource dataReopsitorySchema;
+    @Value("/org/springframework/versions/jpa/schema-hsqldb.sql")
+    private Resource dataRepositorySchema;
 
     @Bean
-    DataSourceInitializer datasourceInitializer() {
+    DataSourceInitializer datasourceInitializer(DataSource dataSource) {
         ResourceDatabasePopulator databasePopulator =
                 new ResourceDatabasePopulator();
 
-        databasePopulator.addScript(dropReopsitoryTables);
-        databasePopulator.addScript(dataReopsitorySchema);
+        databasePopulator.addScript(dropRepositoryTables);
+        databasePopulator.addScript(dataRepositorySchema);
         databasePopulator.setIgnoreFailedDrops(true);
 
         DataSourceInitializer initializer = new DataSourceInitializer();
-        initializer.setDataSource(dataSource());
+        initializer.setDataSource(dataSource);
         initializer.setDatabasePopulator(databasePopulator);
 
         return initializer;
-    }
-
-    @Bean
-    public JpaStoreConfigurer configurer() {
-        return new JpaStoreConfigurer() {
-            @Override
-            public void configure(JpaStoreProperties store) {
-                store.commitTimeout(120);
-            }
-        };
     }
 }

@@ -21,9 +21,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages="examples")	 	// Tell Spring Data JPA where to find Repositories
+@EnableJpaRepositories(basePackages="examples.repositories")
 @EnableTransactionManagement
-@EnableJpaStores
+@EnableJpaStores(basePackages="examples.stores")
 public class SqlServerTestConfig {
 
     @Value("#{environment.SQLSERVER_URL}")
@@ -54,7 +54,7 @@ public class SqlServerTestConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("examples");  	// Tell Hibernate where to find Entities
+        factory.setPackagesToScan("examples.models");  	// Tell Hibernate where to find Entities
         factory.setDataSource(dataSource());
 
         return factory;

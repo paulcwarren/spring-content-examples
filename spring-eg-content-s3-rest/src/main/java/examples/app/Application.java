@@ -19,7 +19,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 
-import examples.config.JpaConfig;
+import tests.smoke.JpaConfig;
 
 @SpringBootApplication
 @ComponentScan(excludeFilters={

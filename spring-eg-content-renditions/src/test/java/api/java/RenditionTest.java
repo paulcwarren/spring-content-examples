@@ -20,7 +20,7 @@ import examples.models.Claim;
 import examples.models.ClaimForm;
 import examples.stores.ClaimFormStore;
 import examples.repositories.ClaimRepository;
-import examples.config.JpaConfig;
+import tests.smoke.JpaConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { JpaConfig.class, RenditionTestConfig.class })

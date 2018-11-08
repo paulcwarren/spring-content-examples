@@ -21,9 +21,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages="examples")	 	// Tell Spring Data JPA where to find Repositories
+@EnableJpaRepositories(basePackages="examples.repositories")
 @EnableTransactionManagement
-@EnableJpaStores
+@EnableJpaStores(basePackages = "examples.stores")
 public class MysqlTestConfig {
 
     @Value("#{environment.MYSQL_URL}")
@@ -54,7 +54,7 @@ public class MysqlTestConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("examples");
+        factory.setPackagesToScan("examples.models");
         factory.setDataSource(dataSource());
 
         return factory;

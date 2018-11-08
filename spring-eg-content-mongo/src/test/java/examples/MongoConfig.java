@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import examples.config.JpaConfig;
+import tests.smoke.JpaConfig;
 
 @Configuration
 @ComponentScan(excludeFilters={

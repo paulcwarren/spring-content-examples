@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import examples.config.JpaConfig;
+import tests.smoke.JpaConfig;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude={MongoRepositoriesAutoConfiguration.class})

@@ -2,6 +2,7 @@ package examples.ecs;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.s3.config.EnableS3ContentRepositories;
+import org.springframework.content.s3.config.EnableS3Stores;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -12,8 +13,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 
 @Configuration
-@EnableJpaRepositories(basePackages="examples")
-@EnableS3ContentRepositories(basePackages="examples")
+@EnableJpaRepositories(basePackages="examples.repositories")
+@EnableS3Stores(basePackages="examples.stores")
 public class ECSConfig {
 
     @Value("${ecs.url:#{environment.ECS_URL}}")

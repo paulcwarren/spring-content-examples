@@ -2,6 +2,7 @@ package examples;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
+import tests.smoke.ContentStoreTests;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 

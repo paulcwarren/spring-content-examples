@@ -30,19 +30,28 @@
 			<artifactId>hsqldb</artifactId>
 		</dependency>
 
+		<!-- Spring Content -->
+		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-content-s3</artifactId>
+			<version>${spring-content-version}</version>
+		</dependency>
+
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<scope>runtime</scope>
+			<artifactId>hibernate-core</artifactId>
 		</dependency>
- 		
-		<!--  Test deps -->
-	  	<dependency>
+
+		<!-- Locking and Versioning Spike -->
+		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
-	  		<artifactId>spring-content-s3</artifactId>
-	  		<version>${spring-content-version}</version>
-	  	</dependency>
+			<artifactId>spring-versions-jpa</artifactId>
+			<version>${spring-content-version}</version>
+		</dependency>
+		<!-- Locking and Versioning Spike -->
+
+		<!--  Test deps -->
 	  	<dependency>
 	  		<groupId>org.springframework.boot</groupId>
 	  		<artifactId>spring-boot-starter-test</artifactId>
