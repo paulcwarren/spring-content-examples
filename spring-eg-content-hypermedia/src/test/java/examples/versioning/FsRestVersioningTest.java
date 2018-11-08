@@ -3,10 +3,7 @@ package examples.versioning;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.ResponseBody;
-import tests.versioning.VersionedDocument;
-import tests.versioning.VersionedDocumentAndVersioningRepository;
-import tests.versioning.VersionedDocumentStore;
+import com.jayway.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -15,24 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import javax.security.auth.Subject;
-import java.io.ByteArrayInputStream;
-import java.security.Principal;
-import java.util.Collection;
+import tests.versioning.VersionedDocument;
+import tests.versioning.VersionedDocumentAndVersioningRepository;
+import tests.versioning.VersionedDocumentStore;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FIt;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -110,25 +101,38 @@ public class FsRestVersioningTest {
 							.then()
 							.statusCode(is(409));
 
+					JsonPath response =
 					given()
 							.auth().preemptive().basic("paul123", "password")
 							.contentType("application/json")
 							.content("{\"number\":\"1.1\",\"label\":\"some minor changes\"}".getBytes())
 							.put("/versionedDocuments/" + doc.getId() + "/version")
 							.then()
- 							.statusCode(HttpStatus.SC_OK);
+ 							.statusCode(HttpStatus.SC_OK)
+							.extract().jsonPath();
+					assertThat(response.get("_links.self.href"), endsWith("versionedDocuments/" + (doc.getId() + 1)));
 
+					response =
 					given()
 							.auth().basic("paul123", "password")
 							.get("/versionedDocuments/" + doc.getId() + "/findAllLatestVersion")
 							.then()
-							.statusCode(HttpStatus.SC_OK);
+							.statusCode(HttpStatus.SC_OK)
+							.extract().jsonPath();
+					assertThat(response.get("_embedded.versionedDocuments[0].version"), is("1.1"));
+					assertThat(response.get("_embedded.versionedDocuments[0].latest"), is(true));
 
+					response =
 					given()
 							.auth().basic("paul123", "password")
 							.get("/versionedDocuments/" + doc.getId() + "/findAllVersions")
 							.then()
-							.statusCode(HttpStatus.SC_OK);
+							.statusCode(HttpStatus.SC_OK)
+							.extract().jsonPath();
+					assertThat(response.get("_embedded.versionedDocuments[0].version"), is("1.0"));
+					assertThat(response.get("_embedded.versionedDocuments[0].latest"), is(false));
+					assertThat(response.get("_embedded.versionedDocuments[1].version"), is("1.1"));
+					assertThat(response.get("_embedded.versionedDocuments[1].latest"), is(true));
 				});
 			});
     	});
