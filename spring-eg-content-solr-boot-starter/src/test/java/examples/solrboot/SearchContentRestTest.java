@@ -67,7 +67,7 @@ public class SearchContentRestTest {
     		    	docContentStore.setContent(existingDoc, this.getClass().getResourceAsStream("/one.docx"));
     		    	docRepo.save(existingDoc);
     			});
-    			It("should be findable via the /searchcontents REST endpoint", () -> {
+    			It("should be findable via the /searchContents REST endpoint", () -> {
     				Response resp =
     						given()
         		    			.header("accept", "application/hal+json")

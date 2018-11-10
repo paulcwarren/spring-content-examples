@@ -42,11 +42,11 @@ public class FsRestVersioningTest {
     private VersionedDocument doc;
 
     {
-    	Describe("Spring Content REST", () -> {
+    	Describe("Spring Content REST Versioning", () -> {
     		BeforeEach(() -> {
     			RestAssured.port = port;
     		});
-    		Context("given a claim", () -> {
+    		Context("given a versionable entity with content", () -> {
     			BeforeEach(() -> {
     		    	doc = new VersionedDocument();
     		    	doc.setData("John");
@@ -57,7 +57,7 @@ public class FsRestVersioningTest {
 					given()
 						.auth().basic("paul123", "password")
 					.when()
-						.get("/versionedDocuments/" + doc.getId())
+						.get("/versionedDocumentsContent/" + doc.getId())
 					.then()
 						.assertThat()
 						.statusCode(HttpStatus.SC_NOT_FOUND);
@@ -70,7 +70,7 @@ public class FsRestVersioningTest {
     					.content(newContent.getBytes())
 						.auth().preemptive().basic("paul123", "password")
 					.when()
-    					.put("/versionedDocuments/" + doc.getId())
+    					.put("/versionedDocumentsContent/" + doc.getId())
 					.then()
     					.statusCode(HttpStatus.SC_CREATED);
 
@@ -78,18 +78,20 @@ public class FsRestVersioningTest {
 					given()
 						.auth().basic("paul123", "password")
     					.header("accept", "plain/text")
-    					.get("/versionedDocuments/" + doc.getId())
+    					.get("/versionedDocumentsContent/" + doc.getId())
 					.then()
     					.statusCode(HttpStatus.SC_OK)
     					.assertThat()
     					.contentType(Matchers.startsWith("plain/text"))
     					.body(Matchers.equalTo(newContent));
 
+					JsonPath response =
 					given()
 							.auth().basic("paul123", "password")
+							.header("accept", "application/json")
 							.put("/versionedDocuments/" + doc.getId() + "/lock")
 					.then()
-							.statusCode(HttpStatus.SC_OK);
+							.statusCode(HttpStatus.SC_OK).extract().jsonPath();
 
 					// POST the new content as john
 					given()
@@ -97,11 +99,11 @@ public class FsRestVersioningTest {
 							.content("john's content".getBytes())
 							.auth().preemptive().basic("john123", "password")
 							.when()
-							.put("/versionedDocuments/" + doc.getId())
+							.put("/versionedDocumentsContent/" + doc.getId())
 							.then()
 							.statusCode(is(409));
 
-					JsonPath response =
+					response =
 					given()
 							.auth().preemptive().basic("paul123", "password")
 							.contentType("application/json")
