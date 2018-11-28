@@ -1,13 +1,6 @@
 package examples.versioning;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import examples.s3.S3Config;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.s3.config.EnableS3Stores;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -28,7 +20,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.versions.jpa.config.JpaVersionsConfig;
+import org.springframework.versions.jpa.config.JpaLockingAndVersioningConfig;
 
 import javax.sql.DataSource;
 
@@ -40,7 +32,7 @@ import javax.sql.DataSource;
                 })
 })
 @ComponentScan("org.springframework.versions")
-@Import({JpaVersionsConfig.class, S3Config.class})
+@Import({JpaLockingAndVersioningConfig.class, S3Config.class})
 @EnableJpaRepositories(basePackages={"tests.versioning"})
 @EnableTransactionManagement
 @EnableS3Stores(basePackages={"tests.versioning"})

@@ -25,6 +25,7 @@ import java.util.List;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FIt;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -728,11 +729,11 @@ public class VersioningTests {
                         }
                     });
                 });
-                It("should be accept unlock by the lock owner", () -> {
+                It("should accept unlock by the lock owner", () -> {
                     doc = repo.unlock(doc);
                     assertThat(doc.getVstamp(), is(2L));
                 });
-                It("should be reject unlock by the lock owner", () -> {
+                It("should reject unlock by the lock owner", () -> {
 
                     securityContext("some-other-user");
 
@@ -753,7 +754,6 @@ public class VersioningTests {
                 securityContext("some-user");
 
                 doc = new VersionedDocument();
-                doc.setLatest(true);
                 doc = repo.save(doc);
                 assertThat(doc.getVstamp(), is(0L));
 
@@ -779,7 +779,7 @@ public class VersioningTests {
                 });
                 It("should create a new entity and carry over the lock", () -> {
                     assertThat(next.getId(), is(not(v0Id)));
-                    assertThat(next.isLatest(), is(true));
+                    assertThat(next.getSuccessorId(), is(nullValue()));
                     assertThat(next.getAncestralRootId(), is(v0Id));
                     assertThat(next.getVstamp(), is(0L));
                     assertThat(next.getLockOwner(), is("some-user"));
@@ -790,7 +790,7 @@ public class VersioningTests {
                     doc = repo.findById(v0Id).get();
 
                     assertThat(doc.getId(), is(v0Id));
-                    assertThat(doc.isLatest(), is(false));
+                    assertThat(doc.getSuccessorId(), is(v1Id));
                     assertThat(doc.getAncestralRootId(), is(v0Id));
                     assertThat(doc.getVstamp(), is(2L));
                     assertThat(doc.getLockOwner(), is(nullValue()));
@@ -829,7 +829,7 @@ public class VersioningTests {
                         next = repo.unlock(next);
                     });
                     It("should succeed", () -> {
-                        assertThat(next.isLatest(), is(true));
+                        assertThat(next.getSuccessorId(), is(nullValue()));
                         assertThat(next.getAncestralRootId(), is(v0Id));
                         assertThat(next.getVstamp(), is(1L));
                         assertThat(next.getLockOwner(), is(nullValue()));
@@ -856,7 +856,7 @@ public class VersioningTests {
                     It("should create a new entity and carry over the lock", () -> {
                         assertThat(next.getId(), is(not(v0Id)));
                         assertThat(next.getId(), is(not(v1Id)));
-                        assertThat(next.isLatest(), is(true));
+                        assertThat(next.getSuccessorId(), is(nullValue()));
                         assertThat(next.getAncestorId(), is(v1Id));
                         assertThat(next.getAncestralRootId(), is(v0Id));
                         assertThat(next.getVstamp(), is(0L));
@@ -868,7 +868,7 @@ public class VersioningTests {
                         doc = repo.findById(v1Id).get();
 
                         assertThat(doc.getId(), is(v1Id));
-                        assertThat(doc.isLatest(), is(false));
+                        assertThat(doc.getSuccessorId(), is(v2Id));
                         assertThat(doc.getAncestorId(), is(v0Id));
                         assertThat(doc.getAncestralRootId(), is(v0Id));
                         assertThat(doc.getVstamp(), is(1L));

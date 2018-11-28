@@ -6,9 +6,9 @@ import org.springframework.content.commons.annotations.MimeType;
 import org.springframework.versions.AncestorId;
 import org.springframework.versions.AncestorRootId;
 import org.springframework.versions.LockOwner;
+import org.springframework.versions.SuccessorId;
 import org.springframework.versions.VersionLabel;
 import org.springframework.versions.VersionNumber;
-import org.springframework.versions.VersionStatus;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,16 +44,27 @@ public class VersionedDocument {
     @AncestorRootId
     private Long ancestralRootId;
 
+    @SuccessorId
+    private Long successorId;
+
     @VersionNumber
     private String version;
 
     @VersionLabel
     private String label;
 
-    @VersionStatus
-    private boolean latest;
-
     private String data;
+
+    public VersionedDocument() {
+    }
+
+    public VersionedDocument(VersionedDocument doc) {
+        this.setContentId(doc.getContentId());
+        this.setContentLen(doc.getContentLen());
+        this.setMimeType(doc.getMimeType());
+        this.setLockOwner(doc.getLockOwner());
+        this.setData(doc.getData());
+    }
 
     public Long getId() {
         return id;
@@ -111,14 +122,6 @@ public class VersionedDocument {
         this.data = data;
     }
 
-    public boolean isLatest() {
-        return latest;
-    }
-
-    public void setLatest(boolean latest) {
-        this.latest = latest;
-    }
-
     public Long getAncestralRootId() {
         return ancestralRootId;
     }
@@ -133,6 +136,14 @@ public class VersionedDocument {
 
     public void setAncestorId(Long ancestorId) {
         this.ancestorId = ancestorId;
+    }
+
+    public Long getSuccessorId() {
+        return successorId;
+    }
+
+    public void setSuccessorId(Long successorId) {
+        this.successorId = successorId;
     }
 
     public String getVersion() {

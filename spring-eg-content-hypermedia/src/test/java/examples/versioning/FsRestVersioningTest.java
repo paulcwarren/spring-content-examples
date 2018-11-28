@@ -23,6 +23,7 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Ginkgo4jSpringRunner.class)
@@ -122,19 +123,19 @@ public class FsRestVersioningTest {
 							.statusCode(HttpStatus.SC_OK)
 							.extract().jsonPath();
 					assertThat(response.get("_embedded.versionedDocuments[0].version"), is("1.1"));
-					assertThat(response.get("_embedded.versionedDocuments[0].latest"), is(true));
+					assertThat(response.get("_embedded.versionedDocuments[0].successorId"), is(nullValue()));
 
 					response =
 					given()
 							.auth().basic("paul123", "password")
-							.get("/versionedDocuments/" + doc.getId() + "/findAllVersions")
+							.get("/versionedDocuments/" + (doc.getId() + 1) + "/findAllVersions")
 							.then()
 							.statusCode(HttpStatus.SC_OK)
 							.extract().jsonPath();
 					assertThat(response.get("_embedded.versionedDocuments[0].version"), is("1.0"));
-					assertThat(response.get("_embedded.versionedDocuments[0].latest"), is(false));
+					assertThat(response.get("_embedded.versionedDocuments[0].successorId"), is((int)(doc.getId() + 1)));
 					assertThat(response.get("_embedded.versionedDocuments[1].version"), is("1.1"));
-					assertThat(response.get("_embedded.versionedDocuments[1].latest"), is(true));
+					assertThat(response.get("_embedded.versionedDocuments[1].successorId"), is(nullValue()));
 				});
 			});
     	});

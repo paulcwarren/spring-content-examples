@@ -19,7 +19,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.versions.jpa.config.JpaVersionsConfig;
+import org.springframework.versions.jpa.config.JpaLockingAndVersioningConfig;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -28,7 +28,7 @@ import java.nio.file.Files;
 
 @Configuration
 @ComponentScan("org.springframework.versions")
-@Import(JpaVersionsConfig.class)
+@Import(JpaLockingAndVersioningConfig.class)
 @EnableJpaRepositories(basePackages={"tests.versioning"})
 @EnableTransactionManagement
 @EnableFilesystemStores("tests.versioning")
