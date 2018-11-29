@@ -35,14 +35,14 @@ install:
   - export M2_HOME=/usr/share/maven3
 
 script:
-  - mvn -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' deploy --settings settings.xml
-  - mvn -pl spring-eg-content-solr -pl spring-eg-content-commons deploy --settings settings.xml
+  - mvn -B -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' deploy --settings settings.xml
+  - mvn -B -pl spring-eg-content-solr -pl spring-eg-content-commons deploy --settings settings.xml
   - unset SOLR_PASSWORD
   - unset SOLR_USERNAME
   - export SOLR_URL=$INSECURE_SOLR
-  - mvn -pl spring-eg-content-solr -pl spring-eg-content-commons deploy --settings settings.xml
+  - mvn -B -pl spring-eg-content-solr -pl spring-eg-content-commons deploy --settings settings.xml
   - unset SOLR_URL
-  - mvn -pl spring-eg-content-solr-boot-starter deploy --settings settings.xml
+  - mvn -B -pl spring-eg-content-solr-boot-starter deploy --settings settings.xml
 
 
 
