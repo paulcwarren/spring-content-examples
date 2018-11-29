@@ -12,7 +12,7 @@ public class Document {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String id;
+	private Long id;
 
 	private String title;
 	private String author;
@@ -23,11 +23,11 @@ public class Document {
 	public Document() {
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
