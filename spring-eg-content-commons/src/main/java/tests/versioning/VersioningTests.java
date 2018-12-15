@@ -228,7 +228,7 @@ public class VersioningTests {
                     {
                         doc = new VersionedDocument();
                         try {
-                            doc = repo.save(doc);
+                             doc = repo.save(doc);
                         } catch (Throwable t) {
                             t.printStackTrace();
                         }
@@ -766,16 +766,21 @@ public class VersioningTests {
                 assertThat(doc.getAncestralRootId(), is(nullValue()));
                 assertThat(doc.getVstamp(), is(0L));
 
-                List<VersionedDocument> latestVersions = repo.findAllLatestVersion();
+                List<VersionedDocument> latestVersions = repo.findAllVersionsLatest();
                 assertThat(latestVersions, CoreMatchers.hasItem(doc));
             });
             Context("when versioned", () -> {
                 BeforeEach(() -> {
-                    doc = repo.lock(doc);
-                    assertThat(doc.getVstamp(), is(1L));
+                    try {
+                        doc = repo.lock(doc);
+                        assertThat(doc.getVstamp(), is(1L));
 
-                    next = repo.version(doc, new VersionInfo("1.1", "some minor changes"));
-                    v1Id = next.getId();
+                        next = repo.version(doc, new VersionInfo("1.1", "some minor changes"));
+                        v1Id = next.getId();
+                    } catch (Exception e) {
+                        System.out.println("error locking " + doc.getId());;
+                        e.printStackTrace();
+                    }
                 });
                 It("should create a new entity and carry over the lock", () -> {
                     assertThat(next.getId(), is(not(v0Id)));
@@ -801,7 +806,7 @@ public class VersioningTests {
                     It("should return the new version as latest but not the old", () -> {
                         doc = repo.findById(v0Id).get();
 
-                        List<VersionedDocument> latestVersions = repo.findAllLatestVersion();
+                        List<VersionedDocument> latestVersions = repo.findAllVersionsLatest();
                         assertThat(latestVersions, CoreMatchers.hasItem(next));
                         assertThat(latestVersions, not(CoreMatchers.hasItem(doc)));
                     });

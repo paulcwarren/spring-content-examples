@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.fs.config.EnableFilesystemStores;
 import org.springframework.content.fs.io.FileSystemResourceLoader;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 @Configuration
-@ComponentScan("org.springframework.versions")
 @Import(JpaLockingAndVersioningConfig.class)
 @EnableJpaRepositories(basePackages={"tests.versioning"})
 @EnableTransactionManagement
@@ -48,18 +46,18 @@ public class FsVersioningConfig {
     }
 
     @Value("/org/springframework/versions/jpa/schema-drop-hsqldb.sql")
-    private Resource dropRepositoryTables;
+    private Resource dropJpaVersionsSchema;
 
     @Value("/org/springframework/versions/jpa/schema-hsqldb.sql")
-    private Resource dataRepositorySchema;
+    private Resource jpaVersionsSchema;
 
     @Bean
     DataSourceInitializer datasourceInitializer(DataSource dataSource) {
         ResourceDatabasePopulator databasePopulator =
                 new ResourceDatabasePopulator();
 
-        databasePopulator.addScript(dropRepositoryTables);
-        databasePopulator.addScript(dataRepositorySchema);
+        databasePopulator.addScript(dropJpaVersionsSchema);
+        databasePopulator.addScript(jpaVersionsSchema);
         databasePopulator.setIgnoreFailedDrops(true);
 
         DataSourceInitializer initializer = new DataSourceInitializer();
