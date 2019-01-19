@@ -1,7 +1,6 @@
 package examples;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FIt;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
@@ -42,26 +41,11 @@ public class ExamplesTest {
 			It("should have a template", () -> {
 				assertThat(template, is(not(nullValue())));
 			});
-			
-//			FIt("should do what?", () -> {
-//				HttpHeaders headers = new HttpHeaders();
-//				headers.setContentType(MediaType.APPLICATION_JSON);
-//				HttpEntity<String> entity = new HttpEntity<String>("", headers);
-//
-//				try {
-//					template.exchange("http://somehting/that/doesnt/exist/", HttpMethod.GET, entity, String.class);
-//					assertTrue(false);
-//				} catch (RestClientException rae) {
-//					rae.printStackTrace();
-//					assertTrue(true);
-//				}
-//			});
-			
+
 			Context("given an index", () -> {
 				BeforeEach(() -> {
 					JSONObject request = new JSONObject();
-//					request.put("settings", new JSONObject().put("index", new JSONObject().put("number_of_shards", 3).put("number_of_replicas", 2)));
-					request.put("mappings", 
+					request.put("mappings",
 							new JSONObject().put("doc", 
 								new JSONObject().put("properties", 
 									new JSONObject()
@@ -79,7 +63,6 @@ public class ExamplesTest {
 				});
 				AfterEach(() -> {
 					ResponseEntity<String> response = template.exchange("http://search-spring-content-cc4bqyhqoiokxrakhfp4s2y3tm.us-east-1.es.amazonaws.com/docs", HttpMethod.DELETE, null, String.class);
-//					assertThat(response.getStatusCode(), is(HttpStatus.OK));
 				});
 				
 				Context("given a PDF", () -> {

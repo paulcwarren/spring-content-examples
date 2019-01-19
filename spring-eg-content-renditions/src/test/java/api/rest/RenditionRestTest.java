@@ -81,13 +81,13 @@ public class RenditionRestTest {
     @Test
     public void noRenditionProviderReturns406() {
         	String contentUrl = "/claims/" + claim.getClaimId() + "/claimForm/" + claim.getClaimForm().getContentId();
-        	Response response2 = 
+        	Response response2 =
     			given()
     				.header("Accept", "what/ever")
     			.when()
     	    		.get(contentUrl)
-        	
+
     	    		.andReturn();
-        	assertThat(response2.getStatusCode(), is(406)); 
+        	assertThat(response2.getStatusCode(), is(406));
     }
 }

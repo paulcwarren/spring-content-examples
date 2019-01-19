@@ -1,10 +1,12 @@
 package examples.rest;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-
-import java.io.ByteArrayInputStream;
-
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
+import com.jayway.restassured.RestAssured;
+import examples.models.Claim;
+import examples.models.ClaimForm;
+import examples.repositories.ClaimRepository;
+import examples.stores.ClaimFormStore;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -12,21 +14,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import com.jayway.restassured.RestAssured;
+import java.io.ByteArrayInputStream;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-
-import examples.models.Claim;
-import examples.models.ClaimForm;
-import examples.stores.ClaimFormStore;
-import examples.repositories.ClaimRepository;
-import org.springframework.boot.web.server.LocalServerPort;
+import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -122,7 +119,7 @@ public class FsRestExamplesTest {
     					.when()
 	    					.post("/claims/" + existingClaim.getClaimId() + "/claimForm")
     					.then()
-	    					.statusCode(HttpStatus.SC_CREATED);
+	    					.statusCode(HttpStatus.SC_OK);
     					
     					given()
 	    					.header("accept", "plain/text")

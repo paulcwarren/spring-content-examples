@@ -1,11 +1,7 @@
 package examples.hypermedia;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-
-import java.io.ByteArrayInputStream;
-
-import examples.hypermedia.Application;
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.path.json.JsonPath;
 import examples.models.Claim;
 import examples.models.ClaimForm;
 import examples.repositories.ClaimRepository;
@@ -22,12 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.path.json.JsonPath;
+import java.io.ByteArrayInputStream;
+
+import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-//@WebAppConfiguration   
 public class FsRestTest {
 
 	@Autowired
@@ -86,20 +83,13 @@ public class FsRestTest {
 
     @Test
     public void canSetContent() {
-    	JsonPath response = 
-	    	given()
-				.contentType("plain/text")
-				.content("This is plain text content!".getBytes())
-		    .when()
-		        .post("/claims/" + canSetClaim.getClaimId() + "/claimForm")
-		    .then()
-		    	.statusCode(HttpStatus.SC_CREATED)
-		    	.extract()
-		    		.jsonPath();
-    	
-    	Assert.assertNotNull(response.get("_links"));
-    	Assert.assertNotNull(response.get("_links.self"));
-    	Assert.assertNotNull(response.get("_links.self.href"));
+		given()
+			.contentType("plain/text")
+			.content("This is plain text content!".getBytes())
+		.when()
+			.post("/claims/" + canSetClaim.getClaimId() + "/claimForm")
+		.then()
+			.statusCode(HttpStatus.SC_CREATED);
     }
 
     @Test

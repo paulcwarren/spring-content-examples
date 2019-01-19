@@ -25,7 +25,6 @@ import java.util.List;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FIt;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -313,7 +312,7 @@ public class VersioningTests {
                 });
             });
 
-            Describe("getContent", () -> {
+            Describe("resolveResource", () -> {
                 It("should return content for a current entity", () -> {
 
                     // create new entity

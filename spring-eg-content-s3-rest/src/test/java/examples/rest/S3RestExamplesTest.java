@@ -112,7 +112,7 @@ public class S3RestExamplesTest {
 	    					.contentType(Matchers.startsWith("plain/text"))
 	    					.body(Matchers.equalTo("This is plain text content!"));
     				});
-    				It("should be POSTable with new content with 201 Created", () -> {
+    				It("should be POSTable with new content with 200 OK", () -> {
     					String newContent = "This is new content";
     					
     					given()
@@ -121,7 +121,7 @@ public class S3RestExamplesTest {
     					.when()
 	    					.post("/claims/" + existingClaim.getClaimId() + "/claimForm")
     					.then()
-	    					.statusCode(HttpStatus.SC_CREATED);
+	    					.statusCode(HttpStatus.SC_OK);
     					
     					given()
 	    					.header("accept", "plain/text")

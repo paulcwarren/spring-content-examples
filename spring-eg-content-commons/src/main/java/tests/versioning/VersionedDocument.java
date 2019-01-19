@@ -1,5 +1,10 @@
 package tests.versioning;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.content.commons.annotations.MimeType;
@@ -17,6 +22,10 @@ import javax.persistence.Version;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 public class VersionedDocument {
 
     @Id
@@ -30,7 +39,7 @@ public class VersionedDocument {
     private UUID contentId;
 
     @ContentLength
-    private int contentLen;
+    private long contentLen;
 
     @MimeType
     private String mimeType;
@@ -64,124 +73,5 @@ public class VersionedDocument {
         this.setMimeType(doc.getMimeType());
         this.setLockOwner(doc.getLockOwner());
         this.setData(doc.getData());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVstamp() {
-        return vstamp;
-    }
-
-    public void setVstamp(Long vstamp) {
-        this.vstamp = vstamp;
-    }
-
-    public UUID getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(UUID contentId) {
-        this.contentId = contentId;
-    }
-
-    public int getContentLen() {
-        return contentLen;
-    }
-
-    public void setContentLen(int contentLen) {
-        this.contentLen = contentLen;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public String getLockOwner() {
-        return lockOwner;
-    }
-
-    public void setLockOwner(String lockOwner) {
-        this.lockOwner = lockOwner;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public Long getAncestralRootId() {
-        return ancestralRootId;
-    }
-
-    public void setAncestralRootId(Long ancestralRootId) {
-        this.ancestralRootId = ancestralRootId;
-    }
-
-    public Long getAncestorId() {
-        return ancestorId;
-    }
-
-    public void setAncestorId(Long ancestorId) {
-        this.ancestorId = ancestorId;
-    }
-
-    public Long getSuccessorId() {
-        return successorId;
-    }
-
-    public void setSuccessorId(Long successorId) {
-        this.successorId = successorId;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof VersionedDocument)) return false;
-
-        VersionedDocument that = (VersionedDocument) o;
-
-        return id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "VersionedDocument{" +
-                "id=" + id +
-                ":" + vstamp +
-                '}';
     }
 }

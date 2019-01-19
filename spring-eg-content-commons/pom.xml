@@ -60,5 +60,9 @@
 			<artifactId>ginkgo4j</artifactId>
 			<version>${ginkgo-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
 	</dependencies>
 </project>
