@@ -1,8 +1,8 @@
 package examples.typesupport;
 
-import java.net.URI;
-
 import org.springframework.content.commons.annotations.ContentId;
+
+import java.net.URI;
 
 public class URIBasedContentEntity {
 

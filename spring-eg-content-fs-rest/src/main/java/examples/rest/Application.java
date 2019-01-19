@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-
 import tests.smoke.JpaConfig;
 
 @SpringBootApplication

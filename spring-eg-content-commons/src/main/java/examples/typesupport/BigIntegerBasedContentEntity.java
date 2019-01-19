@@ -1,8 +1,8 @@
 package examples.typesupport;
 
-import java.math.BigInteger;
-
 import org.springframework.content.commons.annotations.ContentId;
+
+import java.math.BigInteger;
 
 public class BigIntegerBasedContentEntity {
 

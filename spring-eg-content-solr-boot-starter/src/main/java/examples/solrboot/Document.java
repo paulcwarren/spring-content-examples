@@ -1,11 +1,11 @@
 package examples.solrboot;
 
+import org.springframework.content.commons.annotations.ContentId;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.springframework.content.commons.annotations.ContentId;
 
 @Entity
 public class Document {

@@ -1,8 +1,8 @@
 package examples.typesupport;
 
-import java.util.UUID;
-
 import org.springframework.content.commons.annotations.ContentId;
+
+import java.util.UUID;
 
 public class UUIDBasedContentEntity {
 

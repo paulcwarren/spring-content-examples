@@ -1,13 +1,12 @@
 package examples.models;
 
-import java.util.UUID;
+import org.springframework.content.commons.annotations.Content;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import org.springframework.content.commons.annotations.Content;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.UUID;
 
 @Entity
 @Document

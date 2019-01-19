@@ -1,20 +1,8 @@
 package tests.events;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.hamcrest.MockitoHamcrest.argThat;
-
 import examples.models.ClaimForm;
 import examples.models.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import tests.smoke.ContentStoreTests;
-import tests.events.AnnotatedEventHandlerConfig.ExampleAnnotatedEventHandler;
 import org.springframework.content.commons.repository.events.AfterAssociateEvent;
 import org.springframework.content.commons.repository.events.AfterGetContentEvent;
 import org.springframework.content.commons.repository.events.AfterGetResourceEvent;
@@ -27,6 +15,15 @@ import org.springframework.content.commons.repository.events.BeforeGetResourceEv
 import org.springframework.content.commons.repository.events.BeforeSetContentEvent;
 import org.springframework.content.commons.repository.events.BeforeUnassociateEvent;
 import org.springframework.content.commons.repository.events.BeforeUnsetContentEvent;
+import tests.events.AnnotatedEventHandlerConfig.ExampleAnnotatedEventHandler;
+import tests.smoke.ContentStoreTests;
+
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 public class AnnotatedEventHandlerStoreTests extends ContentStoreTests {
 	

@@ -1,8 +1,8 @@
 package examples.typesupport;
 
-import java.math.BigInteger;
-
 import org.springframework.content.commons.repository.ContentStore;
+
+import java.math.BigInteger;
 
 public interface BigIntegerBasedContentEntityStore extends ContentStore<BigIntegerBasedContentEntity, BigInteger> {
 

@@ -1,6 +1,5 @@
 package examples.hypermedia;
 
-import tests.smoke.JpaConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import tests.smoke.JpaConfig;
 
 @SpringBootApplication
 @ComponentScan(excludeFilters={

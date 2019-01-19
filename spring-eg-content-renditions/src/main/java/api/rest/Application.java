@@ -9,7 +9,6 @@ import org.springframework.content.rest.config.RestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
 import tests.smoke.JpaConfig;
 
 @SpringBootApplication

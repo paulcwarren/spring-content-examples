@@ -1,7 +1,11 @@
 package api.rest;
 
-import static com.jayway.restassured.RestAssured.given;
-
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.response.Response;
+import examples.models.Claim;
+import examples.models.ClaimForm;
+import examples.repositories.ClaimRepository;
+import examples.stores.ClaimFormStore;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,16 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
-
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import examples.models.Claim;
-import examples.models.ClaimForm;
-import examples.stores.ClaimFormStore;
-import examples.repositories.ClaimRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)

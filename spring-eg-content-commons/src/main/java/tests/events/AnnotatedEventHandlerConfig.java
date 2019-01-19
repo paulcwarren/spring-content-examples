@@ -1,5 +1,6 @@
 package tests.events;
 
+import examples.models.ClaimForm;
 import examples.models.Document;
 import org.springframework.content.commons.annotations.HandleAfterAssociate;
 import org.springframework.content.commons.annotations.HandleAfterGetContent;
@@ -29,10 +30,7 @@ import org.springframework.content.commons.repository.events.BeforeUnsetContentE
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import examples.models.ClaimForm;
-
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 @Configuration
 public class AnnotatedEventHandlerConfig {
