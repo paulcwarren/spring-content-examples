@@ -1,27 +1,27 @@
  package examples.typesupport;
 
  import com.amazonaws.services.s3.model.S3ObjectId;
- import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
- import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
- import examples.s3.S3Config;
- import org.apache.commons.io.IOUtils;
- import org.junit.Assert;
- import org.junit.runner.RunWith;
- import org.springframework.beans.factory.annotation.Autowired;
- import org.springframework.content.s3.config.EnableS3Stores;
- import org.springframework.test.context.ContextConfiguration;
- import tests.smoke.JpaConfig;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
+import examples.s3.S3Config;
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.content.s3.config.EnableS3Stores;
+import org.springframework.test.context.ContextConfiguration;
+import tests.smoke.JpaConfig;
 
- import java.io.ByteArrayInputStream;
- import java.util.UUID;
+import java.io.ByteArrayInputStream;
+import java.util.UUID;
 
- import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
- import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
- import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
- import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
- import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
- import static org.hamcrest.Matchers.is;
- import static org.hamcrest.Matchers.nullValue;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
