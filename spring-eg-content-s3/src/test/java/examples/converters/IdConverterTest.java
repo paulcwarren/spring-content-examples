@@ -40,9 +40,9 @@ import static org.hamcrest.Matchers.nullValue;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { JpaConfig.class, S3Config.class, S3TypeSupportTest.ConverterConfig.class })
+@ContextConfiguration(classes = { JpaConfig.class, S3Config.class, IdConverterTest.ConverterConfig.class })
 @EnableS3Stores("examples.converters")
-public class S3TypeSupportTest {
+public class IdConverterTest {
 
 	@Autowired
 	private ConverterContentStore store;
@@ -82,7 +82,6 @@ public class S3TypeSupportTest {
 			});
 			AfterEach(() -> {
 				store.unsetContent(entity);
-				assertThat(entity.getContentId(), is(nullValue()));
 			});
 		});
 	}

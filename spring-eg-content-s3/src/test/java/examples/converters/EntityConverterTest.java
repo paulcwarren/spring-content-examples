@@ -11,7 +11,6 @@ import lombok.Setter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.repository.ContentStore;
 import org.springframework.content.s3.config.EnableS3Stores;
@@ -35,8 +34,6 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -53,8 +50,7 @@ public class EntityConverterTest {
 	@Autowired
 	private AmazonS3 s3;
 
-	@Value("${spring.content.s3.bucket:#{environment.AWS_BUCKET}}")
-	private String bucket;
+	private static String bucket = "another-spring-content-bucket";
 
 	{
 		Describe("S3ObjectId", () -> {
@@ -65,24 +61,23 @@ public class EntityConverterTest {
 				Context("given content is added", () -> {
 					BeforeEach(() -> {
 						store.setContent(entity, new ByteArrayInputStream("uuid".getBytes()));
+						id = entity.getContentId();
 					});
 					It("should have the converted entity", () -> {
-						assertThat(entity.getContentId(), is(not(nullValue())));
-						id = entity.getContentId();
+						assertThat(s3.doesObjectExist(bucket, id.toString()), is(true));
 					});
 					Context("given the content is removed", () -> {
 						BeforeEach(() -> {
 							store.unsetContent(entity);
 						});
 						It("should remove the content from the store", () -> {
-							assertThat(s3.doesObjectExist(bucket, "/some-prefix/" + id), is(false));
+							assertThat(s3.doesObjectExist(bucket, id.toString()), is(false));
 						});
 					});
 				});
 			});
 			AfterEach(() -> {
 				store.unsetContent(entity);
-				assertThat(entity.getContentId(), is(nullValue()));
 			});
 		});
 	}
@@ -113,11 +108,14 @@ public class EntityConverterTest {
 			return new S3StoreConfigurer() {
 				@Override
 				public void configureS3StoreConverters(ConverterRegistry registry) {
-					registry.addConverter(new Converter<UUID, S3ObjectId>() {
+					registry.addConverter(new Converter<ConverterEntity, S3ObjectId>() {
 
 						@Override
-						public S3ObjectId convert(UUID source) {
-							return new S3ObjectId("spring-eg-content-s3", "/some-prefix/" + source.toString());
+						public S3ObjectId convert(ConverterEntity source) {
+							if (source.getContentId() == null) {
+								return null;
+							}
+							return new S3ObjectId(bucket, source.getContentId().toString());
 						}
 					});
 				}
