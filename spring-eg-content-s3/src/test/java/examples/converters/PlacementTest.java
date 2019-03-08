@@ -1,5 +1,10 @@
 package examples.converters;
 
+import java.io.ByteArrayInputStream;
+import java.util.UUID;
+
+import javax.persistence.GeneratedValue;
+
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3ObjectId;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
@@ -10,6 +15,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import tests.smoke.JpaConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.commons.annotations.ContentId;
@@ -22,11 +29,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.test.context.ContextConfiguration;
-import tests.smoke.JpaConfig;
-
-import javax.persistence.GeneratedValue;
-import java.io.ByteArrayInputStream;
-import java.util.UUID;
+import org.springframework.util.Assert;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
@@ -35,14 +38,12 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = { JpaConfig.class, S3Config.class, IdConverterTest.ConverterConfig.class })
+@ContextConfiguration(classes = { JpaConfig.class, S3Config.class, PlacementTest.ConverterConfig.class })
 @EnableS3Stores("examples.converters")
-public class IdConverterTest {
+public class PlacementTest {
 
 	@Autowired
 	private ConverterContentStore store;
@@ -57,7 +58,7 @@ public class IdConverterTest {
 	private String bucket;
 
 	{
-		Describe("S3ObjectId", () -> {
+		Describe("Placement", () -> {
 			Context("given a content entity", () -> {
 				BeforeEach(() -> {
 					entity = new ConverterEntity();
@@ -65,23 +66,25 @@ public class IdConverterTest {
 				Context("given content is added", () -> {
 					BeforeEach(() -> {
 						store.setContent(entity, new ByteArrayInputStream("uuid".getBytes()));
+						id = entity.getContentId();
 					});
 					It("should have the converted entity", () -> {
-						assertThat(entity.getContentId(), is(not(nullValue())));
-						id = entity.getContentId();
+						assertThat(s3.doesObjectExist(bucket, id(id)), is(true));
 					});
 					Context("given the content is removed", () -> {
 						BeforeEach(() -> {
 							store.unsetContent(entity);
 						});
 						It("should remove the content from the store", () -> {
-							assertThat(s3.doesObjectExist(bucket, "/some-prefix/" + id), is(false));
+							assertThat(s3.doesObjectExist(bucket, id(id)), is(false));
 						});
 					});
 				});
 			});
 			AfterEach(() -> {
-				store.unsetContent(entity);
+				if (entity.getContentId() != null) {
+					store.unsetContent(entity);
+				}
 			});
 		});
 	}
@@ -112,11 +115,11 @@ public class IdConverterTest {
 			return new S3StoreConfigurer() {
 				@Override
 				public void configureS3StoreConverters(ConverterRegistry registry) {
-					registry.addConverter(new Converter<UUID, S3ObjectId>() {
+					registry.addConverter(new Converter<ConverterEntity, S3ObjectId>() {
 
 						@Override
-						public S3ObjectId convert(UUID source) {
-							return new S3ObjectId("spring-eg-content-s3", "/some-prefix/" + source.toString());
+						public S3ObjectId convert(ConverterEntity source) {
+							return new S3ObjectId("spring-eg-content-s3", id(source.getContentId()));
 						}
 					});
 				}
@@ -128,5 +131,10 @@ public class IdConverterTest {
 			};
 		}
 
+	}
+
+	public static String id(UUID id) {
+		Assert.notNull(id, "id cannot be null");
+		return "some-prefix/" + id.toString();
 	}
 }
