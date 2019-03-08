@@ -1,5 +1,11 @@
 package examples.versioning;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

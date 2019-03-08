@@ -1,5 +1,11 @@
 package examples;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.fs.config.EnableFilesystemStores;
 import org.springframework.content.fs.io.FileSystemResourceLoader;
