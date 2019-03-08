@@ -33,7 +33,7 @@ import javax.sql.DataSource;
 })
 @ComponentScan("org.springframework.versions")
 @Import({JpaLockingAndVersioningConfig.class, S3Config.class})
-@EnableJpaRepositories(basePackages={"tests.versioning"})
+@EnableJpaRepositories(basePackages={"tests.versioning", "org.springframework.versions"})
 @EnableTransactionManagement
 @EnableS3Stores(basePackages={"tests.versioning"})
 public class S3VersioningConfig {

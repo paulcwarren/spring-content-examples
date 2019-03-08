@@ -15,7 +15,7 @@ public class Application {
     }
 
     @Configuration
-    @EnableJpaRepositories(basePackages="tests.versioning")
+    @EnableJpaRepositories(basePackages={"tests.versioning", "org.springframework.versions"})
     @EnableFilesystemStores(basePackages = "tests.versioning")
     @EntityScan(basePackages = "tests.versioning")
     public static class ApplicationConfiguration {

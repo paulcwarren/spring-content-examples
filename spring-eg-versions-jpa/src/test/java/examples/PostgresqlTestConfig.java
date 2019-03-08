@@ -19,13 +19,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.versions.jpa.config.JpaLockingAndVersioningConfig;
 
-import javax.sql.DataSource;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
 @Configuration
-@EnableJpaRepositories(basePackages="tests.versioning")
+@EnableJpaRepositories(basePackages={"tests.versioning", "org.springframework.versions"})
 @EnableTransactionManagement
 @EnableFilesystemStores(basePackages="tests.versioning")
 @Import(JpaLockingAndVersioningConfig.class)

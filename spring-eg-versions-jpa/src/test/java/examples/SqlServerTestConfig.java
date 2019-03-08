@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 @Configuration
-@EnableJpaRepositories(basePackages="tests.versioning")
+@EnableJpaRepositories(basePackages={"tests.versioning", "org.springframework.versions"})
 @EnableTransactionManagement
 @EnableFilesystemStores(basePackages="tests.versioning")
 @Import(JpaLockingAndVersioningConfig.class)
