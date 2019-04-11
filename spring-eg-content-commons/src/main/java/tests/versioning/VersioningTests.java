@@ -1,11 +1,21 @@
 package tests.versioning;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.security.Principal;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.OptimisticLockException;
+import javax.security.auth.Subject;
+
 import internal.org.springframework.versions.LockingService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,24 +24,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.versions.LockOwnerException;
 import org.springframework.versions.VersionInfo;
 
-import javax.persistence.OptimisticLockException;
-import javax.security.auth.Subject;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.security.Principal;
-import java.util.Collection;
-import java.util.List;
-
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static java.lang.String.format;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class VersioningTests {
 
@@ -47,7 +51,8 @@ public class VersioningTests {
     private LockingService lockingService;
 
     private Long v0Id, v1Id, v2Id, vstamp;
-    private VersionedDocument doc, stale, next;
+    private VersionedDocument doc, stale, next, pwc;
+    private List<VersionedDocument> list;
     private Throwable e;
 
     {
@@ -68,154 +73,6 @@ public class VersioningTests {
                 assertThat(lockingService.isLockOwner(doc.getId(), principal("some-user")), is(false));
             });
         });
-
-//        Describe("LockingAndVersioningRepository", () -> {
-//            Context("given a security context", () -> {
-//                BeforeEach(() -> {
-//                    securityContext("some-user");
-//                });
-//                Context("given a new entity", () -> {
-//                    BeforeEach(() -> {
-//                        doc = new VersionedDocument();
-//                    });
-//                    Context("when it is saved", () -> {
-//                        BeforeEach(() -> {
-//                            result = repo.save(doc);
-//                        });
-//                        It("should succeed and hold the lock", () -> {
-//                            assertThat(result, is(not(nullValue())));
-//                            assertThat(result.getId(), is(not(nullValue())));
-//                            assertThat(result.getLockOwner(), is("some-user"));
-//                        });
-//                    });
-//                    Context("given an existing, unlocked entity", () -> {
-//                        BeforeEach(() -> {
-//                            doc = repo.save(doc);
-////                            doc = repo.unlock(doc);
-//                            assertThat(doc.getLockOwner(), is(nullValue()));
-//                        });
-//                        Context("a lock can be obtained", () -> {
-//                            BeforeEach(() -> {
-//                                result = repo.lock(doc);
-//                            });
-//                            It("should succeed", () -> {
-//                                assertThat(result, is(not(nullValue())));
-//                                assertThat(result.getId(), is(not(nullValue())));
-//                                assertThat(result.getLockOwner(), is("some-user"));
-//                            });
-//                            Context("given changes are made", () -> {
-//                                BeforeEach(() -> {
-//                                    doc.setData("some data");
-//                                    result = repo.save(doc);
-//                                });
-//                                It("should succeed and lock should remain", () -> {
-//                                    assertThat(result, is(not(nullValue())));
-//                                    assertThat(result.getId(), is(not(nullValue())));
-//                                    assertThat(result.getData(), is("some data"));
-//                                    assertThat(result.getLockOwner(), is("some-user"));
-//                                });
-//                                Context("given is it unlocked", () -> {
-//                                    BeforeEach(() -> {
-//                                        result = repo.unlock(doc);
-//                                    });
-//                                    It("should relinqiush the lock and the changed data should persist", () -> {
-//                                        assertThat(result, is(not(nullValue())));
-//                                        assertThat(result.getId(), is(not(nullValue())));
-//                                        assertThat(result.getData(), is("some data"));
-//                                        assertThat(result.getLockOwner(), is(nullValue()));
-//                                    });
-//                                });
-//                                Context("given another user tries to make changes", () -> {
-//                                    BeforeEach(() -> {
-//                                        securityContext("some-other-user");
-//
-//                                        doc.setData("some other user changes");
-//                                        try {
-//                                            result = repo.save(doc);
-//                                        } catch (Exception e) {
-//                                            this.e = e;
-//                                        }
-//                                    });
-//                                    It("should fail with a not lock owner exception", () -> {
-//                                        assertThat(result, is(not(nullValue())));
-//                                        assertThat(result.getId(), is(not(nullValue())));
-//                                        assertThat(result.getData(), is("some data"));
-//                                        assertThat(result.getLockOwner(), is("some-user"));
-//                                        assertThat(e, is(instanceOf(LockOwnerException.class)));
-//                                    });
-//                                });
-//                            });
-//                        });
-//                    });
-//                });
-//            });
-//        });
-
-//        FDescribe("@Version semantics", () -> {
-//            BeforeEach(() -> {
-//                securityContext("some-user");
-//            });
-//            Context("given a new entity", () -> {
-//                BeforeEach(() -> {
-//                    doc = new VersionedDocument();
-//                });
-//                It("should have a vstamp of null", () -> {
-//                    assertThat(doc.getVstamp(), is(nullValue()));
-//                });
-//                Context("when it is saved", () -> {
-//                    BeforeEach(() -> {
-//                        doc.setData("0");
-//                        doc = repo.save(doc);
-//                    });
-//                    It("should increment the vstamp to 0", () -> {
-//                        assertThat(doc.getVstamp(), is(0L));
-//                    });
-//                    Context("when it is saved again", () -> {
-//                        BeforeEach(() -> {
-//                            doc.setData("1");
-//                            doc = repo.save(doc);
-//                        });
-//                        It("should increment the vstamp to 1", () -> {
-//                            assertThat(doc.getVstamp(), is(1L));
-//                        });
-//                        Context("when it is saved again again", () -> {
-//                            BeforeEach(() -> {
-//                                doc.setData("2");
-//                                doc = repo.save(doc);
-//                            });
-//                            It("should increment the vstamp to 2", () -> {
-//                                assertThat(doc.getVstamp(), is(2L));
-//                            });
-//                            Context("when is it saved with an older vstamp", () -> {
-//                                BeforeEach(() -> {
-//                                    doc.setData("3");
-//                                    doc.setVstamp(1L);
-//                                    try {
-//                                        doc = repo.save(doc);
-//                                    } catch (Exception e) {
-//                                        this.e = e;
-//                                    }
-//                                });
-//                                It("should throw an OptimisticLockException", () -> {
-//                                    assertThat(e, is(instanceOf(ObjectOptimisticLockingFailureException.class)));
-//                                });
-//                            });
-//                        });
-//                    });
-//                    Context("when content is added", () -> {
-//                        BeforeEach(() -> {
-////                            doc.setData("foo");
-////                            doc = repo.save(doc);
-//                            store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
-//                        });
-//                        FIt("should update the doc's vstamp", () -> {
-//                            doc = repo.findById(doc.getId()).get();
-//                            assertThat(doc.getVstamp(), is(2L));
-//                        });
-//                    });
-//                });
-//            });
-//        });
 
         Describe("Optimistic Locking", () -> {
             Describe("setContent", () -> {
@@ -758,6 +615,11 @@ public class VersioningTests {
 
                 v0Id = doc.getId();
             });
+            It("should be the only version in the version series", () -> {
+                assertThat(doc.getSuccessorId(), is(nullValue()));
+                assertThat(doc.getAncestorId(), is(nullValue()));
+                assertThat(doc.getAncestralRootId(), is(nullValue()));
+            });
             It("should have a 1.0 version number", () -> {
                 assertThat(doc.getVersion(), is("1.0"));
             });
@@ -768,6 +630,141 @@ public class VersioningTests {
                 List<VersionedDocument> latestVersions = repo.findAllVersionsLatest();
                 assertThat(latestVersions, CoreMatchers.hasItem(doc));
             });
+            Context("when a private working copy is created", () -> {
+                BeforeEach(() -> {
+                    try {
+                        doc = repo.lock(doc);
+                        assertThat(doc.getVstamp(), is(1L));
+
+                        pwc = repo.workingCopy(doc);
+                        v1Id = pwc.getId();
+                    } catch (Exception e) {
+                        this.e = e;
+                    }
+                });
+                It("should create a new entity and carry over the lock", () -> {
+                    assertThat(e, is(nullValue()));
+
+                    assertThat(pwc.getId(), is(not(v0Id)));
+                    assertThat(pwc.getSuccessorId(), is(nullValue()));
+                    assertThat(pwc.getAncestralRootId(), is(doc.getAncestralRootId()));
+                    assertThat(pwc.getAncestorId(), is(doc.getId()));
+                    assertThat(pwc.getVstamp(), is(0L));
+                    assertThat(pwc.getLockOwner(), is("some-user"));
+                    assertThat(pwc.getVersion(), is(doc.getVersion()));
+                    assertThat(pwc.getLabel(), is("~~PWC~~"));
+                });
+                It("should leave the ancestor with an un-established successor", () -> {
+                    assertThat(e, is(nullValue()));
+
+                    assertThat(repo.findById(v0Id).get().getSuccessorId(), is(nullValue()));
+                });
+                Context("given isPrivateWorkingCopy is called", () -> {
+                    It("should return true", () -> {
+                        boolean isPwc = false;
+                        try {
+                            isPwc = repo.isPrivateWorkingCopy(pwc);
+                        } catch (Exception e) {
+                            this.e = e;
+                        }
+                        assertThat(e, is(nullValue()));
+                        assertThat(isPwc, is(true));
+                    });
+                });
+                Context("given findAllVersionsLatest", () -> {
+                    BeforeEach(() -> {
+                        try {
+                            list = repo.findAllVersionsLatest();
+                        } catch (Exception e) {
+                            this.e = e;
+                        }
+                    });
+                    It("should not return the pwc", () -> {
+                        assertThat(e, is(nullValue()));
+                        assertThat(list, not(hasItem(pwc)));
+                    });
+                });
+                Context("given findAllVersions", () -> {
+                    BeforeEach(() -> {
+                        try {
+                            list = repo.findAllVersions(doc);
+                        } catch (Exception e) {
+                            this.e = e;
+                        }
+                    });
+                    It("should return the pwc", () -> {
+                        assertThat(e, is(nullValue()));
+                        assertThat(list, hasItem(pwc));
+                        assertThat(list.size(), is(greaterThan(1)));
+                    });
+                });
+                Context("given findWorkingCopy", () -> {
+                    BeforeEach(() -> {
+                        try {
+                            next = repo.findWorkingCopy(doc);
+                        } catch (Exception e) {
+                            this.e = e;
+                        }
+                    });
+                    It("should return the pwc", () -> {
+                        assertThat(e, is(nullValue()));
+                        assertThat(next.getId(), is(pwc.getId()));
+                    });
+                });
+                Context("given the pwc is versioned", () -> {
+                    BeforeEach(() -> {
+                        try {
+                            next = repo.version(pwc, new VersionInfo("1.1", "some minor changes"));
+                            v1Id = next.getId();
+                        } catch (Exception e) {
+                            this.e = e;
+                        }
+                    });
+                    It("should create a new entity and carry over the lock", () -> {
+                        assertThat(e, is(nullValue()));
+
+                        assertThat(next.getId(), is(pwc.getId()));
+                        assertThat(next.getSuccessorId(), is(nullValue()));
+                        assertThat(next.getAncestralRootId(), is(v0Id));
+                        assertThat(next.getAncestorId(), is(v0Id));
+                        assertThat(next.getLockOwner(), is("some-user"));
+                        assertThat(next.getVersion(), is("1.1"));
+                        assertThat(next.getLabel(), is("some minor changes"));
+                    });
+                    It("should update existing as the ancestor and release its lock", () -> {
+                        assertThat(e, is(nullValue()));
+
+                        doc = repo.findById(v0Id).get();
+                        assertThat(doc.getId(), is(v0Id));
+                        assertThat(doc.getSuccessorId(), is(v1Id));
+                        assertThat(doc.getAncestralRootId(), is(v0Id));
+                        assertThat(doc.getLockOwner(), is(nullValue()));
+                        assertThat(doc.getVersion(), is("1.0"));
+                        assertThat(doc.getLabel(), is(nullValue()));
+                    });
+                });
+                Context("given the pwc is deleted", () -> {
+                    BeforeEach(() -> {
+                        try {
+                            repo.delete(pwc);
+                        } catch (Exception e) {
+                            this.e = e;
+                        }
+                    });
+                    It("should remove the pwc entity", () -> {
+                        assertThat(e, is(nullValue()));
+                        assertThat(repo.findById(v1Id).isPresent(), is(false));
+                    });
+                    It("should leave the ancestor in it's pre-pwc state", () -> {
+                        assertThat(e, is(nullValue()));
+                        doc = repo.findById(v0Id).get();
+                        assertThat(doc.getSuccessorId(), is(nullValue()));
+                        assertThat(doc.getAncestorId(), is(nullValue()));
+                        assertThat(doc.getAncestralRootId(), is(nullValue()));
+                        assertThat(doc.getLockOwner(), is("some-user"));
+                    });
+                });
+            });
             Context("when versioned", () -> {
                 BeforeEach(() -> {
                     try {
@@ -777,14 +774,14 @@ public class VersioningTests {
                         next = repo.version(doc, new VersionInfo("1.1", "some minor changes"));
                         v1Id = next.getId();
                     } catch (Exception e) {
-                        System.out.println("error locking " + doc.getId());;
-                        e.printStackTrace();
+                        this.e = e;
                     }
                 });
                 It("should create a new entity and carry over the lock", () -> {
                     assertThat(next.getId(), is(not(v0Id)));
                     assertThat(next.getSuccessorId(), is(nullValue()));
                     assertThat(next.getAncestralRootId(), is(v0Id));
+                    assertThat(next.getAncestorId(), is(v0Id));
                     assertThat(next.getVstamp(), is(0L));
                     assertThat(next.getLockOwner(), is("some-user"));
                     assertThat(next.getVersion(), is("1.1"));

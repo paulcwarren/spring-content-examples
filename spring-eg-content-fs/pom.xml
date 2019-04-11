@@ -35,6 +35,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-versions-jpa</artifactId>
+			<version>${spring-content-version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -56,17 +62,5 @@
 	  		<version>${ginkgo-version}</version>
 			<scope>test</scope>
 	  	</dependency>
-
-		<!-- Versioning -->
-        <dependency>
-            <groupId>com.github.paulcwarren</groupId>
-            <artifactId>spring-versions-jpa</artifactId>
-            <version>${spring-content-version}</version>
-        </dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
-		</dependency>
-    </dependencies>
+	</dependencies>
 </project>
