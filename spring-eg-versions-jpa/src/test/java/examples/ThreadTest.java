@@ -1,27 +1,31 @@
 package examples;
 
+import java.util.Collection;
+import java.util.Random;
+
+import javax.security.auth.Subject;
+
+import tests.versioning.VersionedDocument;
+import tests.versioning.VersionedDocumentAndVersioningRepository;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.versions.VersionInfo;
-import tests.versioning.VersionedDocument;
-import tests.versioning.VersionedDocumentAndVersioningRepository;
-
-import javax.security.auth.Subject;
-import java.util.Collection;
-import java.util.Random;
 
 import static java.lang.String.format;
 
 public class ThreadTest implements Runnable {
 
     private final int index;
-    private VersionedDocumentAndVersioningRepository repo;
+	private final VersionedDocumentAndVersioningRepository repo;
+	private final boolean createPrivateWorkingCopy;
 
-    public ThreadTest(int i, VersionedDocumentAndVersioningRepository repo) {
+    public ThreadTest(int i, VersionedDocumentAndVersioningRepository repo, boolean createPrivateWorkingCopy) {
         this.index = i;
         this.repo = repo;
+        this.createPrivateWorkingCopy = createPrivateWorkingCopy;
     }
 
     @Override
@@ -44,6 +48,13 @@ public class ThreadTest implements Runnable {
                 System.out.flush();
                 doc = repo.lock(doc);
 
+                if (createPrivateWorkingCopy) {
+//                Thread.sleep(delay);
+					System.out.println(format("User %s creating private working copy %s", "user-" + index, doc.getId()));
+					System.out.flush();
+                	doc = repo.workingCopy(doc);
+				}
+
 //                Thread.sleep(delay);
                 System.out.println(format("User %s saving %s", "user-" + index, doc.getId()));
                 System.out.flush();
@@ -61,7 +72,12 @@ public class ThreadTest implements Runnable {
 //                Thread.sleep(delay);
                 System.out.println(format("User %s unlocking %s", "user-" + index, doc.getId()));
                 System.out.flush();
-                repo.unlock(doc);
+                doc = repo.unlock(doc);
+
+//                Thread.sleep(delay);
+				System.out.println(format("User %s deleting %s", "user-" + index, doc.getId()));
+				System.out.flush();
+				repo.delete(doc);
             } catch (Exception e) {
                 System.out.println(format("User %s id %s", "user-" + index, doc.getId()));
                 e.printStackTrace();
