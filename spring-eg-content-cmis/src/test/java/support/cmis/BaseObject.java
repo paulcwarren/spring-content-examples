@@ -18,8 +18,8 @@ import lombok.Setter;
 
 import org.springframework.content.cmis.CmisDescription;
 import org.springframework.content.cmis.CmisName;
-import org.springframework.content.cmis.CmisProperty;
-import org.springframework.content.cmis.CmisPropertyType;
+import org.springframework.content.cmis.CmisReference;
+import org.springframework.content.cmis.CmisReferenceType;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -37,7 +37,6 @@ public class BaseObject {
 	private Long Id;
 
 	@CmisName
-	@CmisProperty(name="name", type= CmisPropertyType.String)
 	private String name;
 
 	@CmisDescription
@@ -58,7 +57,7 @@ public class BaseObject {
 	@Version
 	private Long vstamp;
 
-	@CmisProperty(name="parent", type = CmisPropertyType.Parent_Relationship)
+	@CmisReference(type = CmisReferenceType.Parent)
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Folder parent;
 
