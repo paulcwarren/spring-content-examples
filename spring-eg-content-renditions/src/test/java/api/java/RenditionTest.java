@@ -1,5 +1,7 @@
 package api.java;
 
+import java.io.InputStream;
+
 import examples.models.Claim;
 import examples.models.ClaimForm;
 import examples.repositories.ClaimRepository;
@@ -8,13 +10,12 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import tests.smoke.JpaConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import tests.smoke.JpaConfig;
-
-import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -32,7 +33,7 @@ public class RenditionTest {
 	private ClaimFormStore claimFormStore;
 	
 	@Autowired
-	private RenditionService renditions;
+	private RenditionService renditionService;
 	
     private Claim claim;
     
@@ -61,7 +62,7 @@ public class RenditionTest {
 
     @Test
     public void testRenditionService() {
-    	assertThat(renditions, is(not(nullValue())));
+    	assertThat(renditionService, is(not(nullValue())));
     }
     
     @Test
