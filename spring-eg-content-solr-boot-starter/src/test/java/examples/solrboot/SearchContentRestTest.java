@@ -1,5 +1,7 @@
 package examples.solrboot;
 
+import java.io.StringReader;
+
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.jayway.restassured.RestAssured;
@@ -10,12 +12,11 @@ import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import java.io.StringReader;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
@@ -65,7 +66,7 @@ public class SearchContentRestTest {
     						given()
         		    			.header("accept", "application/hal+json")
     						.when()
-	    						.get("/documents/searchContent/findKeyword?keyword=one")
+	    						.get("/documents/searchContent?queryString=one")
 	    						.andReturn();
 
 					resp.then()

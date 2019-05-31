@@ -10,6 +10,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.content.solr.SolrProperties;
@@ -68,7 +69,7 @@ public class BootStarterSolrTest {
 					});
 					Context("when the content is searched", () -> {
 						It("should return the searched content", () -> {
-							Iterable<String> content = docContentRepo.findKeyword("one");
+							Iterable<String> content = docContentRepo.search("one");
 							assertThat(content, CoreMatchers.hasItem(doc.getContentId()));
 						});
 					});

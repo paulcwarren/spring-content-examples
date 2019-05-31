@@ -59,7 +59,7 @@ public class BootStarterSolrRESTTest {
 					Context("when the content is searched", () -> {
 						It("should return the searched content", () -> {
 							when()
-							.get("/documents/searchContent/findKeyword?keyword=one")
+							.get("/documents/searchContent?queryString=one")
 						.then()
 							.assertThat()
 							.statusCode(HttpStatus.SC_OK)

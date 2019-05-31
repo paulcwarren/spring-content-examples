@@ -86,7 +86,7 @@ public class AuthSolrTest {
                     });
                     Context("when the content is searched", () -> {
                         It("should return the searched content and no more", () -> {
-                            Iterable<String> content = docContentRepo.findKeyword("one");
+                            Iterable<String> content = docContentRepo.search("one");
                             List<String> result = stream(content.spliterator(), false).collect(Collectors.toList());
                             assertThat(result, hasItem(doc.getContentId()));
                         });

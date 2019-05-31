@@ -74,7 +74,7 @@ public class SolrTest {
 					});
 					Context("when the content is searched", () -> {
 						It("should return the searched content", () -> {
-							Iterable<String> content = docContentRepo.findKeyword("one");
+							Iterable<String> content = docContentRepo.search("one");
 							assertThat(content, CoreMatchers.hasItem(doc.getContentId()));
 						});
 					});
