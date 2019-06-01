@@ -7,11 +7,10 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.content.elasticsearch.FullTextIndexingElasticConfig;
+import org.springframework.content.elasticsearch.EnableElasticsearchFulltextIndexing;
 import org.springframework.content.jpa.config.EnableJpaStores;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -27,9 +26,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-// TODO: Implement @EnableFulltextIndexingElastic
-//@EnableElasticsearchFullTextIndexing
-@Import(FullTextIndexingElasticConfig.class)
+@EnableElasticsearchFulltextIndexing
 @EnableJpaRepositories(basePackages = "model")
 @EnableJpaStores(basePackages = "model")
 public class ElasticsearchConfig {
