@@ -1,5 +1,7 @@
 package examples;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.jpa.config.EnableJpaStores;
 import org.springframework.content.jpa.config.JpaStoreConfigurer;
@@ -18,7 +20,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.sql.DataSource;
+import static java.lang.String.format;
 
 @Configuration
 @EnableJpaRepositories(basePackages="examples.repositories")
@@ -27,21 +29,24 @@ import javax.sql.DataSource;
 public class SqlServerTestConfig {
 
     @Value("#{environment.SQLSERVER_URL}")
-    private String postgresqlUrl;
+    private String sqlServerUrl;
+
+    @Value("#{environment.SQLSERVER_DB_NAME}")
+    private String sqlServerDbName;
 
     @Value("#{environment.SQLSERVER_USERNAME}")
-    private String postgresqlUsername;
+    private String sqlServerUsername;
 
     @Value("#{environment.SQLSERVER_PASSWORD}")
-    private String postgresqlPassword;
+    private String sqlServerPassword;
 
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        ds.setUrl(postgresqlUrl);
-        ds.setUsername(postgresqlUsername);
-        ds.setPassword(postgresqlPassword);
+        ds.setUrl(format("jdbc:%s;databaseName=%s", sqlServerUrl, sqlServerDbName));
+        ds.setUsername(sqlServerUsername);
+        ds.setPassword(sqlServerPassword);
         return ds;
     }
 
@@ -69,18 +74,18 @@ public class SqlServerTestConfig {
     }
 
     @Value("/org/springframework/content/jpa/schema-drop-sqlserver.sql")
-    private Resource dropReopsitoryTables;
+    private Resource dropBlobsSchema;
 
     @Value("/org/springframework/content/jpa/schema-sqlserver.sql")
-    private Resource dataReopsitorySchema;
+    private Resource blobsSchema;
 
     @Bean
     DataSourceInitializer datasourceInitializer() {
         ResourceDatabasePopulator databasePopulator =
                 new ResourceDatabasePopulator();
 
-        databasePopulator.addScript(dropReopsitoryTables);
-        databasePopulator.addScript(dataReopsitorySchema);
+        databasePopulator.addScript(dropBlobsSchema);
+        databasePopulator.addScript(blobsSchema);
         databasePopulator.setIgnoreFailedDrops(true);
 
         DataSourceInitializer initializer = new DataSourceInitializer();
