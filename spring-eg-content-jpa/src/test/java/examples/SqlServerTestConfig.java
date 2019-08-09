@@ -2,6 +2,8 @@ package examples;
 
 import javax.sql.DataSource;
 
+import com.nimbusds.jose.util.Base64;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.jpa.config.EnableJpaStores;
 import org.springframework.content.jpa.config.JpaStoreConfigurer;
@@ -28,8 +30,8 @@ import static java.lang.String.format;
 @EnableJpaStores(basePackages="examples.stores")
 public class SqlServerTestConfig {
 
-    @Value("#{environment.SQLSERVER_URL}")
-    private String sqlServerUrl;
+    @Value("#{environment.SQLSERVER_HOST}")
+    private String sqlServerHost;
 
     @Value("#{environment.SQLSERVER_DB_NAME}")
     private String sqlServerDbName;
@@ -44,9 +46,13 @@ public class SqlServerTestConfig {
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        ds.setUrl(format("jdbc:%s;databaseName=%s", sqlServerUrl, sqlServerDbName));
+        String connectionString = format("jdbc:sqlserver://%s;databaseName=%s", sqlServerHost, sqlServerDbName);
+        ds.setUrl(connectionString);
         ds.setUsername(sqlServerUsername);
         ds.setPassword(sqlServerPassword);
+
+        System.out.println(format("----> sqlserver configuration: %s", Base64.encode(connectionString + ":" + sqlServerUsername + ":" + sqlServerPassword)));
+
         return ds;
     }
 
