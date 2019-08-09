@@ -2,8 +2,6 @@ package examples;
 
 import javax.sql.DataSource;
 
-import com.nimbusds.jose.util.Base64;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.jpa.config.EnableJpaStores;
 import org.springframework.content.jpa.config.JpaStoreConfigurer;
@@ -50,9 +48,6 @@ public class SqlServerTestConfig {
         ds.setUrl(connectionString);
         ds.setUsername(sqlServerUsername);
         ds.setPassword(sqlServerPassword);
-
-        System.out.println(format("----> sqlserver configuration: %s", Base64.encode(connectionString + ":" + sqlServerUsername + ":" + sqlServerPassword)));
-
         return ds;
     }
 
