@@ -1,18 +1,25 @@
 package examples;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+
+import static java.lang.String.format;
 
 @Configuration
 public class AbstractSpringContentMongoConfiguration extends AbstractMongoConfiguration {
@@ -22,38 +29,33 @@ public class AbstractSpringContentMongoConfiguration extends AbstractMongoConfig
 	public GridFsTemplate gridFsTemplate() throws Exception {
 		return new GridFsTemplate(mongoDbFactory(), mappingMongoConverter());
 	}
-	
-	@Override
-	protected String getDatabaseName() {
-		return "spring-content";
+
+	@Value("#{environment.MONGODB_URL}")
+	private String mongoDbUrl;
+
+	@Bean
+	public MongoTemplate mongoTemplate(MongoDbFactory mongoDbFactory) {
+		return new MongoTemplate(mongoDbFactory);
 	}
 
 	@Override
 	public MongoDbFactory mongoDbFactory() {
-		
-		if (System.getenv("spring_eg_content_mongo_host") != null) {
-	    	String host = System.getenv("spring_eg_content_mongo_host");
-	    	String port = System.getenv("spring_eg_content_mongo_port");
-	    	String username = System.getenv("spring_eg_content_mongo_username");
-	    	String password = System.getenv("spring_eg_content_mongo_password");
 
-	    	log.info(String.format("Connecting to %s:%s", host, port));
+		if (StringUtils.isEmpty(mongoDbUrl) == false) {
+ 			return new SimpleMongoDbFactory(new MongoClientURI(mongoDbUrl));
+		} else {
 
-			 // Set credentials      
-		    MongoCredential credential = MongoCredential.createCredential(username, getDatabaseName(), password.toCharArray());
-		    ServerAddress serverAddress = new ServerAddress(host, Integer.parseInt(port));
-	
-		    // Mongo Client
-		    MongoClient mongoClient = new MongoClient(serverAddress,Arrays.asList(credential)); 
-	
-		    // Mongo DB Factory
-		    return new SimpleMongoDbFactory(mongoClient, getDatabaseName());
+			return new SimpleMongoDbFactory(new MongoClientURI("mongodb://localhost/springdocs"));
 		}
-		return super.mongoDbFactory();
 	}
 
+	@Override
+	protected String getDatabaseName() {
+		return "springcontent";
+	}
+
+	@Override
 	public MongoClient mongoClient() {
-    	log.info("Connecting to localhost");
-        return new MongoClient();
+		return new MongoClient();
 	}
 }
