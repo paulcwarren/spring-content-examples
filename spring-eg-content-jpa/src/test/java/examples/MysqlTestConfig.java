@@ -17,6 +17,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 
@@ -37,6 +38,10 @@ public class MysqlTestConfig {
 
     @Bean
     public DataSource dataSource() {
+        Assert.notNull(url, "MYSQL_URL not set");
+        Assert.notNull(username, "MYSQL_USERNAME not set");
+        Assert.notNull(password, "MYSQL_PASSWORD not set");
+
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         ds.setUrl(url);
