@@ -46,7 +46,7 @@ public class MysqlTestConfig {
 
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setUrl(new String(Base64.decode(url)));
+        ds.setUrl(url);
         ds.setUsername(username);
         ds.setPassword(password);
         return ds;
