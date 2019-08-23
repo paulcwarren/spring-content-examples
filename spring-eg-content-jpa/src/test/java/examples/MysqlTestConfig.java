@@ -21,6 +21,8 @@ import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 
+import org.postgresql.util.Base64;
+
 @Configuration
 @EnableJpaRepositories(basePackages="examples.repositories")
 @EnableTransactionManagement
@@ -44,7 +46,7 @@ public class MysqlTestConfig {
 
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setUrl(url);
+        ds.setUrl(new String(Base64.decode(url)));
         ds.setUsername(username);
         ds.setPassword(password);
         return ds;
