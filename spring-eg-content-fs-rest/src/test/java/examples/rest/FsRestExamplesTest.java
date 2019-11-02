@@ -1,5 +1,7 @@
 package examples.rest;
 
+import java.io.ByteArrayInputStream;
+
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.jayway.restassured.RestAssured;
@@ -11,12 +13,11 @@ import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import java.io.ByteArrayInputStream;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
@@ -76,7 +77,7 @@ public class FsRestExamplesTest {
 					
 					// POST the new content
 					given()
-    					.contentType("plain/text")
+    					.contentType("text/plain")
     					.content(newContent.getBytes())
 					.when()
     					.post("/claims/" + existingClaim.getClaimId() + "/claimForm")
@@ -85,36 +86,36 @@ public class FsRestExamplesTest {
 					
 					// assert that it now exists
 					given()
-    					.header("accept", "plain/text")
+    					.header("accept", "text/plain")
     					.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
 					.then()
     					.statusCode(HttpStatus.SC_OK)
     					.assertThat()
-    					.contentType(Matchers.startsWith("plain/text"))
+    					.contentType(Matchers.startsWith("text/plain"))
     					.body(Matchers.equalTo(newContent));
     			});
     			Context("given that claim has existing content", () -> {
         			BeforeEach(() -> {
         		    	existingClaim.setClaimForm(new ClaimForm());
-        		    	existingClaim.getClaimForm().setMimeType("plain/text");
+        		    	existingClaim.getClaimForm().setMimeType("text/plain");
         		    	claimFormStore.setContent(existingClaim.getClaimForm(), new ByteArrayInputStream("This is plain text content!".getBytes()));
         		    	claimRepo.save(existingClaim);
         			});
     				It("should return the content with 200 OK", () -> {
     					given()
-	    					.header("accept", "plain/text")
+	    					.header("accept", "text/plain")
 	    					.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
     					.then()
 	    					.statusCode(HttpStatus.SC_OK)
 	    					.assertThat()
-	    					.contentType(Matchers.startsWith("plain/text"))
+	    					.contentType(Matchers.startsWith("text/plain"))
 	    					.body(Matchers.equalTo("This is plain text content!"));
     				});
     				It("should be POSTable with new content with 201 Created", () -> {
     					String newContent = "This is new content";
     					
     					given()
-	    					.contentType("plain/text")
+	    					.contentType("text/plain")
 	    					.content(newContent.getBytes())
     					.when()
 	    					.post("/claims/" + existingClaim.getClaimId() + "/claimForm")
@@ -122,12 +123,12 @@ public class FsRestExamplesTest {
 	    					.statusCode(HttpStatus.SC_OK);
     					
     					given()
-	    					.header("accept", "plain/text")
+	    					.header("accept", "text/plain")
 	    					.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
     					.then()
 	    					.statusCode(HttpStatus.SC_OK)
 	    					.assertThat()
-	    					.contentType(Matchers.startsWith("plain/text"))
+	    					.contentType(Matchers.startsWith("text/plain"))
 	    					.body(Matchers.equalTo(newContent));
     				});
     				It("should be DELETEable with 204 No Content", () -> {
