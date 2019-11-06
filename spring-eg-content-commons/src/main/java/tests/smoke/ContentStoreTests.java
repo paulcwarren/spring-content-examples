@@ -68,7 +68,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 					claim.setLastName("Smith");
 					claim.setClaimForm(new ClaimForm());
 					claimFormStore.setContent(claim.getClaimForm(), new ByteArrayInputStream("Hello Spring Content World!".getBytes()));
-					claimRepo.save(claim);
+					claim = claimRepo.save(claim);
 				});
 				
 				It("should be able to store new content", () -> {
@@ -87,7 +87,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 				It("should have content metadata", () -> {
 					Assert.assertThat(claim.getClaimForm().getContentId(), is(notNullValue()));
 					Assert.assertThat(claim.getClaimForm().getContentId().trim().length(), greaterThan(0));
-					Assert.assertEquals(claim.getClaimForm().getContentLength(), 26624);
+					Assert.assertEquals(claim.getClaimForm().getContentLength(), 27L);
 				});
 				
 				Context("when content is updated", () -> {
@@ -128,9 +128,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
                         InputStream content = claimFormStore.getContent(deletedClaimForm);
 						Assert.assertThat(content, is(nullValue()));
 						IOUtils.closeQuietly(content);
-					});
-					
-					It("should have no metadata", () -> {
+
 						Assert.assertThat(claim.getClaimForm().getContentId(), is(nullValue()));
 						Assert.assertEquals(claim.getClaimForm().getContentLength(), 0);
 					});
