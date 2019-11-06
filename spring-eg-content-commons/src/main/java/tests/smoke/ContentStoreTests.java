@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -66,7 +67,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 					claim.setFirstName("John");
 					claim.setLastName("Smith");
 					claim.setClaimForm(new ClaimForm());
-					claimFormStore.setContent(claim.getClaimForm(), this.getClass().getResourceAsStream("/ACC_IN-1.DOC"));
+					claimFormStore.setContent(claim.getClaimForm(), new ByteArrayInputStream("Hello Spring Content World!".getBytes()));
 					claimRepo.save(claim);
 				});
 				
@@ -75,7 +76,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 					InputStream content = null;
 					try {
 						content = claimFormStore.getContent(claim.getClaimForm());
-						matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/ACC_IN-1.DOC"), content);
+						matches = IOUtils.contentEquals(new ByteArrayInputStream("Hello Spring Content World!".getBytes()), content);
 					} catch (IOException e) {
 					} finally {
 						IOUtils.closeQuietly(content);
@@ -91,7 +92,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 				
 				Context("when content is updated", () -> {
 					BeforeEach(() ->{
-						claimFormStore.setContent(claim.getClaimForm(), this.getClass().getResourceAsStream("/claim_form.pdf"));
+						claimFormStore.setContent(claim.getClaimForm(), new ByteArrayInputStream("Hello Updated Spring Content World!".getBytes()));
 						claim = claimRepo.save(claim);
 					});
 					
@@ -100,7 +101,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 						InputStream content = null;
 						try {
 							content = claimFormStore.getContent(claim.getClaimForm());
-							matches = IOUtils.contentEquals(this.getClass().getResourceAsStream("/claim_form.pdf"), content);
+							matches = IOUtils.contentEquals(new ByteArrayInputStream("Hello Updated Spring Content World!".getBytes()), content);
 						} catch (IOException e) {
 						} finally {
 							IOUtils.closeQuietly(content);

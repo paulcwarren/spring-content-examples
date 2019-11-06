@@ -9,6 +9,7 @@ import org.springframework.content.commons.io.DeletableResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,7 +42,7 @@ public class StoreTests {
                 });
                 Context("given content is added to that resource", () -> {
                     BeforeEach(() -> {
-                        InputStream is = this.getClass().getResourceAsStream("/claim_form.pdf");
+                        InputStream is = new ByteArrayInputStream("Hello Spring Content World!".getBytes());
                         OutputStream os = ((WritableResource)r).getOutputStream();
                         IOUtils.copy(is, os);
                         is.close();
@@ -54,12 +55,11 @@ public class StoreTests {
                             // do nothing
                         }
                     });
-                    It("should then exist", () -> {
-                        assertThat(r.exists(), is(true));
-                    });
                     It("should store that content", () -> {
+                        assertThat(r.exists(), is(true));
+
                         boolean matches = false;
-                        InputStream expected = this.getClass().getResourceAsStream("/claim_form.pdf");
+                        InputStream expected = new ByteArrayInputStream("Hello Spring Content World!".getBytes());
                         InputStream actual = null;
                         try {
                             actual = r.getInputStream();
@@ -74,18 +74,17 @@ public class StoreTests {
                     });
                     Context("given that resource is then updated", () -> {
                         BeforeEach(() -> {
-                            InputStream is = this.getClass().getResourceAsStream("/ACC_IN-1.DOC");
+                            InputStream is = new ByteArrayInputStream("Hello Updated Spring Content World!".getBytes());
                             OutputStream os = ((WritableResource)r).getOutputStream();
                             IOUtils.copy(is, os);
                             is.close();
                             os.close();
                         });
-                        It("should still exist", () -> {
-                            assertThat(r.exists(), is(true));
-                        });
                         It("should store that updated content", () -> {
+                            assertThat(r.exists(), is(true));
+
                             boolean matches = false;
-                            InputStream expected = this.getClass().getResourceAsStream("/ACC_IN-1.DOC");
+                            InputStream expected = new ByteArrayInputStream("Hello Updated Spring Content World!".getBytes());
                             InputStream actual = null;
                             try {
                                 actual = r.getInputStream();
