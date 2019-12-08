@@ -134,7 +134,7 @@ public class VersioningTests {
                     // add content
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         } catch (Exception e1) {
                             logger.error(e1);
                             e = e1;
@@ -150,7 +150,7 @@ public class VersioningTests {
                     // update content
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("bar".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("bar".getBytes()));
                         } catch (Exception e1) {
                             logger.error(e1);
                             e = e1;
@@ -188,7 +188,7 @@ public class VersioningTests {
                     // add content
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         } catch (Exception e1) {
                             logger.error(e1);
                             e = e1;
@@ -212,7 +212,7 @@ public class VersioningTests {
                     // update content
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("bar".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("bar".getBytes()));
                         } catch (Exception e1) {
                             logger.error(e1);
                             e = e1;
@@ -252,7 +252,7 @@ public class VersioningTests {
                     // add content
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         } catch (Exception e1) {
                             logger.error(e1);
                             e = e1;
@@ -278,7 +278,7 @@ public class VersioningTests {
                     // update content
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("bar".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("bar".getBytes()));
                         } catch (Exception e1) {
                             logger.error(e1);
                             e = e1;
@@ -356,7 +356,7 @@ public class VersioningTests {
                     // update content
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         } catch (Exception e1) {
                             logger.error(e1);
                             e = e1;
@@ -414,7 +414,7 @@ public class VersioningTests {
                 // content update + save
                 {
                     try {
-                        store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                        doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         doc = repo.findById(v0Id).get();
                     } catch (Exception e1) {
                         e = e1;
@@ -438,7 +438,7 @@ public class VersioningTests {
                 // some-other-user content update + save
                 {
                     try {
-                        store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                        doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         doc = repo.findById(v0Id).get();
                     } catch (Exception e1) {
                         e = e1;
@@ -483,7 +483,7 @@ public class VersioningTests {
                     // content update + save
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                             doc = repo.findById(v0Id).get();
                         } catch (Exception e1) {
                             e = e1;
@@ -499,7 +499,7 @@ public class VersioningTests {
                     // some-other-user content update + save
                     {
                         try {
-                            store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                            doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                             doc = repo.findById(v0Id).get();
                         } catch (Exception e1) {
                             e = e1;
@@ -510,7 +510,7 @@ public class VersioningTests {
                 });
                 Context("given there is content", () -> {
                     BeforeEach(() -> {
-                        store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
+                        doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         doc = repo.findById(v0Id).get();
                         assertThat(doc.getVstamp(), is(2L));
                     });
