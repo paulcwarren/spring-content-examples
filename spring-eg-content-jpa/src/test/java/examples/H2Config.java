@@ -1,16 +1,13 @@
 package examples;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.jpa.config.EnableJpaStores;
-import org.springframework.content.jpa.config.JpaStoreConfigurer;
-import org.springframework.content.jpa.config.JpaStoreProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,47 +17,30 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import static java.lang.String.format;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(basePackages="examples.repositories")
 @EnableTransactionManagement
 @EnableJpaStores(basePackages="examples.stores")
-public class SqlServerTestConfig {
-
-    @Value("#{environment.SQLSERVER_HOST}")
-    private String sqlServerHost;
-
-    @Value("#{environment.SQLSERVER_DB_NAME}")
-    private String sqlServerDbName;
-
-    @Value("#{environment.SQLSERVER_USERNAME}")
-    private String sqlServerUsername;
-
-    @Value("#{environment.SQLSERVER_PASSWORD}")
-    private String sqlServerPassword;
+public class H2TestConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String connectionString = format("jdbc:sqlserver://%s;databaseName=%s", sqlServerHost, sqlServerDbName);
-        ds.setUrl(connectionString);
-        ds.setUsername(sqlServerUsername);
-        ds.setPassword(sqlServerPassword);
-        return ds;
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        return builder.setType(EmbeddedDatabaseType.H2).build();
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setDatabase(Database.SQL_SERVER);
+        vendorAdapter.setDatabase(Database.H2);
         vendorAdapter.setGenerateDdl(true);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("examples.models");  	// Tell Hibernate where to find Entities
+        factory.setPackagesToScan("examples.models");
         factory.setDataSource(dataSource());
 
         return factory;
@@ -74,19 +54,19 @@ public class SqlServerTestConfig {
         return txManager;
     }
 
-    @Value("/org/springframework/content/jpa/schema-drop-sqlserver.sql")
-    private Resource dropBlobsSchema;
+    @Value("/org/springframework/content/jpa/schema-drop-h2.sql")
+    private Resource dropReopsitoryTables;
 
-    @Value("/org/springframework/content/jpa/schema-sqlserver.sql")
-    private Resource blobsSchema;
+    @Value("/org/springframework/content/jpa/schema-h2.sql")
+    private Resource dataReopsitorySchema;
 
     @Bean
     DataSourceInitializer datasourceInitializer() {
         ResourceDatabasePopulator databasePopulator =
                 new ResourceDatabasePopulator();
 
-        databasePopulator.addScript(dropBlobsSchema);
-        databasePopulator.addScript(blobsSchema);
+        databasePopulator.addScript(dropReopsitoryTables);
+        databasePopulator.addScript(dataReopsitorySchema);
         databasePopulator.setIgnoreFailedDrops(true);
 
         DataSourceInitializer initializer = new DataSourceInitializer();
@@ -96,13 +76,4 @@ public class SqlServerTestConfig {
         return initializer;
     }
 
-    @Bean
-    public JpaStoreConfigurer configurer() {
-        return new JpaStoreConfigurer() {
-            @Override
-            public void configure(JpaStoreProperties store) {
-                store.commitTimeout(120);
-            }
-        };
-    }
 }
