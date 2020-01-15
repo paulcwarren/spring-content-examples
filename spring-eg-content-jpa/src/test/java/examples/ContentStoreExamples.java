@@ -2,23 +2,18 @@ package examples;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.UUID;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import examples.models.Document;
 import examples.repositories.DocumentRepository;
-import examples.stores.DocumentAssociativeStore;
-import examples.stores.DocumentStore;
-import examples.utils.RandomString;
+import examples.stores.DocumentContentStore;
 import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.springframework.content.commons.io.DeletableResource;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.WritableResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -28,74 +23,59 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 
-@RunWith(Ginkgo4jRunner.class)
+@RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads = 1)
-public class AssociativeStoreExamples {
+@ContextConfiguration(classes = { H2Config.class })
+public class ContentStoreExamples {
 
-    private static Class<?>[] CONFIG_CLASSES = new Class[]{
-            H2TestConfig.class,
-            HSQLTestConfig.class,
-            MysqlTestConfig.class,
-            PostgresqlTestConfig.class,
-            SqlServerTestConfig.class
-    };
-
-    private AnnotationConfigApplicationContext context = null;
-
+    @Autowired
     private PlatformTransactionManager ptm;
     private TransactionStatus status;
 
+    @Autowired
     private DocumentRepository repo;
-    private DocumentAssociativeStore store;
+
+    @Autowired
+    private DocumentContentStore store;
 
     private Document document;
 
     {
-        for (Class<?> configClass : CONFIG_CLASSES) {
+        Describe("ContentStore API", () -> {
 
-            Describe(getContextName(configClass), () -> {
-
-                BeforeEach(() -> {
-                    context = new AnnotationConfigApplicationContext();
-                    context.register(configClass);
-                    context.refresh();
-
-                    ptm = context.getBean(PlatformTransactionManager.class);
-                    repo = context.getBean(DocumentRepository.class);
-                    store = context.getBean(DocumentAssociativeStore.class);
-
-                    status = ptm.getTransaction(new DefaultTransactionDefinition());
-                });
-
-                AfterEach(() -> {
-                    repo.delete(document);
-
-                    ptm.commit(status);
-                });
-
-                It("associating a resource with an entity", () -> {
-                    document = repo.save(new Document());
-
-                    String resourceId = UUID.randomUUID().toString();
-
-                    store.getResource(resourceId);
-
-                    store.associate(document, resourceId);
-
-                    assertThat(document.getContentId(), is(resourceId));
-                });
+            BeforeEach(() -> {
+                status = ptm.getTransaction(new DefaultTransactionDefinition());
             });
-        }
+
+            AfterEach(() -> {
+                store.unsetContent(document);
+                repo.delete(document);
+
+                ptm.commit(status);
+            });
+
+            It("associate content with an entity", () -> {
+                document = repo.save(new Document());
+
+                document = store.setContent(document, new ByteArrayInputStream("Hello Spring Content World!".getBytes()));
+
+                assertThat(document.getContentId(), is(not(nullValue())));
+
+                try (InputStream content = store.getContent(document)) {
+                    assertThat(IOUtils.toString(content), is("Hello Spring Content World!"));
+                }
+            });
+        });
     }
 
     public static String getContextName(Class<?> configClass) {
         return configClass.getSimpleName().replaceAll("Config", "");
     }
 
-    public static String getId() {
-        RandomString random  = new RandomString(5);
-        return "/store-tests/" + random.nextString();
-    }
+    @Test
+    public void noop() {}
 }

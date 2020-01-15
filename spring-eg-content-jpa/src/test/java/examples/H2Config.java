@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackages="examples.repositories")
 @EnableTransactionManagement
 @EnableJpaStores(basePackages="examples.stores")
-public class H2TestConfig {
+public class H2Config {
 
     @Bean
     public DataSource dataSource() {
