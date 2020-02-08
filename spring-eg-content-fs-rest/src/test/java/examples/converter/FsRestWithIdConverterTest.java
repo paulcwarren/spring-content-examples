@@ -56,8 +56,6 @@ public class FsRestWithIdConverterTest {
     			Iterable<Claim> existingClaims = claimRepo.findAll();
     			for (Claim existingClaim : existingClaims) {
     				claimFormStore.unsetContent(existingClaim.getClaimForm());
-    				existingClaim.setClaimForm(null);
-    				claimRepo.save(existingClaim);
     			}
     			
     			// and claims
