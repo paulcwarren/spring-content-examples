@@ -51,19 +51,6 @@ public class FsRestWithIdConverterTest {
     	Describe("Spring Content REST", () -> {
     		BeforeEach(() -> {
     			RestAssured.port = port;
-    			
-    			// delete any existing claim forms
-    			Iterable<Claim> existingClaims = claimRepo.findAll();
-    			for (Claim existingClaim : existingClaims) {
-    				claimFormStore.unsetContent(existingClaim.getClaimForm());
-    				existingClaim.setClaimForm(null);
-    				claimRepo.save(existingClaim);
-    			}
-    			
-    			// and claims
-    			for (Claim existingClaim : existingClaims) {
-    				claimRepo.delete(existingClaim);
-    			}
     		});
     		Context("given a claim", () -> {
     			BeforeEach(() -> {

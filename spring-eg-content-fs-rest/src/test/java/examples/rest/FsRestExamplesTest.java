@@ -45,17 +45,6 @@ public class FsRestExamplesTest {
     	Describe("Spring Content REST", () -> {
     		BeforeEach(() -> {
     			RestAssured.port = port;
-    			
-    			// delete any existing claim forms
-    			Iterable<Claim> existingClaims = claimRepo.findAll();
-    			for (Claim existingClaim : existingClaims) {
-    				claimFormStore.unsetContent(existingClaim.getClaimForm());
-    			}
-    			
-    			// and claims
-    			for (Claim existingClaim : existingClaims) {
-    				claimRepo.delete(existingClaim);
-    			}
     		});
     		Context("given a claim", () -> {
     			BeforeEach(() -> {

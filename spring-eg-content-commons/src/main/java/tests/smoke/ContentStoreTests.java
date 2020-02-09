@@ -34,32 +34,7 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
     
     {
 		Describe("ContentStore", () -> {
-			
-			AfterEach(() -> {
-				// delete any existing claim forms
-				Iterable<Claim> existingClaims = claimRepo.findAll();
-				for (Claim existingClaim : existingClaims) {
-					if (existingClaim.getClaimForm() != null && claimFormStore.getContent(existingClaim.getClaimForm()) != null) {
-                        String contentId = existingClaim.getClaimForm().getContentId();
-                        claimFormStore.unsetContent(existingClaim.getClaimForm());
-                        if (existingClaim.getClaimForm() != null) {
-                            Assert.assertThat(existingClaim.getClaimForm().getContentId(), is(nullValue()));
-                            Assert.assertEquals(existingClaim.getClaimForm().getContentLength(), 0);
 
-                            // double check the content got removed
-                            ClaimForm deletedClaimForm = new ClaimForm();
-                            deletedClaimForm.setContentId(contentId);
-                            InputStream content = claimFormStore.getContent(deletedClaimForm);
-                            Assert.assertThat(content, is(nullValue()));
-                            IOUtils.closeQuietly(content);
-                        }
-                    }
-				}
-				
-				// delete existing claims
-				claimRepo.deleteAll();
-			});
-			
 			Context("given an Entity with content", () -> {
 				
 				BeforeEach(() -> {
