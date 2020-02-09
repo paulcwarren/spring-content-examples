@@ -49,11 +49,11 @@ public class SearchContentRestTest {
     			RestAssured.port = port;
 
     			// delete any existing docs
-    			Iterable<Document> existingDocs = docRepo.findAll();
-    			for (Document existingDoc : existingDocs) {
-    				docContentStore.unsetContent(existingDoc);
-    			}
-    			docRepo.deleteAll();
+//    			Iterable<Document> existingDocs = docRepo.findAll();
+//    			for (Document existingDoc : existingDocs) {
+//    				docContentStore.unsetContent(existingDoc);
+//    			}
+//    			docRepo.deleteAll();
     		});
     		Context("given a document with content", () -> {
     			BeforeEach(() -> {
