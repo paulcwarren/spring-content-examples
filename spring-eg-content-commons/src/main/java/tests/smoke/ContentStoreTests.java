@@ -35,10 +35,10 @@ public abstract class ContentStoreTests extends AssociativeStoreTests {
 	{
 		Describe("ContentStore", () -> {
 
-			AfterEach(() -> {
-				deleteAllClaimFormsContent();
-				deleteAllClaims();
-			});
+//			AfterEach(() -> {
+//				deleteAllClaimFormsContent();
+//				deleteAllClaims();
+//			});
 
 			Context("given an Entity with content", () -> {
 
