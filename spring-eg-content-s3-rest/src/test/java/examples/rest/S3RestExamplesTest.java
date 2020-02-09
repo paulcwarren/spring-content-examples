@@ -48,13 +48,13 @@ public class S3RestExamplesTest {
     			RestAssured.port = port;
     			
     			// delete any existing claim forms
-    			Iterable<Claim> existingClaims = claimRepo.findAll();
-    			for (Claim existingClaim : existingClaims) {
-    				claimFormStore.unsetContent(existingClaim.getClaimForm());
-    			}
+//    			Iterable<Claim> existingClaims = claimRepo.findAll();
+//    			for (Claim existingClaim : existingClaims) {
+//    				claimFormStore.unsetContent(existingClaim.getClaimForm());
+//    			}
     			
     			// and claims
-    			claimRepo.deleteAll();
+//    			claimRepo.deleteAll();
     		});
     		Context("given a claim", () -> {
     			BeforeEach(() -> {
