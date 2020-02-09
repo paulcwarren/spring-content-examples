@@ -1,5 +1,7 @@
 package examples;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.jpa.config.EnableJpaStores;
 import org.springframework.content.jpa.config.JpaStoreConfigurer;
@@ -63,6 +65,10 @@ public class MysqlTestConfig {
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("examples.models");
         factory.setDataSource(dataSource());
+        factory.setJpaVendorAdapter(vendorAdapter);
+        HashMap<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL55Dialect");
+        factory.setJpaPropertyMap(properties);
 
         return factory;
     }
