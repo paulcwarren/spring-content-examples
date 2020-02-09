@@ -41,13 +41,13 @@ public class RenditionRestTest {
         RestAssured.port = port;
     	
 		// delete any existing claim forms
-		Iterable<Claim> existingClaims = claimRepo.findAll();
-		for (Claim existingClaim : existingClaims) {
-			claimFormStore.unsetContent(existingClaim.getClaimForm());
-		}
+//		Iterable<Claim> existingClaims = claimRepo.findAll();
+//		for (Claim existingClaim : existingClaims) {
+//			claimFormStore.unsetContent(existingClaim.getClaimForm());
+//		}
 		
     	// ensure clean state
-    	claimRepo.deleteAll();
+//    	claimRepo.deleteAll();
 
     	// create a claim that can get content from
     	claim = new Claim();
