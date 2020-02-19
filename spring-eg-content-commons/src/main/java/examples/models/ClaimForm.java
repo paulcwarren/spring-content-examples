@@ -1,51 +1,40 @@
 package examples.models;
 
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.content.commons.annotations.MimeType;
 
-import javax.persistence.Embeddable;
-
-@Embeddable
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class ClaimForm {
 
-	@ContentId
-	private String contentId;
-	
-	@ContentLength
-	private long contentLength = 0L;
-	
-	@MimeType
-	private String mimeType = "text/plain";
-	
-	public String getContentId() {
-		return contentId;
-	}
+   @Id
+   @GeneratedValue
+   private long id;
 
-	public void setContentId(String contentId) {
-		this.contentId = contentId;
-	}
-
-	public long getContentLength() {
-		return contentLength;
-	}
-
-	public void setContentLength(long contentLength) {
-		this.contentLength = contentLength;
-	}
-
-	public String getMimeType() {
-		return mimeType;
-	}
-
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
-	}
-
-	// Ensure we can handle entities with "computed" getters; i.e. getters that 
-	// dont have an associated field
-	public boolean getIsActive() {
-		return true;
-	}
+   @ContentId
+   private String contentId;
+   
+   @ContentLength
+   private long contentLength = 0L;
+   
+   @MimeType
+   private String mimeType = "text/plain";
+   
+   // Ensure we can handle entities with "computed" getters; i.e. getters that
+   // dont have an associated field
+   public boolean getIsActive() {
+      return true;
+   }
 }
