@@ -74,17 +74,4 @@ public class RenditionRestTest {
     	assertThat(response2.getHeader("Content-Type"), Matchers.startsWith("text/plain")); 
     	assertThat(response2.getBody().asString(), is("This is the Document Title and this is the document body."));
     }
-    
-    @Test
-    public void noRenditionProviderReturnsOriginalContent() {
-        	String contentUrl = "/claims/" + claim.getClaimId() + "/claimForm/" + claim.getClaimForm().getContentId();
-        	Response response2 =
-    			given()
-    				.header("Accept", "what/ever")
-    			.when()
-    	    		.get(contentUrl)
-    	    		.andReturn();
-        	assertThat(response2.getStatusCode(), is(200));
-			assertThat(response2.getContentType(), is("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
-    }
 }
