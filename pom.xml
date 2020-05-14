@@ -76,6 +76,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 
 	<modules>
    		<module>./spring-eg-content-commons</module>
+		<module>./spring-eg-content-elasticsearch</module>
 		<module>./spring-eg-content-fs</module>
 		<module>./spring-eg-content-fs-boot-starter</module>
 		<module>./spring-eg-content-fs-rest</module>

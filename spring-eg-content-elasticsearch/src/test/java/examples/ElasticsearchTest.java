@@ -1,7 +1,5 @@
 package examples;
 
-import java.time.Duration;
-
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import model.Document;
 import model.DocumentContentStore;
@@ -9,23 +7,28 @@ import model.DocumentRepository;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import pl.allegro.tech.embeddedelasticsearch.EmbeddedElastic;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.time.Duration;
+
 import static com.github.grantwest.eventually.EventuallyLambdaMatcher.eventuallyEval;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * Requires an elasticsearch server
+ *
+ * We use this command in our CI:
+ * `docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" paulcwarren/elasticsearch:latest`
+ *
+ * Not for production!
+ */
+
 @RunWith(Ginkgo4jSpringRunner.class)
 //@Ginkgo4jConfiguration(threads=1)
-@ContextConfiguration(classes = {EmbeddedElasticConfig.class, ElasticsearchConfig.class})
+@ContextConfiguration(classes = {ElasticsearchConfig.class})
 public class ElasticsearchTest {
 
 	@Autowired
@@ -33,9 +36,6 @@ public class ElasticsearchTest {
 
 	@Autowired
 	private DocumentContentStore store;
-
-	@Autowired
-	private EmbeddedElastic server;
 
 	@Autowired
 	private RestHighLevelClient client;
