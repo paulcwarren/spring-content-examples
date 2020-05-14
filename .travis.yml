@@ -21,34 +21,11 @@ before_install:
   - docker run -d -e POSTGRES_PASSWORD=5F4Dt9ky9dU$ -p 5432:5432 postgres:12.1
   - docker run -d -e MYSQL_ROOT_PASSWORD=5F4Dt9ky9dU$ -e MYSQL_DATABASE=sc -p 3306:3306 mysql:8.0.19
   - docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" paulcwarren/elasticsearch:latest
-
-install:
-  - sudo sed -i 's/us-central1.gce/us-central1.gce.clouds/' /etc/apt/sources.list
-  - sudo apt-get update
-  - wget --quiet http://www-us.apache.org/dist/lucene/solr/7.7.2/solr-7.7.2.tgz
-  - tar -xf solr-7.7.2.tgz
-  - ./solr-7.7.2/bin/solr start
-  - ./solr-7.7.2/bin/solr create -c solr
-#  - sudo apt-get update -y --fix-missing
-#  - sudo apt-get purge maven maven2 -y
-#  - sudo apt-add-repository ppa:andrei-pozolotin/maven3 -y
-#  - sudo apt-get update -y
-#  - sudo rm /usr/local/maven-3.1.1 -rf
-#  - sudo apt-get install maven3 -y --allow-unauthenticated
-#  - sudo chmod 777 /usr/share/maven3/bin/mvn
-#  - export PATH=$PATH:/usr/share/maven3/bin
-#  - unset M2_HOME
-#  - export M2_HOME=/usr/share/maven3
+  - docker run -d -p 8983:8983 paulcwarren/solr solr-precreate solr
 
 script:
-  - mvn -B -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' deploy --settings settings.xml
-  - mvn -B -pl spring-eg-content-solr -pl spring-eg-content-commons deploy --settings settings.xml
-  - unset SOLR_PASSWORD
-  - unset SOLR_USERNAME
-  - export SOLR_URL=$INSECURE_SOLR
-  - mvn -B -pl spring-eg-content-solr -pl spring-eg-content-commons deploy --settings settings.xml
-  - unset SOLR_URL
-  - mvn -B -pl spring-eg-content-solr-boot-starter deploy --settings settings.xml
+  - mvn -B -pl '!spring-eg-content-solr' -pl '!spring-eg-content-solr-boot-starter' install --settings settings.xml
+  - mvn -B -pl spring-eg-content-solr,spring-eg-content-solr-boot-starter -am install --settings settings.xml
 
 
 
