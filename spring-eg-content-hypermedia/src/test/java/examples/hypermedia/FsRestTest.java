@@ -2,10 +2,9 @@ package examples.hypermedia;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.path.json.JsonPath;
-import examples.models.Claim;
-import examples.models.ClaimForm;
-import examples.repositories.ClaimRepository;
-import examples.stores.ClaimFormStore;
+import examples.models.Document;
+import examples.repositories.DocumentRepository;
+import examples.stores.DocumentContentStore;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -28,17 +27,17 @@ import static com.jayway.restassured.RestAssured.when;
 public class FsRestTest {
 
    @Autowired
-   private ClaimRepository claimRepo;
+   private DocumentRepository claimRepo;
    
    @Autowired
-   private ClaimFormStore claimFormStore;
+   private DocumentContentStore claimFormStore;
    
     @Value("${local.server.port}") 
     int port;
 
-    private Claim canSetClaim;
-    private Claim canGetClaim;
-    private Claim canDelClaim;
+    private Document canSetClaim;
+    private Document canGetClaim;
+    private Document canDelClaim;
     
     @Before
     public void setUp() throws Exception {
@@ -46,29 +45,21 @@ public class FsRestTest {
         RestAssured.port = port;
       
       // create a claim that can set content on
-      canSetClaim = new Claim();
-      canSetClaim.setFirstName("John");
-      canSetClaim.setLastName("Smith");
+      canSetClaim = new Document();
       claimRepo.save(canSetClaim);
 
       // create a claim that can get content from
-      canGetClaim = new Claim();
-      canGetClaim.setFirstName("John");
-      canGetClaim.setLastName("Smith");
+      canGetClaim = new Document();
       claimRepo.save(canGetClaim);
-      canGetClaim.setClaimForm(new ClaimForm());
-      canGetClaim.getClaimForm().setMimeType("plain/text");
-      claimFormStore.setContent(canGetClaim.getClaimForm(), new ByteArrayInputStream("This is plain text content!".getBytes()));
+      canGetClaim.setMimeType("plain/text");
+      claimFormStore.setContent(canGetClaim, new ByteArrayInputStream("This is plain text content!".getBytes()));
       claimRepo.save(canGetClaim);
 
       // create a doc that can delete content from
-      canDelClaim = new Claim();
-      canDelClaim.setFirstName("John");
-      canDelClaim.setLastName("Smith");
+      canDelClaim = new Document();
       claimRepo.save(canDelClaim);
-      canDelClaim.setClaimForm(new ClaimForm());
-      canDelClaim.getClaimForm().setMimeType("plain/text");
-      claimFormStore.setContent(canDelClaim.getClaimForm(), new ByteArrayInputStream("This is plain text content!".getBytes()));
+      canDelClaim.setMimeType("plain/text");
+      claimFormStore.setContent(canDelClaim, new ByteArrayInputStream("This is plain text content!".getBytes()));
       claimRepo.save(canDelClaim);
     }
 
@@ -78,7 +69,7 @@ public class FsRestTest {
          .contentType("plain/text")
          .content("This is plain text content!".getBytes())
       .when()
-         .post("/claims/" + canSetClaim.getClaimId() + "/claimForm")
+         .post("/documents/" + canSetClaim.getId())
       .then()
          .statusCode(HttpStatus.SC_CREATED);
     }
@@ -88,16 +79,16 @@ public class FsRestTest {
       JsonPath response = 
          given()
             .header("accept", "application/hal+json")
-              .get("/claims/" + canGetClaim.getClaimId())
+              .get("/documents/" + canGetClaim.getId())
           .then()
             .statusCode(HttpStatus.SC_OK)
             .extract()
                .jsonPath();
       
-      Assert.assertNotNull(response.get("_links.claimForm"));
-      Assert.assertNotNull(response.get("_links.claimForm.href"));
+      Assert.assertNotNull(response.get("_links.document"));
+      Assert.assertNotNull(response.get("_links.document.href"));
 
-      String contentUrl = response.get("_links.claimForm.href");
+      String contentUrl = response.get("_links.document.href");
       when()
          .get(contentUrl)
       .then()
@@ -111,16 +102,16 @@ public class FsRestTest {
       JsonPath response =
          given()
             .header("accept", "application/hal+json")
-              .get("/claims/" + canDelClaim.getClaimId())
+              .get("/documents/" + canDelClaim.getId())
           .then()
             .statusCode(HttpStatus.SC_OK)
             .extract()
                .jsonPath();
       
-      Assert.assertNotNull(response.get("_links.claimForm"));
-      Assert.assertNotNull(response.get("_links.claimForm.href"));
+      Assert.assertNotNull(response.get("_links.document"));
+      Assert.assertNotNull(response.get("_links.document.href"));
 
-      String contentUrl = response.get("_links.claimForm.href");
+      String contentUrl = response.get("_links.document.href");
       when()
          .delete(contentUrl)
       .then()

@@ -1,7 +1,5 @@
 package api.java;
 
-import java.io.InputStream;
-
 import examples.models.Claim;
 import examples.models.ClaimForm;
 import examples.repositories.ClaimRepository;
@@ -10,16 +8,15 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import tests.smoke.JpaConfig;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import tests.smoke.JpaConfig;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import java.io.InputStream;
+
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,15 +37,6 @@ public class RenditionTest {
     @Before
     public void setUp() throws Exception {
     	
-		// delete any existing claim forms
-//		Iterable<Claim> existingClaims = claimRepo.findAll();
-//		for (Claim existingClaim : existingClaims) {
-//			claimFormStore.unsetContent(existingClaim.getClaimForm());
-//		}
-		
-    	// ensure clean state
-//    	claimRepo.deleteAll();
-
     	// create a claim that can get content from
     	claim = new Claim();
     	claim.setFirstName("John");

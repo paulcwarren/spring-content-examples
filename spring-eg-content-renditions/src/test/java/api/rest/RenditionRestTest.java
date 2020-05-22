@@ -4,6 +4,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import examples.models.Claim;
 import examples.models.ClaimForm;
+import examples.repositories.ClaimFormRepository;
 import examples.repositories.ClaimRepository;
 import examples.stores.ClaimFormStore;
 import org.hamcrest.Matchers;
@@ -26,7 +27,10 @@ public class RenditionRestTest {
 
 	@Autowired
 	private ClaimRepository claimRepo;
-	
+
+	@Autowired
+	private ClaimFormRepository claimFormRepo;
+
 	@Autowired
 	private ClaimFormStore claimFormStore;
 	
@@ -40,29 +44,23 @@ public class RenditionRestTest {
     	
         RestAssured.port = port;
     	
-		// delete any existing claim forms
-//		Iterable<Claim> existingClaims = claimRepo.findAll();
-//		for (Claim existingClaim : existingClaims) {
-//			claimFormStore.unsetContent(existingClaim.getClaimForm());
-//		}
-		
-    	// ensure clean state
-//    	claimRepo.deleteAll();
-
-    	// create a claim that can get content from
     	claim = new Claim();
     	claim.setFirstName("John");
     	claim.setLastName("Smith");
     	claimRepo.save(claim);
-    	claim.setClaimForm(new ClaimForm());
-    	claim.getClaimForm().setMimeType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-    	claimFormStore.setContent(claim.getClaimForm(), this.getClass().getClassLoader().getResourceAsStream("sample-docx2.docx"));
-    	claimRepo.save(claim);
+
+    	ClaimForm claimForm = new ClaimForm();
+    	claimForm.setMimeType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    	claimForm = claimFormStore.setContent(claimForm, this.getClass().getClassLoader().getResourceAsStream("sample-docx2.docx"));
+    	claimForm = claimFormRepo.save(claimForm);
+
+    	claim.setClaimForm(claimForm);
+    	claim = claimRepo.save(claim);
     }
 
     @Test
     public void canGetRendition() {
-    	String contentUrl = "/claims/" + claim.getClaimId() + "/claimForm/" + claim.getClaimForm().getContentId();
+    	String contentUrl = "/claimForms/" + claim.getClaimForm().getId();
     	Response response2 = 
 			given()
 				.header("Accept", "text/plain")

@@ -4,10 +4,9 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.jayway.restassured.RestAssured;
 import examples.app.Application;
-import examples.models.Claim;
-import examples.models.ClaimForm;
-import examples.repositories.ClaimRepository;
-import examples.stores.ClaimFormStore;
+import examples.models.Document;
+import examples.repositories.DocumentRepository;
+import examples.stores.DocumentContentStore;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -32,41 +31,30 @@ import static com.jayway.restassured.RestAssured.when;
 public class S3RestExamplesTest {
 
 	@Autowired
-	private ClaimRepository claimRepo;
+	private DocumentRepository repo;
 	
 	@Autowired
-	private ClaimFormStore claimFormStore;
+	private DocumentContentStore store;
 	
     @LocalServerPort
     int port;
     
-    private Claim existingClaim;
+    private Document document;
     
     {
     	Describe("Spring Content REST", () -> {
     		BeforeEach(() -> {
     			RestAssured.port = port;
-    			
-    			// delete any existing claim forms
-//    			Iterable<Claim> existingClaims = claimRepo.findAll();
-//    			for (Claim existingClaim : existingClaims) {
-//    				claimFormStore.unsetContent(existingClaim.getClaimForm());
-//    			}
-    			
-    			// and claims
-//    			claimRepo.deleteAll();
     		});
     		Context("given a claim", () -> {
     			BeforeEach(() -> {
-    		    	existingClaim = new Claim();
-    		    	existingClaim.setFirstName("John");
-    		    	existingClaim.setLastName("Smith");
-    		    	claimRepo.save(existingClaim);
+    		    	document = new Document();
+    		    	repo.save(document);
     			});
     			It("should be POSTable with new content with 201 Created", () -> {
     				// assert content does not exist
 					when()
-						.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
+						.get("/documents/" + document.getId())
 					.then()
 						.assertThat()
 						.statusCode(HttpStatus.SC_NOT_FOUND);
@@ -78,14 +66,14 @@ public class S3RestExamplesTest {
     					.contentType("plain/text")
     					.content(newContent.getBytes())
 					.when()
-    					.post("/claims/" + existingClaim.getClaimId() + "/claimForm")
+    					.post("/documents/" + document.getId())
 					.then()
     					.statusCode(HttpStatus.SC_CREATED);
 					
 					// assert that it now exists
 					given()
     					.header("accept", "plain/text")
-    					.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
+    					.get("/documents/" + document.getId())
 					.then()
     					.statusCode(HttpStatus.SC_OK)
     					.assertThat()
@@ -94,15 +82,14 @@ public class S3RestExamplesTest {
     			});
     			Context("given that claim has existing content", () -> {
         			BeforeEach(() -> {
-        		    	existingClaim.setClaimForm(new ClaimForm());
-        		    	existingClaim.getClaimForm().setMimeType("plain/text");
-        		    	claimFormStore.setContent(existingClaim.getClaimForm(), new ByteArrayInputStream("This is plain text content!".getBytes()));
-        		    	claimRepo.save(existingClaim);
+        		    	document.setMimeType("plain/text");
+        		    	document = store.setContent(document, new ByteArrayInputStream("This is plain text content!".getBytes()));
+        		    	repo.save(document);
         			});
     				It("should return the content with 200 OK", () -> {
     					given()
 	    					.header("accept", "plain/text")
-	    					.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
+	    					.get("/documents/" + document.getId())
     					.then()
 	    					.statusCode(HttpStatus.SC_OK)
 	    					.assertThat()
@@ -116,13 +103,13 @@ public class S3RestExamplesTest {
 	    					.contentType("plain/text")
 	    					.content(newContent.getBytes())
     					.when()
-	    					.post("/claims/" + existingClaim.getClaimId() + "/claimForm")
+	    					.post("/documents/" + document.getId())
     					.then()
 	    					.statusCode(HttpStatus.SC_OK);
     					
     					given()
 	    					.header("accept", "plain/text")
-	    					.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
+	    					.get("/documents/" + document.getId())
     					.then()
 	    					.statusCode(HttpStatus.SC_OK)
 	    					.assertThat()
@@ -131,14 +118,14 @@ public class S3RestExamplesTest {
     				});
     				It("should be DELETEable with 204 No Content", () -> {
     					given()
-    						.delete("/claims/" + existingClaim.getClaimId() + "/claimForm")
+    						.delete("/documents/" + document.getId())
     					.then()
 	    					.assertThat()
 	    					.statusCode(HttpStatus.SC_NO_CONTENT);
     					
     					// and make sure that it is really gone
     					when()
-    						.get("/claims/" + existingClaim.getClaimId() + "/claimForm")
+    						.get("/documents/" + document.getId())
     					.then()
 	    					.assertThat()
 	    					.statusCode(HttpStatus.SC_NOT_FOUND);

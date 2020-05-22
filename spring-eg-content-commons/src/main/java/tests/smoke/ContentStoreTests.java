@@ -13,16 +13,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 public abstract class ContentStoreTests extends AssociativeStoreTests {
 

@@ -1,8 +1,5 @@
 package examples;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import examples.models.Document;
@@ -11,17 +8,16 @@ import examples.stores.DocumentContentStore;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
