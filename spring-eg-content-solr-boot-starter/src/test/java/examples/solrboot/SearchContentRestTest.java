@@ -1,23 +1,5 @@
 package examples.solrboot;
 
-import java.io.StringReader;
-
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
-import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
-import com.theoryinpractise.halbuilder.api.RepresentationFactory;
-import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
-import org.apache.http.HttpStatus;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
@@ -26,22 +8,44 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.io.StringReader;
+
+import org.apache.http.HttpStatus;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.content.solr.SolrProperties;
+
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.response.Response;
+import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
+import com.theoryinpractise.halbuilder.api.RepresentationFactory;
+import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
+
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
 @SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class SearchContentRestTest {
 
-	@Autowired
-	private DocumentRepository docRepo;
+    @Autowired
+    private DocumentRepository docRepo;
 
-	@Autowired
-	private DocumentContentRepository docContentStore;
+    @Autowired
+    private DocumentContentRepository docContentStore;
+
+    @Autowired
+    private SolrProperties solrProperties;
 
     @LocalServerPort
     int port;
-    
+
     private Document existingDoc;
-    
+
     {
     	Describe("Search Content REST Endpoint Examples", () -> {
 
@@ -49,7 +53,10 @@ public class SearchContentRestTest {
     			RestAssured.port = port;
     		});
     		Context("given a document with content", () -> {
-    			BeforeEach(() -> {
+                    BeforeEach(() -> {
+                        solrProperties.setUser(System.getenv("SOLR_USER"));
+                        solrProperties.setPassword(System.getenv("SOLR_PASSWORD"));
+
     		    	existingDoc = new Document();
     		    	docContentStore.setContent(existingDoc, this.getClass().getResourceAsStream("/one.docx"));
     		    	docRepo.save(existingDoc);
@@ -74,7 +81,7 @@ public class SearchContentRestTest {
 			});
     	});
     }
-    
+
     @Test
     public void noop() {}
 }
