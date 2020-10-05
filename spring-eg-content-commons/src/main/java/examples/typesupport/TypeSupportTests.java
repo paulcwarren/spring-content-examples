@@ -1,16 +1,5 @@
 package examples.typesupport;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.URI;
-import java.util.UUID;
-
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
@@ -19,8 +8,19 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URI;
+import java.util.UUID;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class TypeSupportTests {
-	
+
 	@Autowired protected UUIDBasedContentEntityStore uuidStore;
 	@Autowired protected URIBasedContentEntityStore uriStore;
 	@Autowired protected LongBasedContentEntityStore longStore;
@@ -28,7 +28,7 @@ public class TypeSupportTests {
 
 	Object entity;
     Object id;
-	
+
     {
 		Describe("java.util.UUID", () -> {
 			Context("given a content entity", () -> {
@@ -128,7 +128,7 @@ public class TypeSupportTests {
 		});
     }
 
-    
+
 	@Test
 	public void noop() throws IOException {
 	}
