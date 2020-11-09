@@ -1,0 +1,33 @@
+<!doctype html>
+<html ng-app="filesApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="files.js"></script>
+    <title>Spring Content REST</title>
+  </head>
+  <body>
+    <div ng-controller="FilesListController as filesList">
+	    <h1>Files</h1>
+	    
+	    <section style="display: table; width: 80%">
+		  <header style="display: table-row;">
+		    <div style="display: table-cell;">Name</div>
+		    <div style="display: table-cell;">Length</div>
+		    <div style="display: table-cell;">Created</div>
+		    <div style="display: table-cell;">Summary</div>
+		  </header>
+		  <div style="display: table-row;" ng-repeat="file in filesList.files">
+		    <div style="display: table-cell;"><a href="{{filesList.getHref(file)}}" type={{file.mimeType}} download={{file.name}}>{{file.name}}</a></div>
+		    <div style="display: table-cell;"><label>{{file.contentLength}}</label></div>
+		    <div style="display: table-cell;"><label>{{file.created}}</label></div>
+		    <div style="display: table-cell;"><label>{{file.summary}}</label></div>
+		  </div>
+		</section>
+	    
+	    <h2>New File</h2>
+	    <input type="file" id="file" name="file"/>
+	    <input type="summary" id="summary" name="summary" ng-model="filesList.summary" placeholder="Summary"/>
+		<button ng-click="filesList.upload()">Upload</button>
+    </div>
+  </body>
+</html>
