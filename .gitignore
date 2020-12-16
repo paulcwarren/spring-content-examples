@@ -14,6 +14,9 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+**/.classpath
+**/.project
+**/.settings/org.eclipse.jdt.core.prefs
 
 # External tool builders
 .externalToolBuilders/

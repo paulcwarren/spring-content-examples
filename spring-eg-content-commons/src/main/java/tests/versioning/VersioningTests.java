@@ -1,29 +1,5 @@
 package tests.versioning;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.security.Principal;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.OptimisticLockException;
-import javax.security.auth.Subject;
-
-import internal.org.springframework.versions.LockingService;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.versions.LockOwnerException;
-import org.springframework.versions.VersionInfo;
-
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
@@ -36,6 +12,30 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.security.Principal;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.OptimisticLockException;
+import javax.security.auth.Subject;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.versions.LockOwnerException;
+import org.springframework.versions.VersionInfo;
+
+import internal.org.springframework.versions.LockingService;
 
 public class VersioningTests {
 
@@ -450,7 +450,7 @@ public class VersioningTests {
             Context("when an entity is locked", () -> {
                 BeforeEach(() -> {
                     doc = repo.lock(doc);
-                    assertThat(doc.getVstamp(), is(1L));
+                    assertThat(doc.getVstamp(), is(0L));
                 });
                 It("should accept metadata updates from the lock owner", () -> {
 
@@ -458,7 +458,7 @@ public class VersioningTests {
                     {
                         doc.setData("update 1");
                         doc = repo.save(doc);
-                        assertThat(doc.getVstamp(), is(2L));
+                        assertThat(doc.getVstamp(), is(1L));
                     }
                 });
                 It("should reject metadata updates from a non-lock owner", () -> {
@@ -474,7 +474,7 @@ public class VersioningTests {
                             this.e = e;
                         }
                         assertThat(e, is(instanceOf(LockOwnerException.class)));
-                        assertThat(doc.getVstamp(), is(1L));
+                        assertThat(doc.getVstamp(), is(0L));
                     }
 
                 });
@@ -489,7 +489,7 @@ public class VersioningTests {
                             e = e1;
                         }
                         assertThat(e, is(nullValue()));
-                        assertThat(doc.getVstamp(), is(2L));
+                        assertThat(doc.getVstamp(), is(1L));
                     }
                 });
                 It("should reject content updates from the non-lock owner", () -> {
@@ -505,14 +505,14 @@ public class VersioningTests {
                             e = e1;
                         }
                         assertThat(e, is(instanceOf(LockOwnerException.class)));
-                        assertThat(doc.getVstamp(), is(1L));
+                        assertThat(doc.getVstamp(), is(0L));
                     }
                 });
                 Context("given there is content", () -> {
                     BeforeEach(() -> {
                         doc = store.setContent(doc, new ByteArrayInputStream("foo".getBytes()));
                         doc = repo.findById(v0Id).get();
-                        assertThat(doc.getVstamp(), is(2L));
+                        assertThat(doc.getVstamp(), is(1L));
                     });
                     It("should accept content deletions from the lock owner", () -> {
 
@@ -525,7 +525,7 @@ public class VersioningTests {
                                 e = e1;
                             }
                             assertThat(e, is(nullValue()));
-                            assertThat(doc.getVstamp(), is(3L));
+                            assertThat(doc.getVstamp(), is(2L));
                         }
                     });
                     It("should reject content deletions from the non-lock owner", () -> {
@@ -541,7 +541,7 @@ public class VersioningTests {
                                 e = e1;
                             }
                             assertThat(e, is(instanceOf(LockOwnerException.class)));
-                            assertThat(doc.getVstamp(), is(2L));
+                            assertThat(doc.getVstamp(), is(1L));
                         }
                     });
                     It("should accept content fetches from the lock owner", () -> {
@@ -560,7 +560,7 @@ public class VersioningTests {
                             }
                             assertThat(e, is(nullValue()));
                             assertThat(content, is("foo"));
-                            assertThat(doc.getVstamp(), is(2L));
+                            assertThat(doc.getVstamp(), is(1L));
                         }
                     });
                     It("should accept content fetches from the non-lock owner", () -> {
@@ -581,13 +581,13 @@ public class VersioningTests {
                             }
                             assertThat(e, is(nullValue()));
                             assertThat(content, is("foo"));
-                            assertThat(doc.getVstamp(), is(2L));
+                            assertThat(doc.getVstamp(), is(1L));
                         }
                     });
                 });
                 It("should accept unlock by the lock owner", () -> {
                     doc = repo.unlock(doc);
-                    assertThat(doc.getVstamp(), is(2L));
+                    assertThat(doc.getVstamp(), is(0L));
                 });
                 It("should reject unlock by the lock owner", () -> {
 
@@ -599,7 +599,7 @@ public class VersioningTests {
                         this.e = e;
                     }
                     assertThat(e, is(instanceOf(LockOwnerException.class)));
-                    assertThat(doc.getVstamp(), is(1L));
+                    assertThat(doc.getVstamp(), is(0L));
                 });
             });
         });
@@ -634,7 +634,7 @@ public class VersioningTests {
                 BeforeEach(() -> {
                     try {
                         doc = repo.lock(doc);
-                        assertThat(doc.getVstamp(), is(1L));
+                        assertThat(doc.getVstamp(), is(0L));
 
                         pwc = repo.workingCopy(doc);
                         v1Id = pwc.getId();
@@ -769,7 +769,7 @@ public class VersioningTests {
                 BeforeEach(() -> {
                     try {
                         doc = repo.lock(doc);
-                        assertThat(doc.getVstamp(), is(1L));
+                        assertThat(doc.getVstamp(), is(0L));
 
                         next = repo.version(doc, new VersionInfo("1.1", "some minor changes"));
                         v1Id = next.getId();
@@ -793,7 +793,7 @@ public class VersioningTests {
                     assertThat(doc.getId(), is(v0Id));
                     assertThat(doc.getSuccessorId(), is(v1Id));
                     assertThat(doc.getAncestralRootId(), is(v0Id));
-                    assertThat(doc.getVstamp(), is(2L));
+                    assertThat(doc.getVstamp(), is(1L));
                     assertThat(doc.getLockOwner(), is(nullValue()));
                     assertThat(doc.getVersion(), is("1.0"));
                     assertThat(doc.getLabel(), is(nullValue()));
@@ -832,7 +832,7 @@ public class VersioningTests {
                     It("should succeed", () -> {
                         assertThat(next.getSuccessorId(), is(nullValue()));
                         assertThat(next.getAncestralRootId(), is(v0Id));
-                        assertThat(next.getVstamp(), is(1L));
+                        assertThat(next.getVstamp(), is(0L));
                         assertThat(next.getLockOwner(), is(nullValue()));
                     });
                 });

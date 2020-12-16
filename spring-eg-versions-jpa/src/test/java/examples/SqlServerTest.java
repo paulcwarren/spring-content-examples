@@ -1,13 +1,15 @@
 package examples;
 
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import org.junit.runner.RunWith;
-import tests.versioning.VersioningTests;
-
 import org.springframework.test.context.ContextConfiguration;
 
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
+
+import tests.versioning.VersioningTests;
+
 @RunWith(Ginkgo4jSpringRunner.class)
-//@Ginkgo4jConfiguration(threads=1)
+@Ginkgo4jConfiguration(threads=1)
 @ContextConfiguration(classes = { SqlServerTestConfig.class })
 public class SqlServerTest extends VersioningTests {
 
