@@ -15,6 +15,7 @@ branches:
   - release
   - 1.0.x
   - 1.1.x
+  - 1.2.x
 
 before_install:
   - docker run -d -e SA_PASSWORD=5F4Dt9ky9dU$ -e SQLSERVER_DATABASE=sc -e SQLSERVER_USER=user -e SQLSERVER_PASSWORD=5F4Dt9ky9dU$ -p 1433:1433 exoplatform/sqlserver:2017-CU8
