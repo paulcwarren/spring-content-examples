@@ -64,6 +64,7 @@ jobs:
     
     - name: Test
       run: |
+        echo >>>$AWS_REGION<<<
         echo -n "$GCP_SA_KEY" > /tmp/gcp_sa_key
         export GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp_sa_key
         mvn -B install
