@@ -64,6 +64,7 @@ jobs:
     
     - name: Test
       run: |
+        echo >>>$AWS_REGION<<<
         echo -n "$GCP_SA_KEY" > /tmp/gcp_sa_key
         export GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp_sa_key
         mvn -B install
@@ -83,7 +84,7 @@ jobs:
         SOLR_PASSWORD: "SolrRocks"
         AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
         AWS_BUCKET: ${{secrets.AWS_BUCKET}}
-        AWS_REGION: ${{secrets.AWS_REGION}}
+        AWS_REGION: "us-west-1"
         AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
         GCP_STORAGE_BUCKET: ${{secrets.GCP_STORAGE_BUCKET}}
         GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
