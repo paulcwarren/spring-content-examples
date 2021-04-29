@@ -1,0 +1,103 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  target-branch: 1.2.x
+  ignore:
+  - dependency-name: com.github.paulcwarren:spring-content-cmis
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-versions-jpa-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-solr
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-renditions-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-solr-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-rest-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-docx4j
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:content-s3-spring-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-gcs
+    versions:
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-s3
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:content-jpa-spring-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-jpa
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:content-mongo-spring-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-mongo
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:content-rest-spring-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-fs-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:content-fs-spring-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-fs
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-elasticsearch
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-jpa-boot-starter
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-rest
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-commons
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-versions-jpa
+    versions:
+    - 1.2.1
+    - 1.2.2
+  - dependency-name: com.github.paulcwarren:spring-content-azure-storage
+    versions:
+    - 1.2.2
