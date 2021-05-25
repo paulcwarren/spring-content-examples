@@ -23,7 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.versions.jpa.config.JpaLockingAndVersioningConfig;
 
-import examples.s3.GCSConfig;
+import examples.gcs.GCSConfig;
 
 @Configuration
 @ComponentScan(excludeFilters={

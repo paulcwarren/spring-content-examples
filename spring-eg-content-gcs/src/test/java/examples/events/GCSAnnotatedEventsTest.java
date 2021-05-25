@@ -7,7 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
-import examples.s3.GCSConfig;
+import examples.gcs.GCSConfig;
 import tests.events.AnnotatedEventHandlerConfig;
 import tests.events.AnnotatedEventHandlerStoreTests;
 import tests.smoke.JpaConfig;

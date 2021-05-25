@@ -23,7 +23,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.google.cloud.storage.BlobId;
 
-import examples.s3.GCSConfig;
+import examples.gcs.GCSConfig;
 import tests.smoke.JpaConfig;
 
 @RunWith(Ginkgo4jSpringRunner.class)

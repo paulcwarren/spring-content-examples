@@ -1,4 +1,4 @@
-package examples.s3;
+package examples.gcs;
 
 import org.junit.runner.RunWith;
 import org.springframework.content.gcs.config.EnableGCPStorage;
