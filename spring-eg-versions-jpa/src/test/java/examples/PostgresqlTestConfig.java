@@ -45,22 +45,12 @@ public class PostgresqlTestConfig {
         return new FileSystemResourceLoader(filesystemRoot().getAbsolutePath());
     }
 
-    @Value("#{environment.POSTGRESQL_URL}")
-    private String postgresqlUrl;
-
-    @Value("#{environment.POSTGRESQL_USERNAME}")
-    private String postgresqlUsername;
-
-    @Value("#{environment.POSTGRESQL_PASSWORD}")
-    private String postgresqlPassword;
-
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("org.postgresql.Driver");
-        ds.setUrl(postgresqlUrl);
-        ds.setUsername(postgresqlUsername);
-        ds.setPassword(postgresqlPassword);
+        ds.setUrl("jdbc:tc:postgresql:12:///databasename?TC_TMPFS=/testtmpfs:rw&TC_DAEMON=true");
+        ds.setUsername("test");
+        ds.setPassword("test");
         return ds;
     }
 

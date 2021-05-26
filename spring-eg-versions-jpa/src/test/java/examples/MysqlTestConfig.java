@@ -45,22 +45,12 @@ public class MysqlTestConfig {
         return new FileSystemResourceLoader(filesystemRoot().getAbsolutePath());
     }
 
-    @Value("#{environment.MYSQL_URL}")
-    private String url;
-
-    @Value("#{environment.MYSQL_USERNAME}")
-    private String username;
-
-    @Value("#{environment.MYSQL_PASSWORD}")
-    private String password;
-
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setUrl(url);
-        ds.setUsername(username);
-        ds.setPassword(password);
+        ds.setUrl("jdbc:tc:mysql:5.7.34:///databasename?TC_TMPFS=/testtmpfs:rw&TC_DAEMON=true&emulateLocators=true");
+        ds.setUsername("test");
+        ds.setPassword("test");
         return ds;
     }
 

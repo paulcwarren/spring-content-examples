@@ -25,8 +25,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.versions.jpa.config.JpaLockingAndVersioningConfig;
 
-import static java.lang.String.format;
-
 @Configuration
 @EnableJpaRepositories(basePackages={"tests.versioning", "org.springframework.versions"})
 @EnableTransactionManagement
@@ -47,26 +45,12 @@ public class SqlServerTestConfig {
         return new FileSystemResourceLoader(filesystemRoot().getAbsolutePath());
     }
 
-    @Value("#{environment.SQLSERVER_HOST}")
-    private String sqlServerHost;
-
-    @Value("#{environment.SQLSERVER_DB_NAME}")
-    private String sqlServerDbName;
-
-    @Value("#{environment.SQLSERVER_USERNAME}")
-    private String sqlServerUsername;
-
-    @Value("#{environment.SQLSERVER_PASSWORD}")
-    private String sqlServerPassword;
-
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String connectionString = format("jdbc:sqlserver://%s;databaseName=%s", sqlServerHost, sqlServerDbName);
-        ds.setUrl(connectionString);
-        ds.setUsername(sqlServerUsername);
-        ds.setPassword(sqlServerPassword);
+        ds.setUrl("jdbc:tc:sqlserver:///databasename?TC_TMPFS=/testtmpfs:rw&TC_DAEMON=true");
+        ds.setUsername("SA");
+        ds.setPassword("A_Str0ng_Required_Password");
         return ds;
     }
 
