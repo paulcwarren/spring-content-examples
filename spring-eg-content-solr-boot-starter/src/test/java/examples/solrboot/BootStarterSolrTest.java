@@ -27,7 +27,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@SpringBootTest(classes={Application.class})
+@SpringBootTest(classes={Application.class, TestConfig.class})
 public class BootStarterSolrTest {
 
     @Autowired private DocumentRepository docRepo;
@@ -42,10 +42,6 @@ public class BootStarterSolrTest {
     {
         Describe("Solr Examples", () -> {
             Context("given a Solr Server", () -> {
-                BeforeEach(() -> {
-                    solrProperties.setUser(System.getenv("SOLR_USER"));
-                    solrProperties.setPassword(System.getenv("SOLR_PASSWORD"));
-                });
                 Context("given a document", () -> {
                     BeforeEach(() -> {
                         doc = new Document();

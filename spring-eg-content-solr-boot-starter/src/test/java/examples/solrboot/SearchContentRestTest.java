@@ -29,7 +29,7 @@ import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {Application.class, TestConfig.class}, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class SearchContentRestTest {
 
     @Autowired

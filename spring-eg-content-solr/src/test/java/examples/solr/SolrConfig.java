@@ -1,7 +1,8 @@
 package examples.solr;
 
+import javax.sql.DataSource;
+
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.jpa.config.EnableJpaStores;
@@ -22,8 +23,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableFullTextSolrIndexing
@@ -68,8 +67,9 @@ public class SolrConfig{
 
     @Bean
     public SolrClient solrClient() {
-        return new HttpSolrClient.Builder(solrProperties.getUrl())
-                .build();
+        solrProperties.setUser("solr");
+        solrProperties.setPassword("SolrRocks");
+        return SolrTestContainer.getSolrClient();
     }
 
     @Value("/org/springframework/content/jpa/schema-drop-hsqldb.sql")

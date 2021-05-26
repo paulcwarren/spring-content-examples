@@ -24,7 +24,7 @@ import com.jayway.restassured.RestAssured;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-@SpringBootTest(classes = Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {Application.class, TestConfig.class}, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class BootStarterSolrRESTTest {
 
     @Autowired private DocumentRepository docRepo;
@@ -46,10 +46,6 @@ public class BootStarterSolrRESTTest {
             });
             Context("given a Solr Server", () -> {
 
-                BeforeEach(() -> {
-                    solrProperties.setUser(System.getenv("SOLR_USER"));
-                    solrProperties.setPassword(System.getenv("SOLR_PASSWORD"));
-                });
                 Context("given a document", () -> {
                     BeforeEach(() -> {
                         doc = new Document();
