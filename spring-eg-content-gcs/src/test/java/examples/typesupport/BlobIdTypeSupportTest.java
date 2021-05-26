@@ -15,7 +15,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.gcs.config.EnableGCPStorage;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -35,7 +34,7 @@ public class BlobIdTypeSupportTest extends TypeSupportTests {
      @Autowired
      protected BlobIdBasedContentEntityStore s3ContentIdStore;
 
-     @Value("#{environment.GCP_STORAGE_BUCKET}")
+     @Autowired
      private String bucketName;
 
      Object entity;
