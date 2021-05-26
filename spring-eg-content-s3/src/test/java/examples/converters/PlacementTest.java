@@ -1,24 +1,21 @@
 package examples.converters;
 
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 import javax.persistence.GeneratedValue;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.S3ObjectId;
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import examples.s3.S3Config;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import tests.smoke.JpaConfig;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.repository.ContentStore;
 import org.springframework.content.s3.config.EnableS3Stores;
@@ -31,13 +28,16 @@ import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.Assert;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.AfterEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.S3ObjectId;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
+
+import examples.s3.S3Config;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tests.smoke.JpaConfig;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -54,8 +54,8 @@ public class PlacementTest {
 	@Autowired
 	private AmazonS3 s3;
 
-	@Value("${spring.content.s3.bucket:#{environment.AWS_BUCKET}}")
-	private String bucket;
+	@Autowired
+	private String bucketName;
 
 	{
 		Describe("Placement", () -> {
@@ -69,14 +69,14 @@ public class PlacementTest {
 						id = entity.getContentId();
 					});
 					It("should have the converted entity", () -> {
-						assertThat(s3.doesObjectExist(bucket, id(id)), is(true));
+						assertThat(s3.doesObjectExist(bucketName, id(id)), is(true));
 					});
 					Context("given the content is removed", () -> {
 						BeforeEach(() -> {
 							store.unsetContent(entity);
 						});
 						It("should remove the content from the store", () -> {
-							assertThat(s3.doesObjectExist(bucket, id(id)), is(false));
+							assertThat(s3.doesObjectExist(bucketName, id(id)), is(false));
 						});
 					});
 				});
@@ -110,6 +110,9 @@ public class PlacementTest {
 	@Configuration
 	public static class ConverterConfig {
 
+	    @Autowired
+	    private String bucketName;
+
 		@Bean
 		public S3StoreConfigurer configurer() {
 			return new S3StoreConfigurer() {
@@ -119,7 +122,7 @@ public class PlacementTest {
 
 						@Override
 						public S3ObjectId convert(ConverterEntity source) {
-							return new S3ObjectId("spring-eg-content-s3", id(source.getContentId()));
+							return new S3ObjectId(bucketName, id(source.getContentId()));
 						}
 					});
 				}

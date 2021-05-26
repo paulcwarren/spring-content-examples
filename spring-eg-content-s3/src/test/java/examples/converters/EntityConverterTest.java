@@ -56,6 +56,9 @@ public class EntityConverterTest {
 
 	{
 		Describe("S3ObjectId", () -> {
+		    BeforeEach(() -> {
+		        s3.createBucket(bucket);
+		    });
 			Context("given a content entity", () -> {
 				BeforeEach(() -> {
 					entity = new ConverterEntity();
