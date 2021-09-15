@@ -1,8 +1,8 @@
-name: Branch Build
+name: Main Build
 
 on:
   push:
-    branches: [ 1.1.x,1.2.x ]
+    branches: [ main ]
 jobs:
 
   build:
