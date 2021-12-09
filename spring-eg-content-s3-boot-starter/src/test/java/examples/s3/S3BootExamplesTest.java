@@ -1,5 +1,12 @@
 package examples.s3;
 
+import static examples.utils.Env.setEnv;
+import static org.junit.Assert.fail;
+
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.runner.RunWith;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,10 +23,14 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.regions.Regions;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import tests.smoke.ContentStoreTests;
 
 @RunWith(Ginkgo4jSpringRunner.class)
@@ -27,6 +38,16 @@ import tests.smoke.ContentStoreTests;
 @SpringBootTest(classes = S3BootExamplesTest.Application.class)
 public class S3BootExamplesTest extends ContentStoreTests {
 
+    static {
+        Map<String,String> props = new HashMap<>();
+        props.put("AWS_REGION", Regions.US_WEST_1.getName());
+        try {
+            setEnv(props);
+        } catch (Exception e) {
+            fail("Failed to set environment for test: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     @SpringBootApplication
     @ComponentScan(excludeFilters={
@@ -62,10 +83,23 @@ public class S3BootExamplesTest extends ContentStoreTests {
             }
 
             @Bean
-            public AmazonS3 client() {
-                AmazonS3 client = LocalStack.getAmazonS3Client();
-                client.createBucket("aws-test-bucket");
-                return LocalStack.getAmazonS3Client();
+            public S3Client client() throws URISyntaxException {
+                S3Client client = LocalStack.getAmazonS3Client();
+                HeadBucketRequest headBucketRequest = HeadBucketRequest.builder()
+                        .bucket(BUCKET)
+                        .build();
+
+                try {
+                    client.headBucket(headBucketRequest);
+                } catch (NoSuchBucketException e) {
+
+                    CreateBucketRequest bucketRequest = CreateBucketRequest.builder()
+                            .bucket(BUCKET)
+                            .build();
+                    client.createBucket(bucketRequest);
+                }
+
+                return client;
             }
         }
     }
