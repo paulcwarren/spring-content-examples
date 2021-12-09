@@ -36,13 +36,6 @@
 			<version>${spring-content-version}</version>
 		</dependency>
 
-        <!-- Azure -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-storage-blob</artifactId>
-            <version>12.10.2</version>
-        </dependency>
-        
 		<!-- Locking and Versioning Spike -->
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
