@@ -36,6 +36,8 @@
 			<artifactId>spring-content-s3</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
+		
+		
 
 		<!-- Hibernate -->
 		<dependency>

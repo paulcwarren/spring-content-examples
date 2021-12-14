@@ -5,8 +5,7 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
@@ -28,7 +27,6 @@ import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.Assert;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3ObjectId;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
@@ -37,6 +35,9 @@ import examples.s3.S3Config;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import tests.smoke.JpaConfig;
 
 @RunWith(Ginkgo4jSpringRunner.class)
@@ -52,7 +53,7 @@ public class PlacementTest {
 	private UUID id;
 
 	@Autowired
-	private AmazonS3 s3;
+	private S3Client s3;
 
 	@Autowired
 	private String bucketName;
@@ -69,14 +70,32 @@ public class PlacementTest {
 						id = entity.getContentId();
 					});
 					It("should have the converted entity", () -> {
-						assertThat(s3.doesObjectExist(bucketName, id(id)), is(true));
+                        HeadObjectRequest objectRequest = HeadObjectRequest.builder()
+                                .bucket(bucketName)
+                                .key(id(id))
+                                .build();
+
+                        try {
+                            s3.headObject(objectRequest);
+                        } catch (NoSuchKeyException e) {
+                            fail(String.format("object %s does not exist", id.toString()));
+                        }
 					});
 					Context("given the content is removed", () -> {
 						BeforeEach(() -> {
 							store.unsetContent(entity);
 						});
 						It("should remove the content from the store", () -> {
-							assertThat(s3.doesObjectExist(bucketName, id(id)), is(false));
+                            HeadObjectRequest objectRequest = HeadObjectRequest.builder()
+                                    .bucket(bucketName)
+                                    .key(id(id))
+                                    .build();
+
+                            try {
+                                s3.headObject(objectRequest);
+                                fail(String.format("object %s was not removed", id.toString()));
+                            } catch (NoSuchKeyException e) {
+                            }
 						});
 					});
 				});
