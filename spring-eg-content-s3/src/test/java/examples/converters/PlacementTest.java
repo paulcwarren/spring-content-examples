@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.repository.ContentStore;
 import org.springframework.content.s3.config.EnableS3Stores;
-import org.springframework.content.s3.config.S3ObjectIdResolvers;
 import org.springframework.content.s3.config.S3StoreConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -144,11 +143,6 @@ public class PlacementTest {
 							return new S3ObjectId(bucketName, id(source.getContentId()));
 						}
 					});
-				}
-
-				@Override
-				public void configureS3ObjectIdResolvers(S3ObjectIdResolvers resolvers) {
-					//
 				}
 			};
 		}

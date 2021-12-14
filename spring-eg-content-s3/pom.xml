@@ -71,6 +71,12 @@
 	  		<version>0.0.1-SNAPSHOT</version>
 	  		<scope>test</scope>
 	  	</dependency>
+		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-java-sdk</artifactId>
+		    <version>1.12.128</version>
+		    <scope>test</scope>
+		</dependency>
 	  	<dependency>
 	  		<groupId>com.github.paulcwarren</groupId>
 	  		<artifactId>ginkgo4j</artifactId>
