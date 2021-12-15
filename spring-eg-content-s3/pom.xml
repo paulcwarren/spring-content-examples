@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.10.11</version>
+			<version>2.10.13</version>
 		</dependency>
 	
 		<!-- Spring Data -->
@@ -74,7 +74,7 @@
 		<dependency>
 		    <groupId>com.amazonaws</groupId>
 		    <artifactId>aws-java-sdk</artifactId>
-		    <version>1.12.128</version>
+		    <version>1.12.129</version>
 		    <scope>test</scope>
 		</dependency>
 	  	<dependency>
