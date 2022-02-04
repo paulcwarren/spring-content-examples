@@ -1,9 +1,10 @@
 package tests.versioning;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Version;
+
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.content.commons.annotations.MimeType;
@@ -14,11 +15,10 @@ import org.springframework.versions.SuccessorId;
 import org.springframework.versions.VersionLabel;
 import org.springframework.versions.VersionNumber;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Version;
-import java.util.UUID;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -35,7 +35,7 @@ public class VersionedDocument {
     private Long vstamp;
 
     @ContentId
-    private UUID contentId;
+    private String contentId;
 
     @ContentLength
     private long contentLen;
