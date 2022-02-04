@@ -21,7 +21,7 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- NOTE: we deliberately omit spring-boot-starter-data-rest and/or spring-data-rest-webmvc (containing the Soring Data REST implementation) to prove that -->
+		<!-- NOTE: we deliberately omit spring-boot-starter-data-rest and/or spring-data-rest-webmvc (containing the Spring Data REST implementation) to prove that -->
 		<!--       Spring Content REST is not dependent upon it -->
   		<dependency>
  			<groupId>org.springframework.boot</groupId>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
-            <version>1.12.131</version>
+            <version>1.12.152</version>
             <scope>test</scope>
         </dependency>
 		<dependency>
