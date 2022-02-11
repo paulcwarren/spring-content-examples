@@ -36,8 +36,6 @@
 			<artifactId>spring-content-s3</artifactId>
 			<version>${spring-content-version}</version>
 		</dependency>
-		
-		
 
 		<!-- Hibernate -->
 		<dependency>
@@ -87,6 +85,11 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>localstack</artifactId>
             <version>1.16.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
             <scope>test</scope>
         </dependency>
 	</dependencies>
