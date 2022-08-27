@@ -1,13 +1,14 @@
 package examples;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+
 public class MongoTestContainer extends MongoDBContainer {
 
-    private static final String DOCKER_IMAGE_NAME = "mongo";
+    private static final String DOCKER_IMAGE_NAME = "mongo:4.0.10";
 
     private MongoTestContainer() {
         super(DOCKER_IMAGE_NAME);
