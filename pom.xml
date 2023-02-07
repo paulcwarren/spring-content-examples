@@ -46,8 +46,8 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 	</licenses>
 
 	<properties>
-		<ginkgo-version>1.0.14</ginkgo-version>
-    	<spring-content-version>2.8.0-SNAPSHOT</spring-content-version>
+		<ginkgo-version>1.0.15-SNAPSHOT</ginkgo-version>
+		<spring-content-version>3.0.0-SNAPSHOT</spring-content-version>
 		<springboot-version>2.7.4</springboot-version>
 		<spring-cloud.version>2021.0.4</spring-cloud.version>
 		<opencmis.version>1.1.0</opencmis.version>
