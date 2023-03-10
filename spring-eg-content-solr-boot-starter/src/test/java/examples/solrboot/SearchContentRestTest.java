@@ -4,28 +4,31 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.StringReader;
 
+import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.content.solr.SolrProperties;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
 import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
+
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import org.springframework.web.context.WebApplicationContext;
+
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -41,8 +44,8 @@ public class SearchContentRestTest {
     @Autowired
     private SolrProperties solrProperties;
 
-    @LocalServerPort
-    int port;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     private Document existingDoc;
 
@@ -50,7 +53,7 @@ public class SearchContentRestTest {
         Describe("Search Content REST Endpoint Examples", () -> {
 
             BeforeEach(() -> {
-                RestAssured.port = port;
+                RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
             });
             Context("given a document with content", () -> {
                 BeforeEach(() -> {
@@ -62,7 +65,7 @@ public class SearchContentRestTest {
                     docRepo.save(existingDoc);
                 });
                 It("should be findable via the /searchContents REST endpoint", () -> {
-                    Response resp =
+                    MockMvcResponse resp =
                             given()
                             .header("accept", "application/hal+json")
                             .when()

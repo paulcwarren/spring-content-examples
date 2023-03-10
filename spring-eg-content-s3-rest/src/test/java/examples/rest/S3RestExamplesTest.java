@@ -4,15 +4,9 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-import static examples.utils.Env.setEnv;
-import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -23,7 +17,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.content.s3.config.EnableS3Stores;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,35 +26,38 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
-import com.amazonaws.regions.Regions;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import com.jayway.restassured.RestAssured;
 
 import examples.models.Document;
 import examples.repositories.DocumentRepository;
 import examples.stores.DocumentContentStore;
+import org.springframework.web.context.WebApplicationContext;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import tests.smoke.JpaConfig;
 
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
 @SpringBootTest(classes = S3RestExamplesTest.Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class S3RestExamplesTest {
 
-    static {
-        Map<String,String> props = new HashMap<>();
-        props.put("AWS_REGION", Regions.US_WEST_1.getName());
-        try {
-            setEnv(props);
-        } catch (Exception e) {
-            fail("Failed to set environment for test: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+//    static {
+//        Map<String,String> props = new HashMap<>();
+//        props.put("AWS_REGION", Regions.US_WEST_1.getName());
+//        try {
+//            setEnv(props);
+//        } catch (Exception e) {
+//            fail("Failed to set environment for test: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
 
 	@Autowired
 	private DocumentRepository repo;
@@ -69,15 +65,15 @@ public class S3RestExamplesTest {
 	@Autowired
 	private DocumentContentStore store;
 
-    @LocalServerPort
-    int port;
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
     private Document document;
 
     {
     	Describe("Spring Content REST", () -> {
     		BeforeEach(() -> {
-    			RestAssured.port = port;
+				RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
     		});
     		Context("given a claim", () -> {
     			BeforeEach(() -> {
@@ -97,7 +93,7 @@ public class S3RestExamplesTest {
 					// POST the new content
 					given()
     					.contentType("plain/text")
-    					.content(newContent.getBytes())
+    					.body(newContent.getBytes())
 					.when()
     					.post("/documents/" + document.getId())
 					.then()
@@ -134,7 +130,7 @@ public class S3RestExamplesTest {
 
     					given()
 	    					.contentType("plain/text")
-	    					.content(newContent.getBytes())
+	    					.body(newContent.getBytes())
     					.when()
 	    					.post("/documents/" + document.getId())
     					.then()

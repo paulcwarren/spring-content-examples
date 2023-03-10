@@ -19,7 +19,7 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.OptimisticLockException;
+import jakarta.persistence.OptimisticLockException;
 import javax.security.auth.Subject;
 
 import org.apache.commons.io.IOUtils;

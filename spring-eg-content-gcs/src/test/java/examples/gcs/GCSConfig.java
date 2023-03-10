@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.contrib.nio.testing.LocalStorageHelper;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 public class GCSConfig {
@@ -26,5 +27,11 @@ public class GCSConfig {
     @Bean
     public String bucketName() {
         return BUCKET_NAME;
+    }
+
+
+    @Bean
+    public PropertySourcesPlaceholderConfigurer properties() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }

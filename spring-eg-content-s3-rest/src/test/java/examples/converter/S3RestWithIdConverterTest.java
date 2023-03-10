@@ -4,14 +4,8 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-import static examples.utils.Env.setEnv;
-import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -20,34 +14,37 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.content.s3.config.S3StoreConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 
-import com.amazonaws.regions.Regions;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import com.jayway.restassured.RestAssured;
 
 import examples.models.Document;
 import examples.repositories.DocumentRepository;
 import examples.rest.S3RestExamplesTest;
 import examples.stores.DocumentContentStore;
 
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import org.springframework.web.context.WebApplicationContext;
+
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+
 @RunWith(Ginkgo4jSpringRunner.class)
 @SpringBootTest(classes = {S3RestExamplesTest.Application.class, S3RestWithIdConverterTest.IdConverterConfig.class}, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class S3RestWithIdConverterTest {
 
-    static {
-        Map<String,String> props = new HashMap<>();
-        props.put("AWS_REGION", Regions.US_WEST_1.getName());
-        try {
-            setEnv(props);
-        } catch (Exception e) {
-            fail("Failed to set environment for test: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+//    static {
+//        Map<String,String> props = new HashMap<>();
+//        props.put("AWS_REGION", Regions.US_WEST_1.getName());
+//        try {
+//            setEnv(props);
+//        } catch (Exception e) {
+//            fail("Failed to set environment for test: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
 
 	@Autowired
 	private DocumentRepository repo;
@@ -55,15 +52,15 @@ public class S3RestWithIdConverterTest {
 	@Autowired
 	private DocumentContentStore store;
 
-    @LocalServerPort
-    int port;
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
     private Document document;
 
     {
     	Describe("Spring Content REST", () -> {
     		BeforeEach(() -> {
-    			RestAssured.port = port;
+				RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
     		});
     		Context("given a document", () -> {
     			BeforeEach(() -> {
@@ -83,7 +80,7 @@ public class S3RestWithIdConverterTest {
 					// POST the new content
 					given()
     					.contentType("plain/text")
-    					.content(newContent.getBytes())
+    					.body(newContent.getBytes())
 					.when()
     					.post("/documents/" + document.getId())
 					.then()
@@ -120,7 +117,7 @@ public class S3RestWithIdConverterTest {
 
     					given()
 	    					.contentType("plain/text")
-	    					.content(newContent.getBytes())
+	    					.body(newContent.getBytes())
     					.when()
 	    					.post("/documents/" + document.getId())
     					.then()

@@ -86,21 +86,38 @@
 		</dependency>
 
 		<!-- Test dependencies -->
- 		<dependency>
-			<groupId>com.jayway.restassured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>2.9.0</version>
+<!-- 		<dependency>-->
+<!--			<groupId>com.jayway.restassured</groupId>-->
+<!--			<artifactId>rest-assured</artifactId>-->
+<!--			<version>2.9.0</version>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>spring-mock-mvc</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<!-- remove conflicting dependency because declared in 2 differents versions (3 & 4) -->
+				<exclusion>
+					<groupId>org.apache.groovy</groupId>
+					<artifactId>groovy-xml</artifactId>
+				</exclusion>
+<!--				<exclusion>-->
+<!--					<groupId>org.apache.groovy</groupId>-->
+<!--					<artifactId>groovy</artifactId>-->
+<!--				</exclusion>-->
+			</exclusions>
+		</dependency>
+		<dependency>
+			<!-- add this dep which bring back the groovy-xml in a single and last version (4) -->
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
 			<scope>test</scope>
 		</dependency>
+
  		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.jayway.restassured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>2.9.0</version>
 			<scope>test</scope>
 		</dependency>
 	  	<dependency>

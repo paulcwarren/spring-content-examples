@@ -10,18 +10,19 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import tests.smoke.JpaConfig;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+		SecurityAutoConfiguration.class
+})
 @ComponentScan(excludeFilters={
 		@Filter(type = FilterType.REGEX,
 				pattern = {
 						".*MongoConfiguration", 
 		})
 })
-@EnableAutoConfiguration(exclude = {
-		SecurityAutoConfiguration.class
-})
+//@EnableAutoConfiguration
 public class Application {
 
 	public static void main(String[] args) {
@@ -29,7 +30,7 @@ public class Application {
     }
 
 	@Configuration
-	@Import(JpaConfig.class)
+	@Import({JpaConfig.class/*, SecurityConfig.class*/})
 	@EnableFilesystemStores(basePackages="examples.stores")
 	public static class AppConfig {
 		//

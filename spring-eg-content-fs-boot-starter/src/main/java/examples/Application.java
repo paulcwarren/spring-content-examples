@@ -17,8 +17,7 @@ import org.springframework.context.annotation.FilterType;
  *
  */
 
-@SpringBootApplication
-@EnableAutoConfiguration(exclude={MongoRepositoriesAutoConfiguration.class})
+@SpringBootApplication(exclude={MongoRepositoriesAutoConfiguration.class})
 @ComponentScan(excludeFilters={
 		@Filter(type = FilterType.REGEX,
 				pattern = {

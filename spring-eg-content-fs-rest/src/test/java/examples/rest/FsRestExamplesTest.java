@@ -2,7 +2,7 @@ package examples.rest;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import com.jayway.restassured.RestAssured;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import examples.models.Document;
 import examples.repositories.DocumentRepository;
 import examples.stores.DocumentContentStore;
@@ -13,13 +13,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.io.ByteArrayInputStream;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -31,16 +31,16 @@ public class FsRestExamplesTest {
 	
 	@Autowired
 	private DocumentContentStore store;
-	
-    @LocalServerPort
-    int port;
-    
-    private Document doc;
+
+	@Autowired
+	private WebApplicationContext webApplicationContext;
+
+	private Document doc;
     
     {
     	Describe("Spring Content REST", () -> {
     		BeforeEach(() -> {
-    			RestAssured.port = port;
+				RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
     		});
     		Context("given a document", () -> {
     			BeforeEach(() -> {
@@ -60,7 +60,7 @@ public class FsRestExamplesTest {
 					// POST the new content
 					given()
     					.contentType("text/plain")
-    					.content(newContent.getBytes())
+    					.body(newContent.getBytes())
 					.when()
     					.post("/documents/" + doc.getId())
 					.then()
@@ -97,7 +97,7 @@ public class FsRestExamplesTest {
     					
     					given()
 	    					.contentType("text/plain")
-	    					.content(newContent.getBytes())
+	    					.body(newContent.getBytes())
     					.when()
 	    					.post("/documents/" + doc.getId())
     					.then()

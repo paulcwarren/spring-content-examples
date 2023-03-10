@@ -31,7 +31,7 @@ import org.springframework.versions.jpa.config.JpaLockingAndVersioningConfig;
 @EnableJpaRepositories(basePackages={"tests.versioning","org.springframework.versions"})
 @EnableTransactionManagement
 @EnableFilesystemStores(basePackages="tests.versioning")
-@Import(JpaLockingAndVersioningConfig.class)
+@Import({JpaLockingAndVersioningConfig.class, SpringSecurityConfig.class})
 public class Application {
 
     public static void main(String[] args) {

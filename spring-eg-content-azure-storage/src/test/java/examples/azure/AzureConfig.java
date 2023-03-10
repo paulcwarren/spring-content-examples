@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 public class AzureConfig {
@@ -14,11 +15,11 @@ public class AzureConfig {
     private static final BlobContainerClient client = builder.buildClient().getBlobContainerClient("test");
 
     static {
+        System.setProperty("spring.content.azure.bucket", "azure-test-bucket");
+
         if (!client.exists()) {
             client.create();
         }
-
-        System.setProperty("spring.content.azure.bucket", "azure-test-bucket");
     }
 
     @Value("#{environment.AZURE_STORAGE_ENDPOINT}")
@@ -30,5 +31,10 @@ public class AzureConfig {
     @Bean
     public BlobServiceClientBuilder blobServiceClientBuilder() {
         return builder;
+    }
+
+    @Bean
+    public PropertySourcesPlaceholderConfigurer properties() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }

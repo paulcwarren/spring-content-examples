@@ -38,17 +38,6 @@ import tests.smoke.ContentStoreTests;
 @SpringBootTest(classes = S3BootExamplesTest.Application.class)
 public class S3BootExamplesTest extends ContentStoreTests {
 
-    static {
-        Map<String,String> props = new HashMap<>();
-        props.put("AWS_REGION", Regions.US_WEST_1.getName());
-        try {
-            setEnv(props);
-        } catch (Exception e) {
-            fail("Failed to set environment for test: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     @SpringBootApplication
     @ComponentScan(excludeFilters={
             @Filter(type = FilterType.REGEX,

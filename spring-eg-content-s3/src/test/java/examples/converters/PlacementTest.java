@@ -10,7 +10,7 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
-import javax.persistence.GeneratedValue;
+import jakarta.persistence.GeneratedValue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -117,7 +117,7 @@ public class PlacementTest {
 	@NoArgsConstructor
 	public class ConverterEntity {
 
-		@javax.persistence.Id
+		@jakarta.persistence.Id
 		@GeneratedValue()
 		private Long Id;
 

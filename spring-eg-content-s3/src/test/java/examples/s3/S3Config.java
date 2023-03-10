@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 
 import com.amazonaws.regions.Regions;
@@ -26,15 +27,15 @@ public class S3Config {
     static {
         System.setProperty("spring.content.s3.bucket", BUCKET);
 
-        try {
-            Map<String,String> props = new HashMap<>();
-            props.put("AWS_REGION", Regions.US_WEST_1.getName());
-            props.put("AWS_ACCESS_KEY_ID", "user");
-            props.put("AWS_SECRET_KEY", "password");
-            setEnv(props);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Map<String,String> props = new HashMap<>();
+//            props.put("AWS_REGION", Regions.US_WEST_1.getName());
+//            props.put("AWS_ACCESS_KEY_ID", "user");
+//            props.put("AWS_SECRET_KEY", "password");
+//            setEnv(props);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -67,31 +68,36 @@ public class S3Config {
 	    return BUCKET;
 	}
 
-    @SuppressWarnings("unchecked")
-    public static void setEnv(Map<String, String> newenv) throws Exception {
-        try {
-            Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
-            Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
-            theEnvironmentField.setAccessible(true);
-            Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
-            env.putAll(newenv);
-            Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
-            theCaseInsensitiveEnvironmentField.setAccessible(true);
-            Map<String, String> cienv = (Map<String, String>)theCaseInsensitiveEnvironmentField.get(null);
-            cienv.putAll(newenv);
-        } catch (NoSuchFieldException e) {
-            Class[] classes = Collections.class.getDeclaredClasses();
-            Map<String, String> env = System.getenv();
-            for(Class cl : classes) {
-                if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
-                    Field field = cl.getDeclaredField("m");
-                    field.setAccessible(true);
-                    Object obj = field.get(env);
-                    Map<String, String> map = (Map<String, String>) obj;
-                    map.clear();
-                    map.putAll(newenv);
-                }
-            }
-        }
+    @Bean
+    public PropertySourcesPlaceholderConfigurer properties() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
+
+//    @SuppressWarnings("unchecked")
+//    public static void setEnv(Map<String, String> newenv) throws Exception {
+//        try {
+//            Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
+//            Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
+//            theEnvironmentField.setAccessible(true);
+//            Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
+//            env.putAll(newenv);
+//            Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+//            theCaseInsensitiveEnvironmentField.setAccessible(true);
+//            Map<String, String> cienv = (Map<String, String>)theCaseInsensitiveEnvironmentField.get(null);
+//            cienv.putAll(newenv);
+//        } catch (NoSuchFieldException e) {
+//            Class[] classes = Collections.class.getDeclaredClasses();
+//            Map<String, String> env = System.getenv();
+//            for(Class cl : classes) {
+//                if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+//                    Field field = cl.getDeclaredField("m");
+//                    field.setAccessible(true);
+//                    Object obj = field.get(env);
+//                    Map<String, String> map = (Map<String, String>) obj;
+//                    map.clear();
+//                    map.putAll(newenv);
+//                }
+//            }
+//        }
+//    }
 }

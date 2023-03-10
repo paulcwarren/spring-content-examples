@@ -1,10 +1,10 @@
 package examples.hypermedia;
 
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.path.json.JsonPath;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import examples.models.Document;
 import examples.repositories.DocumentRepository;
 import examples.stores.DocumentContentStore;
+import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -12,15 +12,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.context.WebApplicationContext;
+
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
 import java.io.ByteArrayInputStream;
-
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -31,9 +31,9 @@ public class FsRestTest {
    
    @Autowired
    private DocumentContentStore claimFormStore;
-   
-    @Value("${local.server.port}") 
-    int port;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     private Document canSetClaim;
     private Document canGetClaim;
@@ -41,8 +41,8 @@ public class FsRestTest {
     
     @Before
     public void setUp() throws Exception {
-      
-        RestAssured.port = port;
+
+        RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
       
       // create a claim that can set content on
       canSetClaim = new Document();
@@ -67,7 +67,7 @@ public class FsRestTest {
     public void canSetContent() {
       given()
          .contentType("plain/text")
-         .content("This is plain text content!".getBytes())
+         .body("This is plain text content!".getBytes())
       .when()
          .post("/documents/" + canSetClaim.getId())
       .then()
@@ -85,11 +85,13 @@ public class FsRestTest {
             .extract()
                .jsonPath();
       
-      Assert.assertNotNull(response.get("_links.document"));
-      Assert.assertNotNull(response.get("_links.document.href"));
+      Assert.assertNotNull(response.get("_links.content"));
+      Assert.assertNotNull(response.get("_links.content.href"));
 
-      String contentUrl = response.get("_links.document.href");
-      when()
+      String contentUrl = response.get("_links.content.href");
+      given()
+         .accept("plain/text")
+      .when()
          .get(contentUrl)
       .then()
          .assertThat()
@@ -99,14 +101,13 @@ public class FsRestTest {
 
     @Test
     public void canDeleteContent() {
-      JsonPath response =
-         given()
-            .header("accept", "application/hal+json")
-              .get("/documents/" + canDelClaim.getId())
-          .then()
-            .statusCode(HttpStatus.SC_OK)
-            .extract()
-               .jsonPath();
+        JsonPath response = given()
+                .header("accept", "application/hal+json")
+                .get("/documents/" + canDelClaim.getId())
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .jsonPath();
       
       Assert.assertNotNull(response.get("_links.document"));
       Assert.assertNotNull(response.get("_links.document.href"));

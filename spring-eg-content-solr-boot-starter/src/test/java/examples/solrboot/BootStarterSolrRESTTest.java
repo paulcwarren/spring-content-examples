@@ -5,7 +5,6 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static com.jayway.restassured.RestAssured.when;
 
 import org.apache.http.HttpStatus;
 import org.apache.solr.client.solrj.SolrClient;
@@ -15,12 +14,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.content.solr.SolrProperties;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-import com.jayway.restassured.RestAssured;
+
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import org.springframework.web.context.WebApplicationContext;
+
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -35,14 +38,14 @@ public class BootStarterSolrRESTTest {
 
     private Document doc;
 
-    @LocalServerPort
-    int port;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     private String id = null;
     {
         Describe("Solr Examples", () -> {
             BeforeEach(() -> {
-                RestAssured.port = port;
+                RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
             });
             Context("given a Solr Server", () -> {
 

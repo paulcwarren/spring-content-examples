@@ -48,8 +48,12 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 	<properties>
 		<ginkgo-version>1.0.15-SNAPSHOT</ginkgo-version>
 		<spring-content-version>3.0.0-SNAPSHOT</spring-content-version>
-		<springboot-version>2.7.4</springboot-version>
-		<spring-cloud.version>2021.0.4</spring-cloud.version>
+		<springboot-version>3.0.2</springboot-version>
+		<spring-cloud.version>2022.0.1</spring-cloud.version>
+		<jakarta-persistence-api.version>3.1.0</jakarta-persistence-api.version>
+		<hibernate.version>5.6.15.Final</hibernate.version>
+		<hibernate-orm.version>6.1.6.Final</hibernate-orm.version>
+		<elasticsearch-rest-high-level-client.version>7.17.9</elasticsearch-rest-high-level-client.version>
 		<opencmis.version>1.1.0</opencmis.version>
 	</properties>
 
@@ -96,7 +100,8 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 		<module>./spring-eg-content-solr</module>
 		<module>./spring-eg-versions-jpa</module>
 		<module>./spring-eg-versions-jpa-boot-starter</module>
-		<module>./spring-eg-content-cmis</module>
+		<module>./spring-eg-versions-rest</module>
+<!--		<module>./spring-eg-content-cmis</module>-->
 	</modules>
  	
 	<build>
