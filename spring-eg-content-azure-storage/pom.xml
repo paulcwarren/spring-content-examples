@@ -11,6 +11,12 @@
 	</parent>
 	
 	<dependencies>
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<version>${jakarta-persistence-api.version}</version>
+		</dependency>
+
 		<!-- Spring Data -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
