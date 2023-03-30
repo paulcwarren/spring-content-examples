@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -137,7 +138,7 @@ public class S3ReactiveTest {
                         .exceptionally(ex -> { throw new IllegalStateException(); });
 
                     return null;
-                });
+                }).get();
 
             return client;
         }
