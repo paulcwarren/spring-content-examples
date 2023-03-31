@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 @Configuration
-@ComponentScan(basePackages = {"internal.org.springframework.content.docx4j"})	// Tell Spring Content where to find Renderers
-@EnableFilesystemStores(basePackages="examples")								// Tell Spring Content where to find Stores
+@EnableFilesystemStores(basePackages="examples")
 public class RenditionTestConfig {
 
     @Bean

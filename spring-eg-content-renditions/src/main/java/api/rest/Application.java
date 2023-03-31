@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Import;
 import tests.smoke.JpaConfig;
 
 @SpringBootApplication
-@EnableAutoConfiguration(exclude={MongoRepositoriesAutoConfiguration.class})
 @Import(RestConfiguration.class)
 public class Application {
 
@@ -22,8 +21,7 @@ public class Application {
 	
 	@Configuration
 	@Import(JpaConfig.class)
-	@EnableFilesystemStores(basePackages="examples")								// Tell Spring Content where to find Stores
-	@ComponentScan(basePackages = {"internal.org.springframework.content.docx4j"})	// Tell Spring Content where to find Renderers
+	@EnableFilesystemStores(basePackages="examples")
 	public static class ApplicationConfig {
 	}
 }
