@@ -23,4 +23,5 @@ jobs:
     
     - name: Test
       run: |
+        export AWS_REGION=us-west-1
         mvn -B install
