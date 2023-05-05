@@ -29,12 +29,6 @@
 			<version>${spring-content-version}</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.hibernate</groupId>-->
-<!--			<artifactId>hibernate-core</artifactId>-->
-<!--			<version>${hibernate.version}</version>-->
-<!--		</dependency>-->
-
 		<!-- HSQL -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -51,6 +45,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.32</version>
 		</dependency>
 
 		<!-- SQL Server -->
