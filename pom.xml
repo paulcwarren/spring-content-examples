@@ -145,5 +145,18 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
+
+	<profiles>
+		<profile>
+			<id>defined</id>
+			<activation>
+				<property>
+					<name>env.SPRING_CONTENT_VERSION</name>
+				</property>
+			</activation>
+			<properties>
+				<spring-content-version>${env.SPRING_CONTENT_VERSION}</spring-content-version>
+			</properties>
+		</profile>
+	</profiles>
 </project>
