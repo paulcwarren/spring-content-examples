@@ -627,7 +627,7 @@ public class VersioningTests {
                 assertThat(doc.getAncestralRootId(), is(nullValue()));
                 assertThat(doc.getVstamp(), is(0L));
 
-                List<VersionedDocument> latestVersions = repo.findAllVersionsLatest();
+                List<VersionedDocument> latestVersions = repo.findAllVersionsLatest(VersionedDocument.class);
                 assertThat(latestVersions, CoreMatchers.hasItem(doc));
             });
             Context("when a private working copy is created", () -> {
@@ -674,7 +674,7 @@ public class VersioningTests {
                 Context("given findAllVersionsLatest", () -> {
                     BeforeEach(() -> {
                         try {
-                            list = repo.findAllVersionsLatest();
+                            list = repo.findAllVersionsLatest(VersionedDocument.class);
                         } catch (Exception e) {
                             this.e = e;
                         }
@@ -802,7 +802,7 @@ public class VersioningTests {
                     It("should return the new version as latest but not the old", () -> {
                         doc = repo.findById(v0Id).get();
 
-                        List<VersionedDocument> latestVersions = repo.findAllVersionsLatest();
+                        List<VersionedDocument> latestVersions = repo.findAllVersionsLatest(VersionedDocument.class);
                         assertThat(latestVersions, CoreMatchers.hasItem(next));
                         assertThat(latestVersions, not(CoreMatchers.hasItem(doc)));
                     });
