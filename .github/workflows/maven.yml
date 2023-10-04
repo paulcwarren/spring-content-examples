@@ -24,6 +24,11 @@ jobs:
     
     - name: Test
       run: |
+        if [[ -z "${SPRING_CONTENT_VERSION}" ]]; then
+          echo "set"
+        else 
+          echo "unset"
+        ]]  
         export AWS_REGION=us-west-1
         mvn -B install
       env:
