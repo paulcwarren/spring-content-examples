@@ -27,5 +27,3 @@ jobs:
       run: |
         export AWS_REGION=us-west-1      
         mvn -B install
-      env:
-        SPRING_CONTENT_VERSION: ${{ secrets.SPRING_CONTENT_VERSION }} 
