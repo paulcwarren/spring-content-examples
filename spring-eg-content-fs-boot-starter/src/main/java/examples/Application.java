@@ -1,5 +1,6 @@
 package examples;
 
+import internal.org.springframework.content.mongo.boot.autoconfigure.MongoContentAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +18,7 @@ import org.springframework.context.annotation.FilterType;
  *
  */
 
-@SpringBootApplication(exclude={MongoRepositoriesAutoConfiguration.class})
+@SpringBootApplication(exclude={MongoRepositoriesAutoConfiguration.class, MongoContentAutoConfiguration.class})
 @ComponentScan(excludeFilters={
 		@Filter(type = FilterType.REGEX,
 				pattern = {

@@ -1,6 +1,7 @@
 package examples;
 
 
+import examples.mongo.AbstractSpringContentMongoConfiguration;
 import org.springframework.content.mongo.config.EnableMongoStores;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;

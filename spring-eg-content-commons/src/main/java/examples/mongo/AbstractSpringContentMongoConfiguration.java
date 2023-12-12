@@ -1,4 +1,4 @@
-package examples;
+package examples.mongo;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import com.mongodb.client.MongoClient;
 
-@Configuration
 public class AbstractSpringContentMongoConfiguration extends AbstractMongoClientConfiguration {
 
 	private static final Log log = LogFactory.getLog(AbstractSpringContentMongoConfiguration.class);

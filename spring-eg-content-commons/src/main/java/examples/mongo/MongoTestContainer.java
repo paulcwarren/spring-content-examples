@@ -1,4 +1,4 @@
-package examples;
+package examples.mongo;
 
 import org.apache.commons.lang.StringUtils;
 import org.testcontainers.containers.MongoDBContainer;
