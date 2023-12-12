@@ -14,6 +14,7 @@ public class SolrTestContainer extends SolrContainer {
 
     private SolrTestContainer() {
         super(IMAGE_NAME);
+        setStartupAttempts(10);
         start();
 
         try {

@@ -16,7 +16,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  */
 
 @SpringBootApplication
-//@ComponentScan("org.springframework.content.solr")
 @EnableConfigurationProperties
 @EnableAutoConfiguration(exclude={MongoRepositoriesAutoConfiguration.class})
 public class Application {
