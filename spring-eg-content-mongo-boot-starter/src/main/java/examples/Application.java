@@ -1,5 +1,6 @@
 package examples;
 
+import examples.mongo.AbstractSpringContentMongoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,6 +20,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+	@Configuration
 	public static class MongoConfig extends AbstractSpringContentMongoConfiguration {
 	}
 

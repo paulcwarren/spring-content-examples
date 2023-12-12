@@ -50,7 +50,14 @@
 	  		<artifactId>spring-boot-starter-test</artifactId>
 	  		<scope>test</scope>
 	  	</dependency>
-	  	<dependency>
+		<!-- required with surefire plugin 3+ otherwise tests are not found -->
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 	  		<groupId>commons-io</groupId>
 	  		<artifactId>commons-io</artifactId>
 	  		<version>2.15.0</version>

@@ -1,7 +1,7 @@
-package examples;
+package examples.mongo;
 
+import org.apache.commons.lang.StringUtils;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
