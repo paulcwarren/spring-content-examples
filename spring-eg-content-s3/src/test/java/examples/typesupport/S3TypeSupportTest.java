@@ -1,6 +1,6 @@
  package examples.typesupport;
 
- import com.amazonaws.services.s3.model.S3ObjectId;
+import org.springframework.content.s3.S3ObjectId;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import examples.s3.S3Config;

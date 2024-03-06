@@ -71,12 +71,16 @@
 	  		<scope>test</scope>
 	  	</dependency>
 		<dependency>
-		    <groupId>com.amazonaws</groupId>
-		    <artifactId>aws-java-sdk</artifactId>
-		    <version>1.12.645</version>
-		    <scope>test</scope>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.25.2</version>
 		</dependency>
-	  	<dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.12.671</version>
+		</dependency>
+		<dependency>
 	  		<groupId>com.github.paulcwarren</groupId>
 	  		<artifactId>ginkgo4j</artifactId>
 	  		<version>${ginkgo-version}</version>
