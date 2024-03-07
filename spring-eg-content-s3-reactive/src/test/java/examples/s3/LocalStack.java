@@ -45,6 +45,7 @@ public class LocalStack extends LocalStackContainer implements Serializable {
         S3Configuration serviceConfiguration = S3Configuration.builder()
                 .checksumValidationEnabled(false)
                 .chunkedEncodingEnabled(true)
+                .pathStyleAccessEnabled(true)
                 .build();
 
         return S3AsyncClient.builder()
