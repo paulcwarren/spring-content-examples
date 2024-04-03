@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
-            <version>1.12.693</version>
+            <version>1.12.694</version>
         </dependency>
         <!-- for localstack -->
                 
