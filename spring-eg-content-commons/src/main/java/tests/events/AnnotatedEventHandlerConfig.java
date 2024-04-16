@@ -2,6 +2,8 @@ package tests.events;
 
 import examples.models.ClaimForm;
 import examples.models.Document;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.content.commons.annotations.HandleAfterAssociate;
 import org.springframework.content.commons.annotations.HandleAfterGetContent;
 import org.springframework.content.commons.annotations.HandleAfterGetResource;
@@ -29,12 +31,17 @@ import org.springframework.content.commons.repository.events.BeforeUnassociateEv
 import org.springframework.content.commons.repository.events.BeforeUnsetContentEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tests.versioning.VersioningTests;
+
+import java.util.logging.Logger;
 
 import static org.mockito.Mockito.mock;
 
 @Configuration
 public class AnnotatedEventHandlerConfig {
-	
+
+	private static Log logger = LogFactory.getLog(AnnotatedEventHandlerConfig.class);
+
 	@Bean
 	public ExampleAnnotatedEventHandler eventHandler() {
 		return mock(ExampleAnnotatedEventHandler.class);
@@ -51,6 +58,10 @@ public class AnnotatedEventHandlerConfig {
 		public void handleBeforeGetResourceEvent(BeforeGetResourceEvent event) {
 		}
 
+		@HandleBeforeGetResource
+		public void handleBeforeGetResourceEvent(org.springframework.content.commons.store.events.BeforeGetResourceEvent event) {
+		}
+
 		@HandleAfterGetResource
 		public void handleAfterGetResource(Document doc) {
 		}
@@ -59,12 +70,19 @@ public class AnnotatedEventHandlerConfig {
 		public void handleAfterGetResourceEvent(AfterGetResourceEvent event) {
 		}
 
+		@HandleAfterGetResource
+		public void handleAfterGetResourceEvent(org.springframework.content.commons.store.events.AfterGetResourceEvent event) {
+		}
 		@HandleBeforeAssociate
 		public void handleBeforeAssociate(Document doc) {
 		}
 
 		@HandleBeforeAssociate
 		public void handleBeforeAssociateEvent(BeforeAssociateEvent event) {
+		}
+
+		@HandleBeforeAssociate
+		public void handleBeforeAssociateEvent(org.springframework.content.commons.store.events.BeforeAssociateEvent event) {
 		}
 
 		@HandleAfterAssociate
@@ -74,6 +92,9 @@ public class AnnotatedEventHandlerConfig {
 		@HandleAfterAssociate
 		public void handleAfterAssociateEvent(AfterAssociateEvent event) {
 		}
+		@HandleAfterAssociate
+		public void handleAfterAssociateEvent(org.springframework.content.commons.store.events.AfterAssociateEvent event) {
+		}
 
 		@HandleBeforeUnassociate
 		public void handleBeforeUnassociate(Document doc) {
@@ -82,6 +103,9 @@ public class AnnotatedEventHandlerConfig {
 		@HandleBeforeUnassociate
 		public void handleBeforeUnassociateEvent(BeforeUnassociateEvent event) {
 		}
+		@HandleBeforeUnassociate
+		public void handleBeforeUnassociateEvent(org.springframework.content.commons.store.events.BeforeUnassociateEvent event) {
+		}
 
 		@HandleAfterUnassociate
 		public void handleAfterUnassociate(Document doc) {
@@ -89,6 +113,9 @@ public class AnnotatedEventHandlerConfig {
 
 		@HandleAfterUnassociate
 		public void handleAfterUnassociateEvent(AfterUnassociateEvent event) {
+		}
+		@HandleAfterUnassociate
+		public void handleAfterUnassociateEvent(org.springframework.content.commons.store.events.AfterUnassociateEvent event) {
 		}
 
 		@HandleBeforeSetContent
@@ -99,12 +126,20 @@ public class AnnotatedEventHandlerConfig {
 		public void handleBeforeSetContentEvent(BeforeSetContentEvent event) {
 		}
 
+		@HandleBeforeSetContent
+		public void handleBeforeSetContentEvent(org.springframework.content.commons.store.events.BeforeSetContentEvent event) {
+		}
+
 		@HandleAfterSetContent
 		public void handleAfterSetContent(ClaimForm claim) {
 		}
 
 		@HandleAfterSetContent
 		public void handleAfterSetContentEvent(AfterSetContentEvent event) {
+		}
+
+		@HandleAfterSetContent
+		public void handleAfterSetContentEvent(org.springframework.content.commons.store.events.AfterSetContentEvent event) {
 		}
 
 		@HandleBeforeGetContent
@@ -115,12 +150,18 @@ public class AnnotatedEventHandlerConfig {
 		public void handleBeforeGetContentEvent(BeforeGetContentEvent event) {
 		}
 
+		@HandleBeforeGetContent
+		public void handleBeforeGetContentEvent(org.springframework.content.commons.store.events.BeforeGetContentEvent event) {
+		}
 		@HandleAfterGetContent
 		public void handleAfterGetContent(ClaimForm claim) {
 		}
 
 		@HandleAfterGetContent
 		public void handleAfterGetContentEvent(AfterGetContentEvent event) {
+		}
+		@HandleAfterGetContent
+		public void handleAfterGetContentEvent(org.springframework.content.commons.store.events.AfterGetContentEvent event) {
 		}
 
 		@HandleBeforeUnsetContent
@@ -131,12 +172,18 @@ public class AnnotatedEventHandlerConfig {
 		public void handleBeforeUnsetContentEvent(BeforeUnsetContentEvent event) {
 		}
 
+		@HandleBeforeUnsetContent
+		public void handleBeforeUnsetContentEvent(org.springframework.content.commons.store.events.BeforeUnsetContentEvent event) {
+		}
 		@HandleAfterUnsetContent
 		public void handleAfterUnsetContent(ClaimForm claim) {
 		}
 
 		@HandleAfterUnsetContent
 		public void handleAfterUnsetContentEvent(AfterUnsetContentEvent event) {
+		}
+		@HandleAfterUnsetContent
+		public void handleAfterUnsetContentEvent(org.springframework.content.commons.store.events.AfterUnsetContentEvent event) {
 		}
 	}
 }
