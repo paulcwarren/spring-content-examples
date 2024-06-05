@@ -32,8 +32,8 @@ public class LocalStack extends LocalStackContainer implements Serializable {
 
     public static S3Client getAmazonS3Client() throws URISyntaxException {
         return S3Client.builder()
-                .endpointOverride(new URI(Singleton.INSTANCE.getEndpointConfiguration(LocalStackContainer.Service.S3).getServiceEndpoint()))
-                .credentialsProvider(new LocalStack.CrossAwsCredentialsProvider(Singleton.INSTANCE.getDefaultCredentialsProvider()))
+                .endpointOverride(Singleton.INSTANCE.getEndpointOverride(LocalStackContainer.Service.S3)/*.getServiceEndpoint()*/)
+//                .credentialsProvider(new LocalStack.CrossAwsCredentialsProvider(Singleton.INSTANCE.getDefaultCredentialsProvider()))
                 .serviceConfiguration((serviceBldr) -> {serviceBldr.pathStyleAccessEnabled(true);})
                 .build();
     }
