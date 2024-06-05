@@ -1,9 +1,9 @@
 package examples.azure;
 
-import java.io.Serializable;
-
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import org.testcontainers.containers.GenericContainer;
+
+import java.io.Serializable;
 
 /**
  * This class provides a TestContainers implementation of Azure storage via
@@ -38,7 +38,9 @@ public class Azurite extends GenericContainer<Azurite> implements Serializable {
 
     public static BlobServiceClientBuilder getBlobServiceClientBuilder() {
         final String host = Singleton.INSTANCE.getContainerIpAddress();
-        final Integer mappedPort = Singleton.INSTANCE.getMappedPort(BLOB_SERVICE_PORT);
+//        final Integer mappedPort = Singleton.INSTANCE.getMappedPort(BLOB_SERVICE_PORT);
+        final Integer mappedPort = Singleton.INSTANCE.getFirstMappedPort();
+        System.out.println(String.format("First mapped port: %s", mappedPort));
         final String endpoint = String.format(ENDPOINT, host, mappedPort, DEV_ACC_NAME);
 
         return new BlobServiceClientBuilder()
