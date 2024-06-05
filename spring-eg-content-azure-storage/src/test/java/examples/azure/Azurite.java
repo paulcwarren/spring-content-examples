@@ -2,6 +2,7 @@ package examples.azure;
 
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.Serializable;
 
@@ -33,6 +34,8 @@ public class Azurite extends GenericContainer<Azurite> implements Serializable {
 
     private Azurite() {
         super(DOCKER_IMAGE_NAME);
+        this.withExposedPorts(10000);
+        this.waitingFor(Wait.forListeningPort());
         this.start();
     }
 
