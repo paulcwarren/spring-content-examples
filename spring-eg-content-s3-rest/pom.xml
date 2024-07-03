@@ -72,7 +72,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
-            <version>1.12.755</version>
+            <version>1.12.756</version>
             <scope>test</scope>
         </dependency>
 		<dependency>
